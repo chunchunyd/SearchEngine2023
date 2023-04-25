@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<writ>
+  <QW nameCN="全文" oValue="广东省珠海市斗门区人民法院 刑事裁定书 （2018）粤0403刑初122号 被告人刘国强犯盗窃罪一案，本院于2018年3月8日作出（2018）粤0403刑初122号刑事判决书。现发现其中有错误字句，特此补充裁定如下： 原判决书第3页第14行的“2017年6月17日17时许”现更正为“2017年6月7日17时许”。 审判员张碧鸿 二〇一八年三月二十日 书记员杜伟娟 " value="广东省珠海市斗门区人民法院 刑事裁定书 （2018）粤0403刑初122号 被告人刘国强犯盗窃罪一案，本院于2018年3月8日作出（2018）粤0403刑初122号刑事判决书。现发现其中有错误字句，特此补充裁定如下： 原判决书第3页第14行的“2017年6月17日17时许”现更正为“2017年6月7日17时许”。 审判员张碧鸿 二〇一八年三月二十日 书记员杜伟娟 ">
+    <WS nameCN="文首" value="广东省珠海市斗门区人民法院 刑事裁定书 （2018）粤0403刑初122号 ">
+      <WSZZDW nameCN="文书制作单位" value="法院"/>
+      <FYWSZL nameCN="法院文书种类" value="裁判文书"/>
+      <JBFY nameCN="经办法院" value="广东省珠海市斗门区人民法院">
+        <FYCJM nameCN="法院层级码" value="J43"/>
+        <BZFYMC nameCN="标准法院名称" value="珠海市斗门区人民法院"/>
+        <FYJB nameCN="法院级别" value="基层"/>
+        <XZQH_P nameCN="行政区划(省)" value="广东"/>
+        <XZQH_C nameCN="行政区划(市)" value="珠海市"/>
+      </JBFY>
+      <WSMC nameCN="文书名称" value="刑事裁定书"/>
+      <AH nameCN="案号" value="（2018）粤0403刑初122号">
+        <ZH nameCN="字号" value="刑初字"/>
+        <AJLB_YJ nameCN="案件类型_一级" value="刑事案件">
+          <AJLB_EJ nameCN="案件类型_二级" value="刑事一审案件"/>
+        </AJLB_YJ>
+        <LAND nameCN="立案年度" value="2018"/>
+        <FYJC nameCN="法院简称" value="粤0403"/>
+        <AHSXH nameCN="案号顺序号" value="122"/>
+      </AH>
+      <AJLB nameCN="案件类别" value="刑事案件"/>
+      <WSZL nameCN="文书种类" value="裁定书"/>
+      <SPCX nameCN="审判程序" value="一审案件"/>
+      <AJLX nameCN="案件类型" value="刑事其他案件"/>
+    </WS>
+    <CPFXGC nameCN="裁判分析过程" value="被告人刘国强犯盗窃罪一案，本院于2018年3月8日作出（2018）粤0403刑初122号刑事判决书。现发现其中有错误字句，特此补充裁定如下：">
+      <QTAJLX nameCN="其他案件类型" value="补正笔误"/>
+      <BGRTYRZCX nameCN="被告人同意认罪程序" value="否"/>
+    </CPFXGC>
+    <PJJG nameCN="判决结果" value=" 原判决书第3页第14行的“2017年6月17日17时许”现更正为“2017年6月7日17时许”。">
+      <GXQYY nameCN="提出管辖权异议" value="否"/>
+      <YSJAFS nameCN="一审结案方式" value="其他"/>
+    </PJJG>
+    <WW nameCN="文尾" value=" 审判员张碧鸿 二〇一八年三月二十日 书记员杜伟娟 ">
+      <CPSJ nameCN="裁判时间" value="2018年3月20日">
+        <JAND nameCN="结案年度" value="2018"/>
+        <CUS_JANYR nameCN="结案年月日" value="2018年3月20日"/>
+        <CUS_JANY nameCN="结案年月" value="2018-3"/>
+        <CUS_JAYF nameCN="结案月份" value="3"/>
+      </CPSJ>
+      <SPZZCY nameCN="审判组织成员">
+        <SPRYXM nameCN="审判人员姓名" value="张碧鸿"/>
+        <SPRYJS nameCN="审判人员角色" value="审判员"/>
+      </SPZZCY>
+      <SPZZCY nameCN="审判组织成员">
+        <SPRYXM nameCN="审判人员姓名" value="杜伟娟"/>
+        <SPRYJS nameCN="审判人员角色" value="书记员"/>
+      </SPZZCY>
+      <CUS_FGCY nameCN="法官成员">
+        <FGRYXM nameCN="法官人员姓名" value="张碧鸿"/>
+        <FGRYJS nameCN="法官人员角色" value="审判员"/>
+        <FGRYWZ nameCN="法官人员完整" value="张碧鸿_广东省珠海市斗门区人民法院"/>
+      </CUS_FGCY>
+    </WW>
+    <WSSFMH nameCN="文书是否模糊" value="否"/>
+  </QW>
+  <CUS_FJD nameCN="附加段" oValue="是" value="是">
+    <AJLB nameCN="案件类别" oValue="刑事案件" value="刑事案件"/>
+    <SPCX nameCN="审判程序" oValue="一审案件" value="一审案件"/>
+  </CUS_FJD>
+  <CUS_CPWS_CPFXGC nameCN="自定义_裁判文书_裁判分析过程" oValue="被告人刘国强犯盗窃罪一案，本院于2018年3月8日作出（2018）粤0403刑初122号刑事判决书。现发现其中有错误字句，特此补充裁定如下：" value="被告人刘国强犯盗窃罪一案，本院于2018年3月8日作出（2018）粤0403刑初122号刑事判决书。现发现其中有错误字句，特此补充裁定如下："/>
+  <BHYJTP nameCN="辩护意见图谱" oValue="辩护意见图谱" value="辩护意见图谱">
+    <CUS_CPWS_CPFXGC nameCN="自定义_裁判文书_裁判分析过程" oValue="被告人刘国强犯盗窃罪一案，本院于2018年3月8日作出（2018）粤0403刑初122号刑事判决书。现发现其中有错误字句，特此补充裁定如下：" value="被告人刘国强犯盗窃罪一案，本院于2018年3月8日作出（2018）粤0403刑初122号刑事判决书。现发现其中有错误字句，特此补充裁定如下："/>
+  </BHYJTP>
+</writ>

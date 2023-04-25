@@ -1,4 +1,9 @@
 from django.db import models
+from enum import Enum
+
+WSZZDW = Enum(
+    "法院"
+)
 
 
 # Create your models here.
@@ -11,4 +16,4 @@ class Index(models.Model):
     content = models.TextField()
     url = models.URLField()
     created_at = models.DateTimeField(auto_now_add=True)
-    tags = models.ManyToManyField(Tag, related_name='indexes')
+    tags = models.ManyToManyField(Tag, related_name='indexes')#
