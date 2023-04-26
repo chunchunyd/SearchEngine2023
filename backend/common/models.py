@@ -18,6 +18,9 @@ class Court(models.Model):
     class Meta:
         verbose_name = '法院'
         verbose_name_plural = verbose_name
+        indexes = [
+            models.Index(fields=['name']),
+        ]
 
     def __str__(self):
         return self.name
@@ -37,6 +40,9 @@ class Procuratorate(models.Model):
     class Meta:
         verbose_name = '检察院'
         verbose_name_plural = verbose_name
+        indexes = [
+            models.Index(fields=['name']),
+        ]
 
     def __str__(self):
         return self.name
@@ -57,6 +63,9 @@ class Party(models.Model):
     class Meta:
         verbose_name = '当事人'
         verbose_name_plural = verbose_name
+        indexes = [
+            models.Index(fields=['name']),
+        ]
 
     def __str__(self):
         return self.name
@@ -72,11 +81,14 @@ class Agent(models.Model):
     a_type = models.CharField(max_length=20, verbose_name='辩护人或诉讼代理人类型', blank=True)  # 代理类型(eg. 律师、亲友)
 
     # 被代理人
-    parties = models.ManyToManyField(Party, verbose_name='被代理人')  # 被代理人
+    parties = models.ManyToManyField(Party, verbose_name='被代理人', db_index=True)  # 被代理人
 
     class Meta:
         verbose_name = '代理人'
         verbose_name_plural = verbose_name
+        indexes = [
+            models.Index(fields=['name']),
+        ]
 
     def __str__(self):
         return self.name
@@ -94,6 +106,12 @@ class LawReference(models.Model):
     class Meta:
         verbose_name = '法条引用'
         verbose_name_plural = verbose_name
+        indexes = [
+            models.Index(fields=['law_name']),
+            models.Index(fields=['law_name', 'law_clause']),
+            models.Index(fields=['law_name', 'law_clause', 'law_clause_item']),
+            models.Index(fields=['law_name', 'law_clause', 'law_clause_item', 'law_item']),
+        ]
 
     def __str__(self):
         return self.law_name
@@ -109,6 +127,10 @@ class Judge(models.Model):
     class Meta:
         verbose_name = '法官'
         verbose_name_plural = verbose_name
+        indexes = [
+            models.Index(fields=['name']),
+            models.Index(fields=['full_name']),
+        ]
 
     def __str__(self):
         return self.name
@@ -134,6 +156,12 @@ class Document(models.Model):
     class Meta:
         verbose_name = '文书'
         verbose_name_plural = verbose_name
+        indexes = [
+            models.Index(fields=['address']),
+            models.Index(fields=['agency']),
+            models.Index(fields=['doc_name']),
+            models.Index(fields=['doc_type']),
+        ]
 
     def __str__(self):
         return self.doc_type
@@ -153,22 +181,28 @@ class Judgment(Document):
     court = models.ForeignKey(Court, on_delete=models.CASCADE, verbose_name='法院')  # 法院
 
     # 当事人信息
-    plaintiff = models.ManyToManyField(Party, related_name='plaintiff', verbose_name='原告')  # 原告
-    defendant = models.ManyToManyField(Party, related_name='defendant', verbose_name='被告')  # 被告
+    plaintiff = models.ManyToManyField(Party, related_name='plaintiff', verbose_name='原告', db_index=True)  # 原告
+    defendant = models.ManyToManyField(Party, related_name='defendant', verbose_name='被告', db_index=True)  # 被告
 
     # 代理人信息
-    agent = models.ManyToManyField(Agent, related_name='plaintiff_agent', verbose_name='原告代理人',
-                                   blank=True)  # 原告代理人
+    agent = models.ManyToManyField(Agent, related_name='plaintiff_agent', verbose_name='代理人',
+                                   blank=True, db_index=True)  # 代理人
 
     # 法条引用
-    law_reference = models.ManyToManyField(LawReference, verbose_name='法条引用')  # 法条引用
+    law_reference = models.ManyToManyField(LawReference, verbose_name='法条引用', db_index=True)  # 法条引用
 
     # 审判组织信息
-    judge = models.ManyToManyField(Judge, verbose_name='法官')  # 法官
+    judge = models.ManyToManyField(Judge, verbose_name='法官', db_index=True)  # 法官
 
     class Meta:
         verbose_name = '判决书'
         verbose_name_plural = verbose_name
+        indexes = [
+            # 'case_number', 'case_type', 'judgment_date'
+            models.Index(fields=['case_number']),
+            models.Index(fields=['case_type']),
+            models.Index(fields=['judgment_date']),
+        ]
 
     def __str__(self):
         return self.doc_title
@@ -192,11 +226,17 @@ class Prosecution(Document):
     procuratorate = models.ForeignKey(Procuratorate, on_delete=models.CASCADE, verbose_name='检察院')  # 检察院
 
     # 被告人信息
-    defendant = models.ManyToManyField(Party, related_name='prosecution_defendant', verbose_name='被告')  # 被告
+    defendant = models.ManyToManyField(Party, related_name='prosecution_defendant', verbose_name='被告', db_index=True)  # 被告
 
     class Meta:
         verbose_name = '检察院文书'
         verbose_name_plural = verbose_name
+        indexes = [
+            # 'case_number', 'case_type', 'p_date'
+            models.Index(fields=['case_number']),
+            models.Index(fields=['case_type']),
+            models.Index(fields=['p_date']),
+        ]
 
     def __str__(self):
         return self.doc_title

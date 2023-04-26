@@ -2,6 +2,7 @@ import bs4
 import arrow
 from bs4 import BeautifulSoup
 from common.models import *
+from django.db import transaction
 
 
 def find_node(_node, query):
@@ -194,6 +195,7 @@ def handle_judge(judge_node):
         return Judge.objects.create(name=name, full_name=full_name)
 
 
+@transaction.atomic
 def handle_document(soup: bs4.BeautifulSoup, relative_xml_path: str):
     """
     处理其他文书(通知书, 起诉状, 只有一个的‘暂予监外执行案例’）
@@ -215,6 +217,7 @@ def handle_document(soup: bs4.BeautifulSoup, relative_xml_path: str):
                                       })
 
 
+@transaction.atomic
 def handle_judgment(soup: bs4.BeautifulSoup, relative_xml_path: str):
     """
     处理判决书(裁定书/调解书)
@@ -280,6 +283,7 @@ def handle_judgment(soup: bs4.BeautifulSoup, relative_xml_path: str):
         judgment[0].judge.add(handle_judge(judge_node))
 
 
+@transaction.atomic
 def handle_prosecution(soup: bs4.BeautifulSoup, relative_xml_path: str):
     """
     处理起诉书

@@ -61,13 +61,16 @@ class XmlSpider:
         self.total_count = len(self.xml_files)
         self.current_count = 0
 
-    def parse(self):
+
+    def parse(self, start_time):
         """
         解析xml文件
         """
         for xml_file in self.xml_files:
             self.current_count += 1
-            print(f"当前进度：{self.current_count}/{self.total_count}")
+            if self.current_count % 1000 == 0:
+                print(f', 总计用时：{time.time() - start_time}秒')
+            print(f"\r当前进度：{self.current_count}/{self.total_count}", end='')
             xml_path = os.path.join(self.dir_path, xml_file)
             with open(xml_path, 'r', encoding='utf-8') as f:
                 xml_content = f.read()
@@ -97,7 +100,7 @@ def launch_spider(request):
     """
     start_time = time.time()
     SPIDER.set_dir(STATICFILES_DIRS[0])
-    SPIDER.parse()
+    SPIDER.parse(start_time)
     end_time = time.time()
     print(f"总耗时：{end_time - start_time}秒")
     return JsonResponse({
@@ -117,3 +120,7 @@ def spider_progress(request):
         "status": "Running"
     }
     return JsonResponse(progress)
+
+
+
+# launch_spider(None)
