@@ -205,8 +205,14 @@ def handle_document(soup: bs4.BeautifulSoup, relative_xml_path: str):
     doc_type = find_node(soup, 'WSZL').get('value')  # 文书种类
     full_text = find_node(soup, 'QW').get('value')  # 文书内容
 
-    Document.objects.update_or_create(address=address, agency=agency, doc_name=doc_name, doc_type=doc_type,
-                                      full_text=full_text)
+    #更新或创建文书
+    Document.objects.update_or_create(address=address,
+                                      defaults={
+                                          'agency': agency,
+                                          'doc_name': doc_name,
+                                          'doc_type': doc_type,
+                                          'full_text': full_text
+                                      })
 
 
 def handle_judgment(soup: bs4.BeautifulSoup, relative_xml_path: str):
@@ -230,16 +236,18 @@ def handle_judgment(soup: bs4.BeautifulSoup, relative_xml_path: str):
     court_node = find_node(soup, 'JBFY')
     court = handle_court(court_node)
 
-    # 创建文书
+    # 更新或创建文书
     judgment = Judgment.objects.update_or_create(address=address,
-                                                 agency=agency,
-                                                 doc_name=doc_name,
-                                                 doc_type=doc_type,
-                                                 full_text=full_text,
-                                                 case_number=case_number,
-                                                 case_type=case_type,
-                                                 judgment_date=judgment_date,
-                                                 court=court)
+                                                 defaults={'agency': agency,
+                                                           'doc_name': doc_name,
+                                                           'doc_type': doc_type,
+                                                           'full_text': full_text,
+                                                           'case_number': case_number,
+                                                           'case_type': case_type,
+                                                           'judgment_date': judgment_date,
+                                                           'court': court,
+                                                           })
+
     # 返回的是一个元组，第一个元素是对象，第二个元素是是否创建成功的标志
 
     # 当事人信息
@@ -299,16 +307,18 @@ def handle_prosecution(soup: bs4.BeautifulSoup, relative_xml_path: str):
     # 检察院信息
     procuratorate = handle_procuratorate(soup)
 
-    # 创建文书
+    # 更新或创建文书
     prosecution = Prosecution.objects.update_or_create(address=address,
-                                                       agency=agency,
-                                                       doc_name=doc_name,
-                                                       doc_type=doc_type,
-                                                       full_text=full_text,
-                                                       case_number=case_number,
-                                                       case_type=case_type,
-                                                       p_date=p_date,
-                                                       procuratorate=procuratorate)
+                                                       defaults={
+                                                           'agency': agency,
+                                                           'doc_name': doc_name,
+                                                           'doc_type': doc_type,
+                                                           'full_text': full_text,
+                                                           'case_number': case_number,
+                                                           'case_type': case_type,
+                                                           'p_date': p_date,
+                                                           'procuratorate': procuratorate,
+                                                       })
     # 返回的是一个元组，第一个元素是对象，第二个元素是是否创建成功的标志
 
     # 当事人信息
