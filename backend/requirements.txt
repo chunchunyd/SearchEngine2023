@@ -1,0 +1,8 @@
+Django==4.1
+djangorestframework==3.14.0
+jieba==0.42.1
+mkdocs==1.4.2
+mkdocs-material==9.1.8
+bs4==0.0.1
+chardet==5.1.0     # 因为bs4导入后charset_normalizer报错, 重新安装后又出现warnings, 安装这个之后warning消失
+arrow==1.2.3    # 用于处理时间
