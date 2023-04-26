@@ -1,5 +1,6 @@
 import json
 import os
+import time
 from django.http import JsonResponse
 from common.models import *
 from bs4 import BeautifulSoup
@@ -25,7 +26,7 @@ class XmlSpider:
         """
         设置数据文件夹
         """
-        # self.xml_files = os.listdir(dir_path)  # 相对于 STATICFILES_DIRS[0] 的路径
+        self.xml_files = os.listdir(dir_path)  # 相对于 STATICFILES_DIRS[0] 的路径
 
         # test
         # self.xml_files = json.load(
@@ -49,9 +50,12 @@ class XmlSpider:
         # self.xml_files = json.load(
         #     open(os.path.join(BASE_DIR, 'scripts', 'classification', 'FY', 'TZS.json'),
         #          'r', encoding='utf-8'))  # OK
-        self.xml_files = json.load(
-            open(os.path.join(BASE_DIR, 'scripts', 'classification', 'FY', 'JDS.json'),
-                 'r', encoding='utf-8'))  # OK
+        # self.xml_files = json.load(
+        #     open(os.path.join(BASE_DIR, 'scripts', 'classification', 'FY', 'JDS.json'),
+        #          'r', encoding='utf-8'))  # OK
+        # self.xml_files = json.load(
+        #     open(os.path.join(BASE_DIR, 'scripts', 'classification', 'FY', 'QSZ.json'),
+        #          'r', encoding='utf-8'))  # OK
 
         self.dir_path = dir_path
         self.total_count = len(self.xml_files)
@@ -91,10 +95,15 @@ def launch_spider(request):
     """
     启动爬虫
     """
-    # relative_dir = os.path.join('pages')
+    start_time = time.time()
     SPIDER.set_dir(STATICFILES_DIRS[0])
     SPIDER.parse()
-    return JsonResponse({"status": "Done"})
+    end_time = time.time()
+    print(f"总耗时：{end_time - start_time}秒")
+    return JsonResponse({
+        "status": "Done",
+        "time": end_time - start_time
+    })
 
 
 def spider_progress(request):
