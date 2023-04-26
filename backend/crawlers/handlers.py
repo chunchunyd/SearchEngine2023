@@ -4,12 +4,40 @@ from bs4 import BeautifulSoup
 from common.models import *
 
 
-def find_node(soup, query):
+def find_node(_node, query):
     """
     一个简单的封装，用于查找节点，如果没有找到，返回一个value为空的default节点
     """
-    result = find_node(soup, query)
+    result = _node.find(query)
     return result or bs4.element.Tag(name='default', attrs={'value': ''})
+
+
+def str_to_date(date_str):
+    """
+    一个简单的封装，将字符串转换为日期
+    """
+    if date_str is None:
+        return None
+    try:
+        return arrow.get(date_str, 'YYYY年MM月DD日').date()
+    except:
+        try:
+            return arrow.get(date_str[:date_str.index('月') + 1], 'YYYY年MM月').date()
+        except:
+            try:
+                return arrow.get(date_str[:date_str.index('年') + 1], 'YYYY年').date()
+            except:
+                return None
+
+
+def str_to_int(int_str):
+    """
+    一个简单的封装，将字符串转换为整数
+    """
+    try:
+        return int(int_str)
+    except:
+        return -1
 
 
 def handle_court(court_node):
@@ -39,7 +67,7 @@ def handle_procuratorate(soup):
     province = find_node(soup, 'XZQH_P').get('value')  # 行政区划——省
     city = find_node(soup, 'XZQH_C').get('value')  # 行政区划——市
     county = find_node(soup, 'XZQH_CC').get('value')  # 行政区划——区县
-    level = find_node(soup, 'CBJG_LEVEL').get('value')  # 行政机关_级别
+    level = str_to_int(find_node(soup, 'CBJG_LEVEL').get('value'))  # 行政机关_级别
 
     procuratorate = Procuratorate.objects.filter(name=name)
     if procuratorate.exists():
@@ -70,7 +98,8 @@ def handle_party(party_node):
     nationality = find_node(party_node, 'GJ').get('value')  # 国籍
     nation = find_node(party_node, 'MZ').get('value')  # 民族
     gender = find_node(party_node, 'XB').get('value')  # 性别
-    birthday = find_node(party_node, 'CSRQ').get('value')  # 出生日期
+    birthday_str = find_node(party_node, 'CSRQ').get('value')  # 出生日期
+    birthday = str_to_date(birthday_str)
 
     if name_is_fuzzy:
         # 直接当作新当事人处理
@@ -113,19 +142,41 @@ def handle_lawreference(lawreference_node):
     res = []
     law_name = find_node(lawreference_node, 'MC').get('value')  # 法律法条名称
     for clause in lawreference_node.findChildren('T'):  # 条
-        for clause_item in clause.findChildren('K'):  # 款
-            for item in clause_item.findChildren('X'):  # 项
+        clause_items = clause.findChildren('K')
+        if not clause_items:
+            law_ref = LawReference.objects.filter(law_name=law_name,
+                                                  law_clause=clause.get('value'))
+            if law_ref.exists():
+                res.append(law_ref.first())
+            else:
+                res.append(LawReference.objects.create(law_name=law_name,
+                                                       law_clause=clause.get('value')))
+            continue
+        for clause_item in clause_items:  # 款
+            items = clause_item.findChildren('X')
+            if not items:
                 law_ref = LawReference.objects.filter(law_name=law_name,
-                                                      clause=clause.get('value'),
-                                                      clause_item=clause_item.get('value'),
-                                                      item=item.get('value'))
+                                                      law_clause=clause.get('value'),
+                                                      law_clause_item=clause_item.get('value'))
                 if law_ref.exists():
                     res.append(law_ref.first())
                 else:
                     res.append(LawReference.objects.create(law_name=law_name,
-                                                           clause=clause.get('value'),
-                                                           clause_item=clause_item.get('value'),
-                                                           item=item.get('value')))
+                                                           law_clause=clause.get('value'),
+                                                           law_clause_item=clause_item.get('value')))
+                continue
+            for item in clause_item.findChildren('X'):  # 项
+                law_ref = LawReference.objects.filter(law_name=law_name,
+                                                      law_clause=clause.get('value'),
+                                                      law_clause_item=clause_item.get('value'),
+                                                      law_item=item.get('value'))
+                if law_ref.exists():
+                    res.append(law_ref.first())
+                else:
+                    res.append(LawReference.objects.create(law_name=law_name,
+                                                           law_clause=clause.get('value'),
+                                                           law_clause_item=clause_item.get('value'),
+                                                           law_item=item.get('value')))
     return res
 
 
@@ -143,80 +194,94 @@ def handle_judge(judge_node):
         return Judge.objects.create(name=name, full_name=full_name)
 
 
-def handle_document(soup: bs4.BeautifulSoup):
+def handle_document(soup: bs4.BeautifulSoup, relative_xml_path: str):
     """
     处理其他文书(通知书, 起诉状, 只有一个的‘暂予监外执行案例’）
     """
     # 仅存储基本信息
+    address = relative_xml_path  # 文书地址
     agency = find_node(soup, 'WSZZDW').get('value')  # 文书制作单位
     doc_name = find_node(soup, 'WSMC').get('value')  # 文书名称
     doc_type = find_node(soup, 'WSZL').get('value')  # 文书种类
     full_text = find_node(soup, 'QW').get('value')  # 文书内容
 
-    return Document.objects.create(agency=agency, doc_name=doc_name, doc_type=doc_type, full_text=full_text)
+    Document.objects.update_or_create(address=address, agency=agency, doc_name=doc_name, doc_type=doc_type,
+                                      full_text=full_text)
 
 
-def handle_judgment(soup: bs4.BeautifulSoup):
+def handle_judgment(soup: bs4.BeautifulSoup, relative_xml_path: str):
     """
     处理判决书(裁定书/调解书)
     """
     # 文书基本信息
-    document = handle_document(soup)
+    address = relative_xml_path  # 文书地址
+    agency = find_node(soup, 'WSZZDW').get('value')  # 文书制作单位
+    doc_name = find_node(soup, 'WSMC').get('value')  # 文书名称
+    doc_type = find_node(soup, 'WSZL').get('value')  # 文书种类
+    full_text = find_node(soup, 'QW').get('value')  # 文书内容
 
     # 判决书基本信息
     case_number = find_node(soup, 'AH').get('value')  # 案号
     case_type = find_node(soup, 'AJLB').get('value')  # 案件类别
     judgment_date_str = find_node(soup, 'CPSJ').get('value')
-    judgment_date = arrow.get(judgment_date_str, 'YYYY年M月D日').date()  # 裁判时间
+    judgment_date = str_to_date(judgment_date_str)  # 裁判时间
 
     # 法院信息
     court_node = find_node(soup, 'JBFY')
     court = handle_court(court_node)
 
     # 创建文书
-    judgment = Judgment.objects.create(document=document,
-                                       case_number=case_number,
-                                       case_type=case_type,
-                                       judgment_date=judgment_date,
-                                       court=court)
-    judgment.save()
+    judgment = Judgment.objects.update_or_create(address=address,
+                                                 agency=agency,
+                                                 doc_name=doc_name,
+                                                 doc_type=doc_type,
+                                                 full_text=full_text,
+                                                 case_number=case_number,
+                                                 case_type=case_type,
+                                                 judgment_date=judgment_date,
+                                                 court=court)
+    # 返回的是一个元组，第一个元素是对象，第二个元素是是否创建成功的标志
 
     # 当事人信息
     plaintiff_node_list = soup.find_all('QSF')  # 原告(起诉方)
     for plaintiff_node in plaintiff_node_list:
-        judgment.plaintiff.add(handle_party(plaintiff_node))
+        judgment[0].plaintiff.add(handle_party(plaintiff_node))
 
     defendant_node_list = soup.find_all('YSF')  # 被告(被诉方)
     for defendant_node in defendant_node_list:
-        judgment.defendant.add(handle_party(defendant_node))
+        judgment[0].defendant.add(handle_party(defendant_node))
 
     # 代理人信息
     agent_node_list = soup.find_all('DLR')
     for agent_node in agent_node_list:
         parties = []  # 代理人代理的当事人
         for party_node in agent_node.find_all('DLDX'):
-            parties.append(judgment.plaintiff.filter(name=party_node.get('value')).first())  # 用名字查找当事人
-            parties.append(judgment.defendant.filter(name=party_node.get('value')).first())
-        judgment.agent.add(handle_agent(agent_node, parties))
+            parties.append(judgment[0].plaintiff.filter(name=party_node.get('value')).first())  # 用名字查找当事人
+            parties.append(judgment[0].defendant.filter(name=party_node.get('value')).first())
+        judgment[0].agent.add(handle_agent(agent_node, parties))
 
     # 法条引用
     lawreference_node_list = soup.find_all('FLFTFZ')
     for lawreference_node in lawreference_node_list:
         for lawreference in handle_lawreference(lawreference_node):  # handle_lawreference返回的是一个法条列表
-            judgment.lawreference.add(lawreference)
+            judgment[0].law_reference.add(lawreference)
 
     # 法官信息
     judge_node_list = soup.find_all('CUS_FGCY')
     for judge_node in judge_node_list:
-        judgment.judge.add(handle_judge(judge_node))
+        judgment[0].judge.add(handle_judge(judge_node))
 
 
-def handle_prosecution(soup: bs4.BeautifulSoup):
+def handle_prosecution(soup: bs4.BeautifulSoup, relative_xml_path: str):
     """
     处理起诉书
     """
     # 文书基本信息
-    document = handle_document(soup)
+    address = relative_xml_path  # 文书地址
+    agency = find_node(soup, 'WSZZDW').get('value')  # 文书制作单位
+    doc_name = find_node(soup, 'WSMC').get('value')  # 文书名称
+    doc_type = find_node(soup, 'WSZL').get('value')  # 文书种类
+    full_text = find_node(soup, 'QW').get('value')  # 文书内容
 
     # 起诉书基本信息
     case_number = find_node(soup, 'AH').get('value')  # 案号
@@ -229,18 +294,22 @@ def handle_prosecution(soup: bs4.BeautifulSoup):
         p_date_str = find_node(soup, 'QSRQ').get('value')  # 起诉日期
     else:
         p_date_str = find_node(soup, 'BQSRQ').get('value')  # 不起诉日期
-    p_date = arrow.get(p_date_str, 'YYYY年M月D日').date()
+    p_date = str_to_date(p_date_str)
 
     # 检察院信息
     procuratorate = handle_procuratorate(soup)
 
     # 创建文书
-    prosecution = Prosecution.objects.create(document=document,
-                                             case_number=case_number,
-                                             case_type=case_type,
-                                             p_date=p_date,
-                                             procuratorate=procuratorate)
-    prosecution.save()
+    prosecution = Prosecution.objects.update_or_create(address=address,
+                                                       agency=agency,
+                                                       doc_name=doc_name,
+                                                       doc_type=doc_type,
+                                                       full_text=full_text,
+                                                       case_number=case_number,
+                                                       case_type=case_type,
+                                                       p_date=p_date,
+                                                       procuratorate=procuratorate)
+    # 返回的是一个元组，第一个元素是对象，第二个元素是是否创建成功的标志
 
     # 当事人信息
     if court_name:
@@ -248,4 +317,4 @@ def handle_prosecution(soup: bs4.BeautifulSoup):
     else:
         defendant_node_list = soup.find_all('CUS_BBQSRXX')  # 被不起诉人信息
     for defendant_node in defendant_node_list:
-        prosecution.defendant.add(handle_party(defendant_node))
+        prosecution[0].defendant.add(handle_party(defendant_node))

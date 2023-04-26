@@ -31,7 +31,7 @@ class Procuratorate(models.Model):
     district_code = models.CharField(max_length=10, verbose_name='行政区划代码')  # 行政区划代码
     province = models.CharField(max_length=30, verbose_name='省份')  # 行政区划——省份
     city = models.CharField(max_length=50, verbose_name='城市')  # 行政区划——城市
-    county = models.CharField(max_length=50, verbose_name='区县')  # 行政区划——区县
+    county = models.CharField(max_length=50, verbose_name='区县', null=True, blank=True)  # 行政区划——区县
     level = models.IntegerField(verbose_name='检察院级别')  # 检察院级别(eg. 4)
 
     class Meta:
@@ -52,7 +52,7 @@ class Party(models.Model):
     nationality = models.CharField(max_length=10, verbose_name='国籍', blank=True)  # 国籍
     nation = models.CharField(max_length=10, verbose_name='民族', blank=True)  # 民族
     gender = models.CharField(max_length=10, verbose_name='性别', blank=True)  # 性别
-    birthday = models.DateField(verbose_name='出生日期', blank=True)  # 出生日期
+    birthday = models.DateField(verbose_name='出生日期', blank=True, null=True)  # 出生日期
 
     class Meta:
         verbose_name = '当事人'
@@ -87,16 +87,16 @@ class LawReference(models.Model):
     法条引用模型
     """
     law_name = models.CharField(max_length=100, verbose_name="法律名称")  # 法律名称
-    law_clause = models.CharField(max_length=30, verbose_name="条")  # 条
-    law_clause_item = models.CharField(max_length=30, verbose_name="款")  # 款
-    law_item = models.CharField(max_length=30, verbose_name="项")  # 项
+    law_clause = models.CharField(max_length=30, verbose_name="条", null=True, blank=True)  # 条
+    law_clause_item = models.CharField(max_length=30, verbose_name="款", null=True, blank=True)  # 款
+    law_item = models.CharField(max_length=30, verbose_name="项", null=True, blank=True)  # 项
 
     class Meta:
         verbose_name = '法条引用'
         verbose_name_plural = verbose_name
 
     def __str__(self):
-        return self.law_code
+        return self.law_name
 
 
 class Judge(models.Model):
@@ -125,6 +125,7 @@ class Document(models.Model):
     )
 
     # 文书基本信息
+    address = models.CharField(max_length=100, verbose_name='地址')  # 地址
     agency = models.CharField(max_length=20, choices=WSZZDW, verbose_name='文书制作单位')  # 文书制作单位
     doc_name = models.CharField(max_length=30, verbose_name='文书名称', blank=True)  # 文书名称
     doc_type = models.CharField(max_length=30, verbose_name='文书种类', blank=True)  # 文书种类
@@ -146,7 +147,7 @@ class Judgment(Document):
     case_number = models.CharField(max_length=100, verbose_name='案号')  # 案号
     case_type = models.CharField(max_length=30, verbose_name='案件类别')  # 案件类别
     # 裁判日期
-    judgment_date = models.DateField(verbose_name='裁判日期')  # 裁判日期
+    judgment_date = models.DateField(verbose_name='裁判日期', blank=True, null=True)  # 裁判日期
 
     # 法院信息
     court = models.ForeignKey(Court, on_delete=models.CASCADE, verbose_name='法院')  # 法院
@@ -156,7 +157,8 @@ class Judgment(Document):
     defendant = models.ManyToManyField(Party, related_name='defendant', verbose_name='被告')  # 被告
 
     # 代理人信息
-    agent = models.ManyToManyField(Agent, related_name='plaintiff_agent', verbose_name='原告代理人', blank=True)  # 原告代理人
+    agent = models.ManyToManyField(Agent, related_name='plaintiff_agent', verbose_name='原告代理人',
+                                   blank=True)  # 原告代理人
 
     # 法条引用
     law_reference = models.ManyToManyField(LawReference, verbose_name='法条引用')  # 法条引用
@@ -184,7 +186,7 @@ class Prosecution(Document):
     court = models.CharField(max_length=100, verbose_name='诉至法院')  # 诉至法院
 
     # (不)起诉日期
-    p_date = models.DateField(verbose_name='(不)起诉日期')  # (不)起诉日期
+    p_date = models.DateField(verbose_name='(不)起诉日期', blank=True, null=True)  # (不)起诉日期
 
     # 检察院信息
     procuratorate = models.ForeignKey(Procuratorate, on_delete=models.CASCADE, verbose_name='检察院')  # 检察院

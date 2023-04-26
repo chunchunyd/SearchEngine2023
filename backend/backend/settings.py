@@ -119,7 +119,7 @@ USE_TZ = True
 
 STATIC_URL = "static/"
 STATICFILES_DIRS = (
-    os.path.join(BASE_DIR, "resources", "static"),
+    os.path.join(BASE_DIR, "resources", "static"),  # 项目中静态文件的目录1: 网页文件
 )
 
 
