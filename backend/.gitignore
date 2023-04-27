@@ -1,2 +1,5 @@
-Legal_data/
 .idea/
+resources/static/
+mongodb/
+db*
+doc/site/
