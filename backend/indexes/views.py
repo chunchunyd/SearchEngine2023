@@ -92,10 +92,14 @@ def search_by_index(query):
     terms = Term.objects.filter(term__in=query)
     # 获取每个词条的倒排索引
     postings = Posting.objects.filter(term__in=terms)
-    # 获取每个词条的倒排索引所对应的文档id
-    doc_ids = [posting.doc_id.id for posting in postings]
-    # 返回文档id集合
-    return set(doc_ids)
+    # 获取每个词条的倒排索引所对应的文档id和出现位置
+    results = {}
+    for posting in postings:
+        if posting.doc_id.id not in results:
+            results[posting.doc_id.id] = []
+        results[posting.doc_id.id].append(posting.position)
+    # 返回结果
+    return results
 
 
 def build_index(request):

@@ -41,6 +41,7 @@ INSTALLED_APPS = [
     "common.apps.CommonConfig",
     "crawlers.apps.CrawlersConfig",
     "indexes.apps.IndexesConfig",
+    "search.do_search.apps.DoSearchConfig",
 ]
 
 MIDDLEWARE = [

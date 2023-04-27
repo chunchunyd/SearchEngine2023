@@ -8,6 +8,7 @@ from common.models import *
 from indexes.models import *
 from indexes.views import search_by_index
 from backend.settings import SIGN_WORDS_PATH, STOP_WORDS_PATH, DEFAULT_PAGE_SIZE
+from common.serializers import *
 
 
 def search_by_keywords(words):
@@ -26,11 +27,11 @@ def search_by_keywords(words):
     judges = Judge.objects.filter(name__in=words)
 
     return {
-        'courts': courts,
-        'procuratorates': procuratorates,
-        'parties': parties,
-        'agents': agents,
-        'judges': judges
+        'courts': CourtSerializer(courts, many=True).data,
+        'procuratorates': ProcuratorateSerializer(procuratorates, many=True).data,
+        'parties': PartySerializer(parties, many=True).data,
+        'agents': AgentSerializer(agents, many=True).data,
+        'judges': JudgeSerializer(judges, many=True).data
     }
 
 
@@ -46,11 +47,17 @@ def union_search(query):
         stop_words += f.read().splitlines()
     words = [word for word in words if word not in stop_words]
 
+    print(f'分词结果: {words}')
+
     # 关键词查询
     keywords_result = search_by_keywords(words)
 
+    print(keywords_result)
+
     # 全文检索
     full_text_result = search_by_index(words)
+
+    print(full_text_result)
 
     return {
         'keywords_result': keywords_result,
@@ -65,7 +72,7 @@ def similar_search(query):
     pass
 
 
-def search(request):
+def query_search(request):
     """
     搜索接口
     """
