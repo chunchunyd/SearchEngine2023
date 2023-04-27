@@ -24,7 +24,14 @@ def search_by_keywords(words):
     agents = Agent.objects.filter(name__in=words)
     # 审判人员信息搜索
     judges = Judge.objects.filter(name__in=words)
-    # 文书信息搜索
+
+    return {
+        'courts': courts,
+        'procuratorates': procuratorates,
+        'parties': parties,
+        'agents': agents,
+        'judges': judges
+    }
 
 
 def union_search(query):
@@ -40,14 +47,35 @@ def union_search(query):
     words = [word for word in words if word not in stop_words]
 
     # 关键词查询
-    result_1 = search_by_keywords(words)
+    keywords_result = search_by_keywords(words)
 
     # 全文检索
-    result_2 = search_by_index(words)
+    full_text_result = search_by_index(words)
+
+    return {
+        'keywords_result': keywords_result,
+        'full_text_result': full_text_result
+    }
 
 
 def similar_search(query):
     """
-    相似查询，query为查询字符串
+    todo:相似查询，query为查询字符串
     """
     pass
+
+
+def search(request):
+    """
+    搜索接口
+    """
+    query = request.GET.get('query')
+    if not query:
+        return JsonResponse({'code': 400, 'msg': 'query参数缺失'})
+    # 联合查询
+    result = union_search(query)
+    # # 相似查询
+    # similar_search(query)
+    return JsonResponse({'code': 200,
+                         'msg': 'ok',
+                         'data': result})
