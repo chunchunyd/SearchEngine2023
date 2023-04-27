@@ -1,7 +1,10 @@
+import os.path
+
 import bs4
 import arrow
 from bs4 import BeautifulSoup
 from common.models import *
+from django.db import transaction
 
 
 def find_node(_node, query):
@@ -115,7 +118,7 @@ def handle_party(party_node):
                                         nationality=nationality, nation=nation, gender=gender, birthday=birthday)
 
 
-def handle_agent(agent_node, parties):
+def handle_agent(agent_node):
     """
     处理代理人
     """
@@ -126,13 +129,9 @@ def handle_agent(agent_node, parties):
 
     agent = Agent.objects.filter(name=name, h_type=h_type, profession=profession, a_type=a_type)
     if agent.exists():
-        agent = agent.first()
+        return agent.first()
     else:
-        agent = Agent.objects.create(name=name, h_type=h_type, profession=profession, a_type=a_type)
-
-    # 被代理人
-    for party in parties:
-        agent.parties.add(party)
+        return Agent.objects.create(name=name, h_type=h_type, profession=profession, a_type=a_type)
 
 
 def handle_lawreference(lawreference_node):
@@ -194,18 +193,19 @@ def handle_judge(judge_node):
         return Judge.objects.create(name=name, full_name=full_name)
 
 
+@transaction.atomic
 def handle_document(soup: bs4.BeautifulSoup, relative_xml_path: str):
     """
     处理其他文书(通知书, 起诉状, 只有一个的‘暂予监外执行案例’）
     """
     # 仅存储基本信息
-    address = relative_xml_path  # 文书地址
+    address = f'static/{relative_xml_path}'  # 文书地址
     agency = find_node(soup, 'WSZZDW').get('value')  # 文书制作单位
     doc_name = find_node(soup, 'WSMC').get('value')  # 文书名称
     doc_type = find_node(soup, 'WSZL').get('value')  # 文书种类
     full_text = find_node(soup, 'QW').get('value')  # 文书内容
 
-    #更新或创建文书
+    # 更新或创建文书
     Document.objects.update_or_create(address=address,
                                       defaults={
                                           'agency': agency,
@@ -215,12 +215,13 @@ def handle_document(soup: bs4.BeautifulSoup, relative_xml_path: str):
                                       })
 
 
+@transaction.atomic
 def handle_judgment(soup: bs4.BeautifulSoup, relative_xml_path: str):
     """
     处理判决书(裁定书/调解书)
     """
     # 文书基本信息
-    address = relative_xml_path  # 文书地址
+    address = f'static/{relative_xml_path}'  # 文书地址
     agency = find_node(soup, 'WSZZDW').get('value')  # 文书制作单位
     doc_name = find_node(soup, 'WSMC').get('value')  # 文书名称
     doc_type = find_node(soup, 'WSZL').get('value')  # 文书种类
@@ -252,21 +253,36 @@ def handle_judgment(soup: bs4.BeautifulSoup, relative_xml_path: str):
 
     # 当事人信息
     plaintiff_node_list = soup.find_all('QSF')  # 原告(起诉方)
+    plaintiff_list = []
     for plaintiff_node in plaintiff_node_list:
-        judgment[0].plaintiff.add(handle_party(plaintiff_node))
+        plaintiff = handle_party(plaintiff_node)
+        plaintiff_list.append(plaintiff)
+        judgment[0].plaintiff.add(plaintiff)
+        # print(f"原告: {plaintiff.name}")
 
     defendant_node_list = soup.find_all('YSF')  # 被告(被诉方)
+    defendant_list = []
     for defendant_node in defendant_node_list:
-        judgment[0].defendant.add(handle_party(defendant_node))
+        defendant = handle_party(defendant_node)
+        defendant_list.append(defendant)
+        judgment[0].defendant.add(defendant)
+        # print(f"被告: {defendant.name}")
 
     # 代理人信息
     agent_node_list = soup.find_all('DLR')
     for agent_node in agent_node_list:
-        parties = []  # 代理人代理的当事人
+        parties = plaintiff_list + defendant_list  # 代理人代理的当事人
+        agent_parties = []
         for party_node in agent_node.find_all('DLDX'):
-            parties.append(judgment[0].plaintiff.filter(name=party_node.get('value')).first())  # 用名字查找当事人
-            parties.append(judgment[0].defendant.filter(name=party_node.get('value')).first())
-        judgment[0].agent.add(handle_agent(agent_node, parties))
+            party_name = party_node.get('value')
+            # print(f"当事人: {party_name}")
+            # 用名字筛选当事人
+            agent_parties += list(filter(lambda x: x.name == party_name, parties))
+        # judgment[0].agent.add(handle_agent(agent_node, parties, judgment[0]))
+        # 添加代理人-当事人关系
+        agent = handle_agent(agent_node)
+        for party in agent_parties:
+            DocAgentParty.objects.create(doc=judgment[0], agent=agent, party=party)
 
     # 法条引用
     lawreference_node_list = soup.find_all('FLFTFZ')
@@ -280,12 +296,13 @@ def handle_judgment(soup: bs4.BeautifulSoup, relative_xml_path: str):
         judgment[0].judge.add(handle_judge(judge_node))
 
 
+@transaction.atomic
 def handle_prosecution(soup: bs4.BeautifulSoup, relative_xml_path: str):
     """
     处理起诉书
     """
     # 文书基本信息
-    address = relative_xml_path  # 文书地址
+    address = f'static/{relative_xml_path}'  # 文书地址
     agency = find_node(soup, 'WSZZDW').get('value')  # 文书制作单位
     doc_name = find_node(soup, 'WSMC').get('value')  # 文书名称
     doc_type = find_node(soup, 'WSZL').get('value')  # 文书种类

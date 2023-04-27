@@ -23,4 +23,6 @@ urlpatterns = [
     path("admin/", admin.site.urls),
     path("api/", include("common.urls")),
     path("api/", include("crawlers.urls")),
+    path("api/", include("indexes.urls")),
+    path("api/", include("search.do_search.urls")),
 ] + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)

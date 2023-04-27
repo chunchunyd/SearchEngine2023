@@ -38,7 +38,10 @@ INSTALLED_APPS = [
     "django.contrib.messages",
     "django.contrib.staticfiles",
     "rest_framework",
-    "common",
+    "common.apps.CommonConfig",
+    "crawlers.apps.CrawlersConfig",
+    "indexes.apps.IndexesConfig",
+    "search.do_search.apps.DoSearchConfig",
 ]
 
 MIDDLEWARE = [
@@ -127,3 +130,7 @@ STATICFILES_DIRS = (
 # https://docs.djangoproject.com/en/4.1/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
+
+STOP_WORDS_PATH = os.path.join(BASE_DIR, 'resources', 'stop_words.txt')
+SIGN_WORDS_PATH = os.path.join(BASE_DIR, 'resources', 'sign.json')
+DEFAULT_PAGE_SIZE = 10

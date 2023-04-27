@@ -1,3 +1,5 @@
 .idea/
-resources/
-db.sqlite3
+resources/static/
+mongodb/
+db*
+doc/site/

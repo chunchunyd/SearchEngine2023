@@ -11,4 +11,5 @@ admin.site.register(Judge)
 admin.site.register(Document)
 admin.site.register(Judgment)
 admin.site.register(Prosecution)
+admin.site.register(DocAgentParty)
 
