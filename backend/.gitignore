@@ -1,5 +1,4 @@
 .idea/
-resources/
+resources/static/
 mongodb/
-db.sqlite3
-db_old.sqlite3
+db*
