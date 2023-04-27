@@ -39,6 +39,8 @@ INSTALLED_APPS = [
     "django.contrib.staticfiles",
     "rest_framework",
     "common.apps.CommonConfig",
+    "crawlers.apps.CrawlersConfig",
+    "indexes.apps.IndexesConfig",
 ]
 
 MIDDLEWARE = [

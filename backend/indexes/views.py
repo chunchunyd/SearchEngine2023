@@ -5,6 +5,23 @@ from indexes.models import Term, Posting
 from backend.settings import SIGN_WORDS_PATH, STOP_WORDS_PATH, DEFAULT_PAGE_SIZE
 import jieba
 import json
+from rest_framework.viewsets import ModelViewSet
+from rest_framework.pagination import LimitOffsetPagination
+from .serializers import *
+
+
+class TermViewSet(ModelViewSet):
+    queryset = Term.objects.all()
+    serializer_class = TermSerializer
+    pagination_class = LimitOffsetPagination
+    pagination_class.default_limit = DEFAULT_PAGE_SIZE
+
+
+class PostingViewSet(ModelViewSet):
+    queryset = Posting.objects.all()
+    serializer_class = PostingSerializer
+    pagination_class = LimitOffsetPagination
+    pagination_class.default_limit = DEFAULT_PAGE_SIZE
 
 
 def build_inverted_index():
@@ -40,7 +57,7 @@ def build_inverted_index():
     # 遍历文档
     for document in documents:
         cnt += 1
-        print(f'正在处理第{cnt}/{len(documents)}个文档', end='\r')
+        print(f'\r正在处理第{cnt}/{len(documents)}个文档', end='')
         # 获取文档内容
         content = document.full_text
         # 用jieba分词

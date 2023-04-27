@@ -7,7 +7,7 @@ from django.http import JsonResponse
 from common.models import *
 from indexes.models import *
 from indexes.views import search_by_index
-from backend.settings import SIGN_WORDS_PATH, STOP_WORDS_PATH
+from backend.settings import SIGN_WORDS_PATH, STOP_WORDS_PATH, DEFAULT_PAGE_SIZE
 
 
 def search_by_keywords(words):
