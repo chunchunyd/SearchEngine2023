@@ -80,8 +80,6 @@ class Agent(models.Model):
     profession = models.CharField(max_length=30, verbose_name='代理人辩护人职业类型', blank=True)  # 职业(eg. 职业律师、非法务人员)
     a_type = models.CharField(max_length=20, verbose_name='辩护人或诉讼代理人类型', blank=True)  # 代理类型(eg. 律师、亲友)
 
-    # 被代理人
-    parties = models.ManyToManyField(Party, verbose_name='被代理人', db_index=True)  # 被代理人
 
     class Meta:
         verbose_name = '代理人'
@@ -181,12 +179,13 @@ class Judgment(Document):
     court = models.ForeignKey(Court, on_delete=models.CASCADE, verbose_name='法院')  # 法院
 
     # 当事人信息
-    plaintiff = models.ManyToManyField(Party, related_name='plaintiff', verbose_name='原告', db_index=True)  # 原告
+    plaintiff = models.ManyToManyField(Party, related_name='plaintiff', verbose_name='原告', db_index=True
+                                       )  # 原告
     defendant = models.ManyToManyField(Party, related_name='defendant', verbose_name='被告', db_index=True)  # 被告
 
     # 代理人信息
     agent = models.ManyToManyField(Agent, related_name='plaintiff_agent', verbose_name='代理人',
-                                   blank=True, db_index=True)  # 代理人
+                                   blank=True, db_index=True, through='DocAgentParty')  # 代理人
 
     # 法条引用
     law_reference = models.ManyToManyField(LawReference, verbose_name='法条引用', db_index=True)  # 法条引用
@@ -226,7 +225,8 @@ class Prosecution(Document):
     procuratorate = models.ForeignKey(Procuratorate, on_delete=models.CASCADE, verbose_name='检察院')  # 检察院
 
     # 被告人信息
-    defendant = models.ManyToManyField(Party, related_name='prosecution_defendant', verbose_name='被告', db_index=True)  # 被告
+    defendant = models.ManyToManyField(Party, related_name='prosecution_defendant', verbose_name='被告',
+                                       db_index=True)  # 被告
 
     class Meta:
         verbose_name = '检察院文书'
@@ -240,3 +240,24 @@ class Prosecution(Document):
 
     def __str__(self):
         return self.doc_title
+
+
+class DocAgentParty(models.Model):
+    """
+    文书代理人当事人关系模型
+    """
+    doc = models.ForeignKey(Judgment, on_delete=models.CASCADE, verbose_name='文书')  # 文书
+    agent = models.ForeignKey(Agent, on_delete=models.CASCADE, verbose_name='代理人')  # 代理人
+    party = models.ForeignKey(Party, on_delete=models.CASCADE, verbose_name='当事人')  # 当事人
+
+    class Meta:
+        verbose_name = '文书代理人当事人关系'
+        verbose_name_plural = verbose_name
+        indexes = [
+            models.Index(fields=['doc', 'agent']),
+            models.Index(fields=['agent', 'party']),
+            models.Index(fields=['party', 'doc']),
+        ]
+
+    def __str__(self):
+        return self.doc.address + '-' + self.agent.name + '-' + self.party.name

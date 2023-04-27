@@ -116,7 +116,7 @@ def handle_party(party_node):
                                         nationality=nationality, nation=nation, gender=gender, birthday=birthday)
 
 
-def handle_agent(agent_node, parties):
+def handle_agent(agent_node, parties, doc):
     """
     处理代理人
     """
@@ -127,13 +127,9 @@ def handle_agent(agent_node, parties):
 
     agent = Agent.objects.filter(name=name, h_type=h_type, profession=profession, a_type=a_type)
     if agent.exists():
-        agent = agent.first()
+        return agent.first()
     else:
-        agent = Agent.objects.create(name=name, h_type=h_type, profession=profession, a_type=a_type)
-
-    # 被代理人
-    for party in parties:
-        agent.parties.add(party)
+        return Agent.objects.create(name=name, h_type=h_type, profession=profession, a_type=a_type)
 
 
 def handle_lawreference(lawreference_node):
@@ -207,7 +203,7 @@ def handle_document(soup: bs4.BeautifulSoup, relative_xml_path: str):
     doc_type = find_node(soup, 'WSZL').get('value')  # 文书种类
     full_text = find_node(soup, 'QW').get('value')  # 文书内容
 
-    #更新或创建文书
+    # 更新或创建文书
     Document.objects.update_or_create(address=address,
                                       defaults={
                                           'agency': agency,
@@ -269,7 +265,11 @@ def handle_judgment(soup: bs4.BeautifulSoup, relative_xml_path: str):
         for party_node in agent_node.find_all('DLDX'):
             parties.append(judgment[0].plaintiff.filter(name=party_node.get('value')).first())  # 用名字查找当事人
             parties.append(judgment[0].defendant.filter(name=party_node.get('value')).first())
-        judgment[0].agent.add(handle_agent(agent_node, parties))
+        # judgment[0].agent.add(handle_agent(agent_node, parties, judgment[0]))
+        # 添加代理人-当事人关系
+        agent = handle_agent(agent_node, parties, judgment[0])
+        for party in parties:
+            doc_agent_party = DocAgentParty.objects.create(doc=judgment[0], agent=agent, party=party)
 
     # 法条引用
     lawreference_node_list = soup.find_all('FLFTFZ')

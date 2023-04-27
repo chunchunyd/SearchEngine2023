@@ -54,3 +54,9 @@ class ProsecutionSerializer(ModelSerializer):
     class Meta:
         model = Prosecution
         fields = '__all__'
+
+
+class DocAgentPartySerializer(ModelSerializer):
+    class Meta:
+        model = DocAgentParty
+        fields = '__all__'
