@@ -162,7 +162,7 @@ class Document(models.Model):
         ]
 
     def __str__(self):
-        return self.doc_type
+        return self.address
 
 
 class Judgment(Document):
@@ -204,7 +204,7 @@ class Judgment(Document):
         ]
 
     def __str__(self):
-        return self.doc_title
+        return self.address
 
 
 class Prosecution(Document):
@@ -239,7 +239,7 @@ class Prosecution(Document):
         ]
 
     def __str__(self):
-        return self.doc_title
+        return self.address
 
 
 class DocAgentParty(models.Model):
