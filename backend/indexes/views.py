@@ -1,33 +1,73 @@
 import logging
 from django.http import JsonResponse
-from common.models import Document, Party, Agent, Judge
+from django.db import transaction
+from common.models import LawDocument, Party, Agent, Judge
 from indexes.models import Term, Posting
 from backend.settings import SIGN_WORDS_PATH, STOP_WORDS_PATH, DEFAULT_PAGE_SIZE
 import jieba
 import json
+import time
 from rest_framework.viewsets import ModelViewSet
 from rest_framework.pagination import LimitOffsetPagination
 from .serializers import *
 
 
-class TermViewSet(ModelViewSet):
-    queryset = Term.objects.all()
-    serializer_class = TermSerializer
-    pagination_class = LimitOffsetPagination
-    pagination_class.default_limit = DEFAULT_PAGE_SIZE
+#
+# class TermViewSet(ModelViewSet):
+#     queryset = Term.objects.all()
+#     serializer_class = TermSerializer
+#     pagination_class = LimitOffsetPagination
+#     pagination_class.default_limit = DEFAULT_PAGE_SIZE
+#
+#
+# class PostingViewSet(ModelViewSet):
+#     queryset = Posting.objects.all()
+#     serializer_class = PostingSerializer
+#     pagination_class = LimitOffsetPagination
+#     pagination_class.default_limit = DEFAULT_PAGE_SIZE
+#
+# 实际上应该用drf-me的ModelViewSet，但是非常麻烦，所以不用viewset了
 
 
-class PostingViewSet(ModelViewSet):
-    queryset = Posting.objects.all()
-    serializer_class = PostingSerializer
-    pagination_class = LimitOffsetPagination
-    pagination_class.default_limit = DEFAULT_PAGE_SIZE
+@transaction.atomic
+def handle_document(document, stop_words):
+    # 获取文档内容
+    content = document.full_text
+    # 用jieba分词
+    words = jieba.tokenize(content, mode='search')
+    # 去除停用词
+    words = [word for word in words if word[0] not in stop_words]
+    # 遍历分词结果
+    visited_words = set()  # 用于记录已经访问过的词条
+    for word in words:
+        # 存入mongoDB
+
+        # 词条不存在则创建
+        term = Term.objects().filter(term=word[0]).first()
+        if term is None:
+            term = Term.objects.create(term=word[0], document_count=0)
+        # 如果是第一次访问该词条, 则文档数+1
+        if word not in visited_words:
+            term.document_count += 1
+            # 将词条加入已访问集合
+            visited_words.add(word)
+        # 保存词条
+        term.save()
+
+        # 建立倒排索引
+        posting = Posting.objects().filter(term=word[0], doc_id=document.id).first()
+        if posting is None:
+            posting = Posting.objects.create(term=word[0], doc_id=document.id, position=[])
+        # posting.frequency += 1
+        posting.position.append(word[1])
+        posting.save()
 
 
 def build_inverted_index():
     """
     建立倒排索引
     """
+    stop_watch = time.time()
     print('开始建立倒排索引')
     # 测试发现, jieba分词对人名支持很差，所以这里从数据库手动添加人名dict
     # 获取所有人名，构建人名dict
@@ -50,36 +90,34 @@ def build_inverted_index():
         stop_words += f.read().splitlines()
     print('停用词获取完成')
 
+    now = time.time()
+    print(f'初始化用时{now - stop_watch:.2f}s')
+    stop_watch = now
+
     # 获取所有文档
     print('开始遍历文档')
-    documents = Document.objects.all()
+    documents = LawDocument.objects.all()
+    start_doc_id = 1
     cnt = 0
+    total_time = 0
+    start_time = stop_watch
     # 遍历文档
     for document in documents:
         cnt += 1
-        print(f'\r正在处理第{cnt}/{len(documents)}个文档', end='')
-        # 获取文档内容
-        content = document.full_text
-        # 用jieba分词
-        words = jieba.cut_for_search(content)
-        # 去除停用词
-        words = [word for word in words if word not in stop_words]
-        # 遍历分词结果
-        visited_words = set()  # 用于记录已经访问过的词条
-        for word in words:
-            term = Term.objects.get_or_create(term=word, defaults={'document_count': 0})[0]
-            # 如果本文档中第一次访问到该词条，则文档数+1
-            if word not in visited_words:
-                term.document_count += 1
-                visited_words.add(word)
-            term.save()
-            # 建立倒排索引
-            posting = Posting.objects.get_or_create(term=term,
-                                                    doc_id=document,
-                                                    defaults={'frequency': 0, 'position': 0})[0]
-            posting.frequency += 1
-            posting.position = content.find(word)
-            posting.save()
+        print(f'\r正在处理第{cnt}/{len(documents)}个文档', end=' ')
+
+        # 如果文档id小于start_doc_id，说明已经处理过，跳过
+        if document.id < start_doc_id:
+            print(f'文档{cnt}已处理过')
+            continue
+
+        handle_document(document, stop_words)
+
+        now = time.time()
+        print(
+            f'文档{cnt}用时{now - stop_watch:.2f}s, 总用时{now - start_time:.2f}s, 平均用时{(now - start_time) / cnt:.2f}s')
+        stop_watch = now
+
     print('\n倒排索引建立完成')
 
 
@@ -91,13 +129,25 @@ def search_by_index(query):
     # 获取query中的所有词条
     terms = Term.objects.filter(term__in=query)
     # 获取每个词条的倒排索引
-    postings = Posting.objects.filter(term__in=terms)
+    postings = Posting.objects.filter(term__in=query)
     # 获取每个词条的倒排索引所对应的文档id和出现位置
+
+    sons = [pst.to_mongo() for pst in postings]
+    # print(sons)
+    # [SON([('_id', ObjectId('6453ce69c32402d481968f81')), ('term', '浙江'), ('doc_id', 1), ('position', [0, 1065])]),
+    # SON([('_id', ObjectId('6453ce79c32402d48196a0bc')), ('term', '浙江'), ('doc_id', 8), ('position', [0, 98, 2108])])
+    # ,...]
+
     results = {}
-    for posting in postings:
-        if posting.doc_id.id not in results:
-            results[posting.doc_id.id] = []
-        results[posting.doc_id.id].append(posting.position)
+    for son in sons:
+        posting = son.to_dict()
+        # {'_id': ObjectId('6453ce69c32402d481968f81'), 'term': '浙江', 'doc_id': 1, 'position': [0, 1065]}
+        # {'_id': ObjectId('6453ce79c32402d48196a0bc'), 'term': '浙江', 'doc_id': 8, 'position': [0, 98, 2108]}
+
+        if posting['doc_id'] not in results:
+            document = LawDocument.objects.filter(id=posting['doc_id']).first()
+            results[posting['doc_id']] = {"address": document.address, "terms": {}}
+        results[posting["doc_id"]]["terms"][posting["term"]] = posting["position"]
     # 返回结果
     return results
 
@@ -114,21 +164,22 @@ def test_search(request):
     """
     测试搜索功能
     """
-    query = request.GET.get('query')
-    query = [query]
-    doc_ids = search_by_index(query)
-    documents = Document.objects.filter(id__in=doc_ids)
-    result = []
-    for document in documents:
-        result.append({
-            'address': document.address,
-        })
+    query1 = request.GET.get('query1')
+    query2 = request.GET.get('query2')
+    query = [query1, query2]
+    result = search_by_index(query)
+    # result = []
+    # for document in documents:
+    #     result.append({
+    #         'address': document.address,
+    #     })
 
     # todo:把result缓存到redis中
     # redis.set('search_result', result)
     # redis.expire('search_result', 60)  # 设置过期时间为60s
 
     # 分页
+    result = list(result.items())       # 为了分页，把dict转换成list
     page = request.GET.get('page')
     if page is None:
         page = 1

@@ -1,59 +1,71 @@
 from django.db import models
-from common.models import Document
+from common.models import LawDocument
+from mongoengine import Document, StringField, IntField, ListField
 
 
-# Create your models here.
-# class Index(models.Model):
+class Term(Document):
+    """
+    存储索引词条
+    """
+    term = StringField(max_length=100)  # 词条
+    document_count = IntField()  # 出现该词条的文档数
+    meta = {
+        'collection': 'term',
+        'indexes': [
+            'term',
+        ]}
+
+
+class Posting(Document):
+    """
+    存储倒排索引
+    """
+    term = StringField(max_length=100)  # 词条
+    doc_id = IntField()  # 文档ID
+    # frequency = IntField()  # 词频
+    position = ListField()  # 位置
+    meta = {
+        'collection': 'posting',
+        'indexes': [
+            'term',
+            'doc_id',
+        ]}
+
+# class Term(models.Model):
 #     """
-#     倒排索引
+#     存储索引词条
 #     """
-#     word = models.CharField(max_length=100, verbose_name='词条')  # 词条
-#     doc_id = models.IntegerField(verbose_name='文档ID')  # 文档ID
+#     term = models.CharField(max_length=100, verbose_name='词条')  # 词条
+#     document_count = models.IntegerField(verbose_name='出现该词条的文档数')  # 出现该词条的文档数
+#
+#     class Meta:
+#         verbose_name = '词条'
+#         verbose_name_plural = verbose_name
+#         indexes = [
+#             models.Index(fields=['term']),
+#         ]
+#
+#     def __str__(self):
+#         return self.term
+#
+#
+# class Posting(models.Model):
+#     """
+#     存储倒排索引
+#     """
+#     term = models.ForeignKey(Term, on_delete=models.CASCADE, verbose_name='词条')  # 词条
+#     doc_id = models.ForeignKey(Document, on_delete=models.CASCADE, verbose_name='文档ID')  # 文档ID
 #     frequency = models.IntegerField(verbose_name='词频')  # 词频
-#     position = models.TextField(verbose_name='位置')  # 位置
+#     position = models.IntegerField(verbose_name='位置')  # 位置
 #
 #     class Meta:
 #         verbose_name = '倒排索引'
 #         verbose_name_plural = verbose_name
+#         indexes = [
+#             models.Index(fields=['term']),
+#             models.Index(fields=['doc_id']),
+#             models.Index(fields=['term', 'doc_id']),
+#         ]
 #
 #     def __str__(self):
-#         return self.word
-
-class Term(models.Model):
-    """
-    存储索引词条
-    """
-    term = models.CharField(max_length=100, verbose_name='词条')  # 词条
-    document_count = models.IntegerField(verbose_name='出现该词条的文档数')  # 出现该词条的文档数
-
-    class Meta:
-        verbose_name = '词条'
-        verbose_name_plural = verbose_name
-        indexes = [
-            models.Index(fields=['term']),
-        ]
-
-    def __str__(self):
-        return self.term
-
-
-class Posting(models.Model):
-    """
-    存储倒排索引
-    """
-    term = models.ForeignKey(Term, on_delete=models.CASCADE, verbose_name='词条')  # 词条
-    doc_id = models.ForeignKey(Document, on_delete=models.CASCADE, verbose_name='文档ID')  # 文档ID
-    frequency = models.IntegerField(verbose_name='词频')  # 词频
-    position = models.IntegerField(verbose_name='位置')  # 位置
-
-    class Meta:
-        verbose_name = '倒排索引'
-        verbose_name_plural = verbose_name
-        indexes = [
-            models.Index(fields=['term']),
-            models.Index(fields=['doc_id']),
-            models.Index(fields=['term', 'doc_id']),
-        ]
-
-    def __str__(self):
-        return self.term.term
+#         return self.term.term

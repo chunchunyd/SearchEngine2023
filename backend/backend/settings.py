@@ -85,6 +85,9 @@ DATABASES = {
     }
 }
 
+# mongodb
+from mongoengine import connect
+connect('search_engine', host='localhost', port=27017)
 
 # Password validation
 # https://docs.djangoproject.com/en/4.1/ref/settings/#auth-password-validators

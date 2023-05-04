@@ -206,8 +206,8 @@ def handle_document(soup: bs4.BeautifulSoup, relative_xml_path: str):
     full_text = find_node(soup, 'QW').get('value')  # 文书内容
 
     # 更新或创建文书
-    Document.objects.update_or_create(address=address,
-                                      defaults={
+    LawDocument.objects.update_or_create(address=address,
+                                         defaults={
                                           'agency': agency,
                                           'doc_name': doc_name,
                                           'doc_type': doc_type,

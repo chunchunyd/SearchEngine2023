@@ -40,7 +40,7 @@ class JudgeSerializer(ModelSerializer):
 
 class DocumentSerializer(ModelSerializer):
     class Meta:
-        model = Document
+        model = LawDocument
         fields = '__all__'
 
 

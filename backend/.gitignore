@@ -3,3 +3,4 @@ resources/static/
 mongodb/
 db*
 doc/site/
+*.pyc

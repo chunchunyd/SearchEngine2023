@@ -134,7 +134,7 @@ class Judge(models.Model):
         return self.name
 
 
-class Document(models.Model):
+class LawDocument(models.Model):
     """
     文书基类
     """
@@ -165,7 +165,7 @@ class Document(models.Model):
         return self.address
 
 
-class Judgment(Document):
+class Judgment(LawDocument):
     """
     法院文书模型（裁判文书+决定书）
     """
@@ -207,7 +207,7 @@ class Judgment(Document):
         return self.address
 
 
-class Prosecution(Document):
+class Prosecution(LawDocument):
     """
     检察院文书模型
     """

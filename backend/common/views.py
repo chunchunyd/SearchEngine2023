@@ -51,7 +51,7 @@ class JudgeViewSet(ModelViewSet):
 
 
 class DocumentViewSet(ModelViewSet):
-    queryset = Document.objects.all()
+    queryset = LawDocument.objects.all()
     serializer_class = DocumentSerializer
     pagination_class = LimitOffsetPagination
     pagination_class.default_limit = DEFAULT_PAGE_SIZE

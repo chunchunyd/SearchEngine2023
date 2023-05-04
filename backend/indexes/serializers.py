@@ -1,14 +1,14 @@
-from rest_framework.serializers import ModelSerializer
+from rest_framework import serializers
 from .models import *
 
 
-class TermSerializer(ModelSerializer):
-    class Meta:
-        model = Term
-        fields = '__all__'
+class TermSerializer(serializers.Serializer):
+    term = serializers.CharField(max_length=100)
+    document_count = serializers.IntegerField()
 
 
-class PostingSerializer(ModelSerializer):
-    class Meta:
-        model = Posting
-        fields = '__all__'
+class PostingSerializer(serializers.Serializer):
+    term = serializers.CharField(max_length=100)
+    doc_id = serializers.IntegerField()
+    frequency = serializers.IntegerField()
+    position = serializers.IntegerField()

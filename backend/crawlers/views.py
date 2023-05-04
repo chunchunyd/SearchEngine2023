@@ -66,8 +66,14 @@ class XmlSpider:
         """
         解析xml文件
         """
+        start_xml_id = 1
         for xml_file in self.xml_files:
             self.current_count += 1
+
+            # 开始解析的xml_id
+            if self.current_count < start_xml_id:
+                continue
+
             if self.current_count % 1000 == 0:
                 print(f', 总计用时：{time.time() - start_time}秒')
             print(f"\r当前进度：{self.current_count}/{self.total_count}", end='')
