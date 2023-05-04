@@ -1,10 +1,12 @@
 import logging
 from django.http import JsonResponse
+from django.db import transaction
 from common.models import Document, Party, Agent, Judge
 from indexes.models import Term, Posting
 from backend.settings import SIGN_WORDS_PATH, STOP_WORDS_PATH, DEFAULT_PAGE_SIZE
 import jieba
 import json
+import time
 from rest_framework.viewsets import ModelViewSet
 from rest_framework.pagination import LimitOffsetPagination
 from .serializers import *
@@ -24,7 +26,33 @@ class PostingViewSet(ModelViewSet):
     pagination_class.default_limit = DEFAULT_PAGE_SIZE
 
 
-def build_inverted_index():
+@transaction.atomic
+def handle_document(document, stop_words):
+    # 获取文档内容
+    content = document.full_text
+    # 用jieba分词
+    words = jieba.cut_for_search(content)
+    # 去除停用词
+    words = [word for word in words if word not in stop_words]
+    # 遍历分词结果
+    visited_words = set()  # 用于记录已经访问过的词条
+    for word in words:
+        term = Term.objects.get_or_create(term=word, defaults={'document_count': 0})[0]
+        # 如果本文档中第一次访问到该词条，则文档数+1
+        if word not in visited_words:
+            term.document_count += 1
+            visited_words.add(word)
+        term.save()
+        # 建立倒排索引
+        posting = Posting.objects.get_or_create(term=term,
+                                                doc_id=document,
+                                                defaults={'frequency': 0, 'position': 0})[0]
+        posting.frequency += 1
+        posting.position = content.find(word)
+        posting.save()
+
+
+def build_inverted_index(stop_watch):
     """
     建立倒排索引
     """
@@ -49,37 +77,29 @@ def build_inverted_index():
     with open(STOP_WORDS_PATH, 'r', encoding='utf-8') as f:
         stop_words += f.read().splitlines()
     print('停用词获取完成')
+    now = time.time()
+    print(f'初始化用时{now - stop_watch:.2f}s')
+    stop_watch = now
 
     # 获取所有文档
     print('开始遍历文档')
     documents = Document.objects.all()
+    start_doc_id = 4325
     cnt = 0
     # 遍历文档
     for document in documents:
         cnt += 1
         print(f'\r正在处理第{cnt}/{len(documents)}个文档', end='')
-        # 获取文档内容
-        content = document.full_text
-        # 用jieba分词
-        words = jieba.cut_for_search(content)
-        # 去除停用词
-        words = [word for word in words if word not in stop_words]
-        # 遍历分词结果
-        visited_words = set()  # 用于记录已经访问过的词条
-        for word in words:
-            term = Term.objects.get_or_create(term=word, defaults={'document_count': 0})[0]
-            # 如果本文档中第一次访问到该词条，则文档数+1
-            if word not in visited_words:
-                term.document_count += 1
-                visited_words.add(word)
-            term.save()
-            # 建立倒排索引
-            posting = Posting.objects.get_or_create(term=term,
-                                                    doc_id=document,
-                                                    defaults={'frequency': 0, 'position': 0})[0]
-            posting.frequency += 1
-            posting.position = content.find(word)
-            posting.save()
+        if document.id < start_doc_id:
+            print(f'文档{cnt}已处理过')
+            continue
+        
+        handle_document(document, stop_words)
+
+        now = time.time()
+        print(f'文档{cnt}用时{now - stop_watch:.2f}s')
+        stop_watch = now
+        
     print('\n倒排索引建立完成')
 
 
@@ -106,7 +126,8 @@ def build_index(request):
     """
     建立倒排索引
     """
-    build_inverted_index()
+    stop_watch = time.time()
+    build_inverted_index(stop_watch)
     return JsonResponse({'msg': '倒排索引建立完成'})
 
 
