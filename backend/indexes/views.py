@@ -38,9 +38,15 @@ def handle_document(document, stop_words):
     words = jieba.tokenize(content, mode='search')
     # 去除停用词
     words = [word for word in words if word[0] not in stop_words]
-    # 遍历分词结果
-    visited_words = set()  # 用于记录已经访问过的词条
+    # # 遍历分词结果
+    # visited_words = set()  # 用于记录已经访问过的词条
     
+    # 预处理词条
+    word_list = {}
+    for word in words:
+        if word[0] not in word_list:
+            word_list[word[0]] = []
+        word_list[word[0]].append(word[1])
     
     # 统计各种操作用时
     time_get_term = 0
@@ -48,40 +54,28 @@ def handle_document(document, stop_words):
     time_save_term = 0
     time_save_posting = 0
     
-    for word in words:
+    for word,pos in word_list.items():
         # 存入mongoDB
 
         st_time = time.time()
         # 词条不存在则创建
-        term = Term.objects().filter(term=word[0]).first()
-        if term is None:
-            term = Term.objects.create(term=word[0], document_count=0)
+        term = Term.objects().filter(term=word).first()
         time_get_term += time.time() - st_time
         
         st_time = time.time()
-        # 如果是第一次访问该词条, 则文档数+1
-        if word not in visited_words:
+        if term is None:
+            term = Term.objects.create(term=word, document_count=1)
+        else:
             term.document_count += 1
-            # 将词条加入已访问集合
-            visited_words.add(word)
-        # 保存词条
-        term.save()
+            term.save()
         time_save_term += time.time() - st_time
 
         st_time = time.time()
         # 建立倒排索引
-        posting = Posting.objects().filter(term=word[0], doc_id=document.id).first()
-        if posting is None:
-            posting = Posting.objects.create(term=word[0], doc_id=document.id, position=[])
-        time_get_posting += time.time() - st_time
-        
-        st_time = time.time()
-        # posting.frequency += 1
-        posting.position.append(word[1])
-        posting.save()
+        Posting.objects.create(term=word, doc_id=document.id, position=pos)
         time_save_posting += time.time() - st_time
     
-    print(f"获取词条用时{time_get_term:.2f}s, 保存词条用时{time_save_term:.2f}s, 获取倒排索引用时{time_get_posting:.2f}s, 保存倒排索引用时{time_save_posting:.2f}s")
+    print(f"获取词条用时{time_get_term:.2f}s, 保存词条用时{time_save_term:.2f}s, 获取倒排索引用时{time_get_posting:.2f}s, 保存倒排索引用时{time_save_posting:.2f}s", end=' ')
 
 
 def build_inverted_index():
@@ -244,3 +238,30 @@ def test_search(request):
 # 1. 先将words整理成一个字典，key是词条，value是词条的位置信息；然后遍历这个字典，而不是遍历原来的words
 # 2. 这样的话，在插入term时，每个词条只需要查询一次，而不是出现一次查询一次；
 #              在插入posting时，每个词条不需要查询，直接插入即可
+
+
+# 优化后：
+# 正在处理第334/19879个文档 获取词条用时0.55s, 保存词条用时0.43s, 获取倒排索引用时0.00s, 保存倒排索引用时0.39s
+# 文档334用时1.50s, 总用时38.76s, 平均用时1.17s
+# 正在处理第335/19879个文档 获取词条用时0.72s, 保存词条用时0.58s, 获取倒排索引用时0.00s, 保存倒排索引用时0.55s
+# 文档335用时2.03s, 总用时40.79s, 平均用时1.20s
+# 正在处理第336/19879个文档 获取词条用时0.42s, 保存词条用时0.33s, 获取倒排索引用时0.00s, 保存倒排索引用时0.26s
+# 文档336用时1.10s, 总用时41.88s, 平均用时1.20s
+# 正在处理第337/19879个文档 获取词条用时0.23s, 保存词条用时0.16s, 获取倒排索引用时0.00s, 保存倒排索引用时0.18s
+# 文档337用时0.60s, 总用时42.48s, 平均用时1.18s
+# 正在处理第338/19879个文档 获取词条用时0.83s, 保存词条用时0.65s, 获取倒排索引用时0.00s, 保存倒排索引用时0.62s
+# 文档338用时2.40s, 总用时44.89s, 平均用时1.21s
+# 正在处理第339/19879个文档 获取词条用时0.23s, 保存词条用时0.17s, 获取倒排索引用时0.00s, 保存倒排索引用时0.16s
+# 文档339用时0.58s, 总用时45.47s, 平均用时1.20s
+# 正在处理第340/19879个文档 获取词条用时0.56s, 保存词条用时0.45s, 获取倒排索引用时0.00s, 保存倒排索引用时0.38s
+# 文档340用时1.51s, 总用时46.98s, 平均用时1.20s
+# 正在处理第341/19879个文档 获取词条用时0.65s, 保存词条用时0.55s, 获取倒排索引用时0.00s, 保存倒排索引用时0.52s
+# 文档341用时1.87s, 总用时48.85s, 平均用时1.22s
+# 正在处理第342/19879个文档 获取词条用时0.52s, 保存词条用时0.41s, 获取倒排索引用时0.00s, 保存倒排索引用时0.36s
+# 文档342用时1.39s, 总用时50.25s, 平均用时1.23s
+# 正在处理第343/19879个文档 获取词条用时0.26s, 保存词条用时0.20s, 获取倒排索引用时0.00s, 保存倒排索引用时0.17s
+# 文档343用时0.65s, 总用时50.90s, 平均用时1.21s
+# 正在处理第344/19879个文档 获取词条用时0.55s, 保存词条用时0.40s, 获取倒排索引用时0.00s, 保存倒排索引用时0.40s
+# 文档344用时1.44s, 总用时52.34s, 平均用时1.22s
+# 正在处理第345/19879个文档 获取词条用时0.38s, 保存词条用时0.28s, 获取倒排索引用时0.00s, 保存倒排索引用时0.25s
+# 文档345用时0.96s, 总用时53.30s, 平均用时1.21s
