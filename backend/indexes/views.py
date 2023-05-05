@@ -48,6 +48,10 @@ def handle_document(document, stop_words):
             word_list[word[0]] = []
         word_list[word[0]].append(word[1])
     
+    posting_list = []
+    
+    new_term_list = []
+    
     # 统计各种操作用时
     time_get_term = 0
     time_get_posting = 0
@@ -57,23 +61,32 @@ def handle_document(document, stop_words):
     for word,pos in word_list.items():
         # 存入mongoDB
 
-        st_time = time.time()
         # 词条不存在则创建
+        st_time = time.time()
         term = Term.objects().filter(term=word).first()
         time_get_term += time.time() - st_time
         
         st_time = time.time()
         if term is None:
-            term = Term.objects.create(term=word, document_count=1)
+            new_term_list.append(Term(term=word, document_count=1))
         else:
             term.document_count += 1
             term.save()
         time_save_term += time.time() - st_time
-
-        st_time = time.time()
+        
         # 建立倒排索引
-        Posting.objects.create(term=word, doc_id=document.id, position=pos)
+        st_time = time.time()
+        posting_list.append(Posting(term=word, doc_id=document.id, position=pos))
         time_save_posting += time.time() - st_time
+    
+    st_time = time.time()
+    if len(new_term_list) > 0:
+        Term.objects.insert(new_term_list, load_bulk=False) 
+    time_save_term += time.time() - st_time  
+    
+    st_time = time.time()
+    Posting.objects.insert(posting_list, load_bulk=False)
+    time_save_posting += time.time() - st_time
     
     print(f"获取词条用时{time_get_term:.2f}s, 保存词条用时{time_save_term:.2f}s, 获取倒排索引用时{time_get_posting:.2f}s, 保存倒排索引用时{time_save_posting:.2f}s", end=' ')
 
@@ -265,3 +278,24 @@ def test_search(request):
 # 文档344用时1.44s, 总用时52.34s, 平均用时1.22s
 # 正在处理第345/19879个文档 获取词条用时0.38s, 保存词条用时0.28s, 获取倒排索引用时0.00s, 保存倒排索引用时0.25s
 # 文档345用时0.96s, 总用时53.30s, 平均用时1.21s
+
+
+# 优化2：遍历字典时，将posting和new_term先保存在一个list，结束后再批量插入
+
+# 正在处理第22/68382个文档 获取词条用时0.61s, 保存词条用时0.35s, 获取倒排索引用时0.00s, 保存倒排索引用时0.08s 文档22用时1.19s, 总用时22.65s, 平均用时1.03s
+# 正在处理第23/68382个文档 获取词条用时0.84s, 保存词条用时0.46s, 获取倒排索引用时0.00s, 保存倒排索引用时0.11s 文档23用时1.58s, 总用时24.23s, 平均用时1.05s
+# 正在处理第24/68382个文档 获取词条用时0.46s, 保存词条用时0.29s, 获取倒排索引用时0.00s, 保存倒排索引用时0.05s 文档24用时0.87s, 总用时25.10s, 平均用时1.05s
+# 正在处理第25/68382个文档 获取词条用时0.66s, 保存词条用时0.41s, 获取倒排索引用时0.00s, 保存倒排索引用时0.08s 文档25用时1.28s, 总用时26.38s, 平均用时1.06s
+# 正在处理第26/68382个文档 获取词条用时0.23s, 保存词条用时0.14s, 获取倒排索引用时0.00s, 保存倒排索引用时0.03s 文档26用时0.43s, 总用时26.81s, 平均用时1.03s
+# 正在处理第27/68382个文档 获取词条用时0.37s, 保存词条用时0.26s, 获取倒排索引用时0.00s, 保存倒排索引用时0.04s 文档27用时0.72s, 总用时27.53s, 平均用时1.02s
+# 正在处理第28/68382个文档 获取词条用时0.70s, 保存词条用时0.37s, 获取倒排索引用时0.00s, 保存倒排索引用时0.09s 文档28用时1.29s, 总用时28.82s, 平均用时1.03s
+# 正在处理第29/68382个文档 获取词条用时0.21s, 保存词条用时0.14s, 获取倒排索引用时0.00s, 保存倒排索引用时0.02s 文档29用时0.40s, 总用时29.22s, 平均用时1.01s
+# 正在处理第30/68382个文档 获取词条用时1.40s, 保存词条用时0.62s, 获取倒排索引用时0.00s, 保存倒排索引用时0.16s 文档30用时2.48s, 总用时31.69s, 平均用时1.06s
+# 正在处理第31/68382个文档 获取词条用时0.39s, 保存词条用时0.25s, 获取倒排索引用时0.00s, 保存倒排索引用时0.05s 文档31用时0.74s, 总用时32.43s, 平均用时1.05s
+# 正在处理第32/68382个文档 获取词条用时0.86s, 保存词条用时0.51s, 获取倒排索引用时0.00s, 保存倒排索引用时0.10s 文档32用时1.68s, 总用时34.11s, 平均用时1.07s
+# 正在处理第33/68382个文档 获取词条用时0.26s, 保存词条用时0.18s, 获取倒排索引用时0.00s, 保存倒排索引用时0.03s 文档33用时0.49s, 总用时34.60s, 平均用时1.05s
+# 正在处理第34/68382个文档 获取词条用时0.30s, 保存词条用时0.19s, 获取倒排索引用时0.00s, 保存倒排索引用时0.04s 文档34用时0.58s, 总用时35.18s, 平均用时1.03s
+# 正在处理第35/68382个文档 获取词条用时0.22s, 保存词条用时0.12s, 获取倒排索引用时0.00s, 保存倒排索引用时0.02s 文档35用时0.39s, 总用时35.57s, 平均用时1.02s
+# 正在处理第36/68382个文档 获取词条用时0.27s, 保存词条用时0.18s, 获取倒排索引用时0.00s, 保存倒排索引用时0.03s 文档36用时0.52s, 总用时36.09s, 平均用时1.00s
+# 正在处理第37/68382个文档 获取词条用时0.75s, 保存词条用时0.44s, 获取倒排索引用时0.00s, 保存倒排索引用时0.10s 文档37用时1.41s, 总用时37.50s, 平均用时1.01s
+# 正在处理第38/68382个文档 获取词条用时0.43s, 保存词条用时0.27s, 获取倒排索引用时0.00s, 保存倒排索引用时0.05s 文档38用时0.80s, 总用时38.31s, 平均用时1.01s
