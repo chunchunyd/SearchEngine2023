@@ -3,10 +3,11 @@ from django.http import JsonResponse
 from django.db import transaction
 from common.models import LawDocument, Party, Agent, Judge
 from indexes.models import Term, Posting
-from backend.settings import SIGN_WORDS_PATH, STOP_WORDS_PATH, DEFAULT_PAGE_SIZE
+from backend.settings import SIGN_WORDS_PATH, STOP_WORDS_PATH, DEFAULT_PAGE_SIZE, BASE_DIR
 import jieba
 import json
 import time
+import os
 from rest_framework.viewsets import ModelViewSet
 from rest_framework.pagination import LimitOffsetPagination
 from .serializers import *
@@ -39,13 +40,25 @@ def handle_document(document, stop_words):
     words = [word for word in words if word[0] not in stop_words]
     # 遍历分词结果
     visited_words = set()  # 用于记录已经访问过的词条
+    
+    
+    # 统计各种操作用时
+    time_get_term = 0
+    time_get_posting = 0
+    time_save_term = 0
+    time_save_posting = 0
+    
     for word in words:
         # 存入mongoDB
 
+        st_time = time.time()
         # 词条不存在则创建
         term = Term.objects().filter(term=word[0]).first()
         if term is None:
             term = Term.objects.create(term=word[0], document_count=0)
+        time_get_term += time.time() - st_time
+        
+        st_time = time.time()
         # 如果是第一次访问该词条, 则文档数+1
         if word not in visited_words:
             term.document_count += 1
@@ -53,14 +66,22 @@ def handle_document(document, stop_words):
             visited_words.add(word)
         # 保存词条
         term.save()
+        time_save_term += time.time() - st_time
 
+        st_time = time.time()
         # 建立倒排索引
         posting = Posting.objects().filter(term=word[0], doc_id=document.id).first()
         if posting is None:
             posting = Posting.objects.create(term=word[0], doc_id=document.id, position=[])
+        time_get_posting += time.time() - st_time
+        
+        st_time = time.time()
         # posting.frequency += 1
         posting.position.append(word[1])
         posting.save()
+        time_save_posting += time.time() - st_time
+    
+    print(f"获取词条用时{time_get_term:.2f}s, 保存词条用时{time_save_term:.2f}s, 获取倒排索引用时{time_get_posting:.2f}s, 保存倒排索引用时{time_save_posting:.2f}s")
 
 
 def build_inverted_index():
@@ -97,7 +118,10 @@ def build_inverted_index():
     # 获取所有文档
     print('开始遍历文档')
     documents = LawDocument.objects.all()
-    start_doc_id = 1
+    
+    build_setting = json.load(open(os.path.join(BASE_DIR,'indexes','build_setting.json'), 'r', encoding='utf-8'))
+    start_doc_id = build_setting['start_doc_id']
+    
     cnt = 0
     total_time = 0
     start_time = stop_watch
@@ -112,10 +136,12 @@ def build_inverted_index():
             continue
 
         handle_document(document, stop_words)
+        build_setting['start_doc_id'] = cnt + 1
+        json.dump(build_setting, open(os.path.join(BASE_DIR,'indexes','build_setting.json'), 'w', encoding='utf-8'))
 
         now = time.time()
         print(
-            f'文档{cnt}用时{now - stop_watch:.2f}s, 总用时{now - start_time:.2f}s, 平均用时{(now - start_time) / cnt:.2f}s')
+            f'文档{cnt}用时{now - stop_watch:.2f}s, 总用时{now - start_time:.2f}s, 平均用时{(now - start_time) / (cnt-start_doc_id+1):.2f}s')
         stop_watch = now
 
     print('\n倒排索引建立完成')
@@ -188,3 +214,33 @@ def test_search(request):
     total = len(result)
     result = result[(page - 1) * DEFAULT_PAGE_SIZE: page * DEFAULT_PAGE_SIZE]
     return JsonResponse({'msg': '搜索成功', 'result': result, 'total': total})
+
+
+
+
+# 优化前：
+# 正在处理第268/19879个文档 获取词条用时5.50s, 保存词条用时4.23s, 获取倒排索引用时7.68s, 保存倒排索引用时5.08s
+# 文档268用时24.18s, 总用时24.18s, 平均用时24.18s
+# 正在处理第269/19879个文档 获取词条用时1.08s, 保存词条用时0.85s, 获取倒排索引用时1.73s, 保存倒排索引用时0.93s
+# 文档269用时4.65s, 总用时28.83s, 平均用时14.41s
+# 正在处理第270/19879个文档 获取词条用时1.15s, 保存词条用时0.90s, 获取倒排索引用时1.87s, 保存倒排索引用时1.03s
+# 文档270用时5.01s, 总用时33.84s, 平均用时11.28s
+# 正在处理第271/19879个文档 获取词条用时3.64s, 保存词条用时2.84s, 获取倒排索引用时5.24s, 保存倒排索引用时3.23s
+# 文档271用时15.10s, 总用时48.94s, 平均用时12.23s
+# 正在处理第272/19879个文档 获取词条用时2.69s, 保存词条用时2.13s, 获取倒排索引用时4.12s, 保存倒排索引用时2.58s
+# 文档272用时11.64s, 总用时60.58s, 平均用时12.12s
+# 正在处理第273/19879个文档 获取词条用时5.01s, 保存词条用时3.86s, 获取倒排索引用时7.25s, 保存倒排索引用时4.54s
+# 文档273用时20.90s, 总用时81.47s, 平均用时13.58s
+# 正在处理第274/19879个文档 获取词条用时6.77s, 保存词条用时5.27s, 获取倒排索引用时9.60s, 保存倒排索引用时6.33s
+# 文档274用时28.28s, 总用时109.75s, 平均用时15.68s
+# 正在处理第275/19879个文档 获取词条用时3.91s, 保存词条用时3.05s, 获取倒排索引用时5.82s, 保存倒排索引用时3.73s
+# 文档275用时16.67s, 总用时126.42s, 平均用时15.80s
+# 正在处理第276/19879个文档 获取词条用时0.42s, 保存词条用时0.34s, 获取倒排索引用时0.78s, 保存倒排索引用时0.37s
+# 文档276用时1.93s, 总用时128.35s, 平均用时14.26s
+# 正在处理第277/19879个文档 获取词条用时1.65s, 保存词条用时1.26s, 获取倒排索引用时2.63s, 保存倒排索引用时1.48s
+# 文档277用时7.09s, 总用时135.44s, 平均用时13.54s
+
+# 思路：
+# 1. 先将words整理成一个字典，key是词条，value是词条的位置信息；然后遍历这个字典，而不是遍历原来的words
+# 2. 这样的话，在插入term时，每个词条只需要查询一次，而不是出现一次查询一次；
+#              在插入posting时，每个词条不需要查询，直接插入即可
