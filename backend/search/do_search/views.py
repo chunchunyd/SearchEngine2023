@@ -3,6 +3,7 @@
 """
 import json
 import jieba
+import time
 from django.http import JsonResponse
 from common.models import *
 from indexes.models import *
@@ -39,6 +40,26 @@ def union_search(query):
     """
     联合查询，query为查询字符串
     """
+    st_time = time.time()
+    # 构建个人词典, TODO: 持久化载入自定义词典
+    courts = Court.objects.all()
+    for court in courts:
+        jieba.add_word(court.name)
+    procuratorates = Procuratorate.objects.all()
+    for procuratorate in procuratorates:
+        jieba.add_word(procuratorate.name)
+    parties = Party.objects.all()
+    for party in parties:
+        jieba.add_word(party.name)
+    agents = Agent.objects.all()
+    for agent in agents:
+        jieba.add_word(agent.name)
+    judges = Judge.objects.all()
+    for judge in judges:
+        jieba.add_word(judge.name)
+    print(f'个性化dict构建完成, 耗时: {time.time() - st_time}')
+
+
     # 分词
     words = jieba.cut_for_search(query)
     # 去除停用词

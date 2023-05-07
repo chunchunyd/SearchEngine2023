@@ -40,55 +40,21 @@ def handle_document(document, stop_words):
     words = [word for word in words if word[0] not in stop_words]
     # # 遍历分词结果
     # visited_words = set()  # 用于记录已经访问过的词条
-    
+
     # 预处理词条
     word_list = {}
     for word in words:
         if word[0] not in word_list:
             word_list[word[0]] = []
         word_list[word[0]].append(word[1])
-    
-    posting_list = []
-    
-    new_term_list = []
-    
-    # 统计各种操作用时
-    time_get_term = 0
-    time_get_posting = 0
-    time_save_term = 0
-    time_save_posting = 0
-    
-    for word,pos in word_list.items():
-        # 存入mongoDB
 
-        # 词条不存在则创建
-        st_time = time.time()
-        term = Term.objects().filter(term=word).first()
-        time_get_term += time.time() - st_time
-        
-        st_time = time.time()
-        if term is None:
-            new_term_list.append(Term(term=word, document_count=1))
-        else:
-            term.document_count += 1
-            term.save()
-        time_save_term += time.time() - st_time
-        
-        # 建立倒排索引
-        st_time = time.time()
+    posting_list = []
+
+    for word, pos in word_list.items():
+        # 存入mongoDB
         posting_list.append(Posting(term=word, doc_id=document.id, position=pos))
-        time_save_posting += time.time() - st_time
-    
-    st_time = time.time()
-    if len(new_term_list) > 0:
-        Term.objects.insert(new_term_list, load_bulk=False) 
-    time_save_term += time.time() - st_time  
-    
-    st_time = time.time()
+
     Posting.objects.insert(posting_list, load_bulk=False)
-    time_save_posting += time.time() - st_time
-    
-    print(f"获取词条用时{time_get_term:.2f}s, 保存词条用时{time_save_term:.2f}s, 获取倒排索引用时{time_get_posting:.2f}s, 保存倒排索引用时{time_save_posting:.2f}s", end=' ')
 
 
 def build_inverted_index():
@@ -125,14 +91,16 @@ def build_inverted_index():
     # 获取所有文档
     print('开始遍历文档')
     documents = LawDocument.objects.all()
-    
-    build_setting = json.load(open(os.path.join(BASE_DIR,'indexes','build_setting.json'), 'r', encoding='utf-8'))
-    start_doc_id = build_setting['start_doc_id']
-    
+
+    # build_setting = json.load(open(os.path.join(BASE_DIR,'indexes','build_setting.json'), 'r', encoding='utf-8'))
+    # start_doc_id = build_setting['start_doc_id']
+    start_doc_id = 1
+
     cnt = 0
     total_time = 0
     start_time = stop_watch
-    # 遍历文档
+    # 遍历文档, 建立Posting
+    print('开始建立Posting')
     for document in documents:
         cnt += 1
         print(f'\r正在处理第{cnt}/{len(documents)}个文档', end=' ')
@@ -143,15 +111,43 @@ def build_inverted_index():
             continue
 
         handle_document(document, stop_words)
-        build_setting['start_doc_id'] = cnt + 1
-        json.dump(build_setting, open(os.path.join(BASE_DIR,'indexes','build_setting.json'), 'w', encoding='utf-8'))
+        # build_setting['start_doc_id'] = cnt + 1
+        # json.dump(build_setting, open(os.path.join(BASE_DIR,'indexes','build_setting.json'), 'w', encoding='utf-8'))
 
         now = time.time()
         print(
-            f'文档{cnt}用时{now - stop_watch:.2f}s, 总用时{now - start_time:.2f}s, 平均用时{(now - start_time) / (cnt-start_doc_id+1):.2f}s')
+            f'文档{cnt}用时{now - stop_watch:.2f}s, 总用时{now - start_time:.2f}s, 平均用时{(now - start_time) / (cnt - start_doc_id + 1):.2f}s')
         stop_watch = now
 
     print('\n倒排索引建立完成')
+
+
+def build_terms():
+    """
+    根据posting表建立terms表,
+    TODO: 使用MongoDB的MapReduce来统计term出现次数 或 使用MongoDB的聚合管道来统计
+    TODO: 对本文件做优化，取消掉ORM的部分，直接用pymongo操作mongoDB
+    """
+    cnt = 0
+    # term_doc_cnt = {}
+    # 遍历posting表
+    for posting in Posting.objects.all():
+        cnt += 1
+        print(f'\r正在处理第{cnt}个posting', end=' ')
+        # if posting.term not in term_doc_cnt:
+        #     term_doc_cnt[posting.term] = 0
+        # term_doc_cnt[posting.term] += 1
+
+    # 存入terms表
+    # term_list = []
+    # for term, doc_cnt in term_doc_cnt.items():
+    #     term_list.append(Term(term=term, document_count=doc_cnt))
+    #
+    # Term.objects.insert(term_list, load_bulk=False)
+    # print(f'共{cnt}个posting')
+
+    # 输出Posting表中的term数量
+    # print(f'共{len(Posting.objects.all())}个posting')
 
 
 def search_by_index(query):
@@ -182,7 +178,10 @@ def search_by_index(query):
             results[posting['doc_id']] = {"address": document.address, "terms": {}}
         results[posting["doc_id"]]["terms"][posting["term"]] = posting["position"]
     # 返回结果
-    return results
+    return {
+        'doc_count': len(results),
+        'doc_list': results
+    }
 
 
 def build_index(request):
@@ -191,6 +190,14 @@ def build_index(request):
     """
     build_inverted_index()
     return JsonResponse({'msg': '倒排索引建立完成'})
+
+
+def build_term(request):
+    """
+    建立词条
+    """
+    build_terms()
+    return JsonResponse({'msg': '词条列表建立完成'})
 
 
 def test_search(request):
@@ -212,7 +219,7 @@ def test_search(request):
     # redis.expire('search_result', 60)  # 设置过期时间为60s
 
     # 分页
-    result = list(result.items())       # 为了分页，把dict转换成list
+    result = list(result.items())  # 为了分页，把dict转换成list
     page = request.GET.get('page')
     if page is None:
         page = 1
@@ -221,9 +228,6 @@ def test_search(request):
     total = len(result)
     result = result[(page - 1) * DEFAULT_PAGE_SIZE: page * DEFAULT_PAGE_SIZE]
     return JsonResponse({'msg': '搜索成功', 'result': result, 'total': total})
-
-
-
 
 # 优化前：
 # 正在处理第268/19879个文档 获取词条用时5.50s, 保存词条用时4.23s, 获取倒排索引用时7.68s, 保存倒排索引用时5.08s
@@ -299,3 +303,6 @@ def test_search(request):
 # 正在处理第36/68382个文档 获取词条用时0.27s, 保存词条用时0.18s, 获取倒排索引用时0.00s, 保存倒排索引用时0.03s 文档36用时0.52s, 总用时36.09s, 平均用时1.00s
 # 正在处理第37/68382个文档 获取词条用时0.75s, 保存词条用时0.44s, 获取倒排索引用时0.00s, 保存倒排索引用时0.10s 文档37用时1.41s, 总用时37.50s, 平均用时1.01s
 # 正在处理第38/68382个文档 获取词条用时0.43s, 保存词条用时0.27s, 获取倒排索引用时0.00s, 保存倒排索引用时0.05s 文档38用时0.80s, 总用时38.31s, 平均用时1.01s
+
+
+# 优化3：先不处理term, 只处理倒排索引posting。posting做完后，统一一次写入term
