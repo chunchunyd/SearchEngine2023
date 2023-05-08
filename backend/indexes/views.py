@@ -1,37 +1,21 @@
 import logging
 from django.http import JsonResponse
 from django.db import transaction
-from common.models import LawDocument, Party, Agent, Judge
+from common.models import LawDocument, Party, Agent, Judge, Court, Procuratorate
 from indexes.models import Term, Posting
 from backend.settings import SIGN_WORDS_PATH, STOP_WORDS_PATH, DEFAULT_PAGE_SIZE, BASE_DIR
 import jieba
 import json
 import time
+import pymongo
 import os
 from rest_framework.viewsets import ModelViewSet
 from rest_framework.pagination import LimitOffsetPagination
 from .serializers import *
 
 
-#
-# class TermViewSet(ModelViewSet):
-#     queryset = Term.objects.all()
-#     serializer_class = TermSerializer
-#     pagination_class = LimitOffsetPagination
-#     pagination_class.default_limit = DEFAULT_PAGE_SIZE
-#
-#
-# class PostingViewSet(ModelViewSet):
-#     queryset = Posting.objects.all()
-#     serializer_class = PostingSerializer
-#     pagination_class = LimitOffsetPagination
-#     pagination_class.default_limit = DEFAULT_PAGE_SIZE
-#
-# 实际上应该用drf-me的ModelViewSet，但是非常麻烦，所以不用viewset了
-
-
 @transaction.atomic
-def handle_document(document, stop_words):
+def handle_document(document, stop_words, posting):
     # 获取文档内容
     content = document.full_text
     # 用jieba分词
@@ -52,15 +36,27 @@ def handle_document(document, stop_words):
 
     for word, pos in word_list.items():
         # 存入mongoDB
-        posting_list.append(Posting(term=word, doc_id=document.id, position=pos))
+        posting_list.append({
+            'term': word,
+            'doc_id': document.id,
+            'pos': pos
+        })
 
-    Posting.objects.insert(posting_list, load_bulk=False)
+    posting.insert_many(posting_list)
 
 
 def build_inverted_index():
     """
     建立倒排索引
     """
+    # 连接mongoDB
+    client = pymongo.MongoClient('localhost', 27017)
+    db = client['test_pymongo']
+    posting = db['posting']
+    # 设置posting的词条、index
+    posting.create_index([('term', pymongo.ASCENDING)])
+    posting.create_index([('doc_id', pymongo.ASCENDING)])
+
     stop_watch = time.time()
     print('开始建立倒排索引')
     # 测试发现, jieba分词对人名支持很差，所以这里从数据库手动添加人名dict
@@ -74,7 +70,14 @@ def build_inverted_index():
     judges = Judge.objects.all()
     for judge in judges:
         jieba.add_word(judge.name)
-    print('人名dict构建完成')
+    # 法院检察院名称也添加一下
+    courts = Court.objects.all()
+    for court in courts:
+        jieba.add_word(court.name)
+    procuratorates = Procuratorate.objects.all()
+    for procuratorate in procuratorates:
+        jieba.add_word(procuratorate.name)
+    print('自定义dict构建完成')
 
     # 获取停用词
     # 先获取符号词
@@ -92,12 +95,11 @@ def build_inverted_index():
     print('开始遍历文档')
     documents = LawDocument.objects.all()
 
-    # build_setting = json.load(open(os.path.join(BASE_DIR,'indexes','build_setting.json'), 'r', encoding='utf-8'))
-    # start_doc_id = build_setting['start_doc_id']
-    start_doc_id = 1
+    build_setting = json.load(open(os.path.join(BASE_DIR, 'indexes', 'build_setting.json'), 'r', encoding='utf-8'))
+    start_doc_id = build_setting['start_doc_id']
+    # start_doc_id = 1
 
     cnt = 0
-    total_time = 0
     start_time = stop_watch
     # 遍历文档, 建立Posting
     print('开始建立Posting')
@@ -110,9 +112,14 @@ def build_inverted_index():
             print(f'文档{cnt}已处理过')
             continue
 
-        handle_document(document, stop_words)
-        # build_setting['start_doc_id'] = cnt + 1
-        # json.dump(build_setting, open(os.path.join(BASE_DIR,'indexes','build_setting.json'), 'w', encoding='utf-8'))
+        # 如果文档id等于start_doc_id，说明是上次中断的文档，需要删除posting中的相关记录
+        if document.id == start_doc_id:
+            print(f'文档{cnt}是上次中断的文档，需要删除posting中的相关记录')
+            posting.delete_many({'doc_id': document.id})
+
+        handle_document(document, stop_words, posting)
+        build_setting['start_doc_id'] = cnt + 1
+        json.dump(build_setting, open(os.path.join(BASE_DIR, 'indexes', 'build_setting.json'), 'w', encoding='utf-8'))
 
         now = time.time()
         print(
@@ -124,30 +131,32 @@ def build_inverted_index():
 
 def build_terms():
     """
-    根据posting表建立terms表,
-    TODO: 使用MongoDB的MapReduce来统计term出现次数 或 使用MongoDB的聚合管道来统计
-    TODO: 对本文件做优化，取消掉ORM的部分，直接用pymongo操作mongoDB
+    根据posting表建立terms表
     """
+    # 连接mongoDB
+    client = pymongo.MongoClient('localhost', 27017)
+    db = client['search_engine']
+    posting = db['posting']
+    pipeline = [
+        {
+            '$group': {
+                '_id': '$term',
+                'document_count': {'$sum': 1}
+            }
+        }
+    ]
+    # 获取term的document_count
+    results = posting.aggregate(pipeline)
+    # 存入term表
+    term = db['term']
     cnt = 0
-    # term_doc_cnt = {}
-    # 遍历posting表
-    for posting in Posting.objects.all():
+    for result in results:
         cnt += 1
-        print(f'\r正在处理第{cnt}个posting', end=' ')
-        # if posting.term not in term_doc_cnt:
-        #     term_doc_cnt[posting.term] = 0
-        # term_doc_cnt[posting.term] += 1
-
-    # 存入terms表
-    # term_list = []
-    # for term, doc_cnt in term_doc_cnt.items():
-    #     term_list.append(Term(term=term, document_count=doc_cnt))
-    #
-    # Term.objects.insert(term_list, load_bulk=False)
-    # print(f'共{cnt}个posting')
-
-    # 输出Posting表中的term数量
-    # print(f'共{len(Posting.objects.all())}个posting')
+        print(f'\r正在处理第{cnt}个term', end=' ')
+        term.insert_one({
+            'term': result['_id'],
+            'document_count': result['document_count']
+        })
 
 
 def search_by_index(query):
@@ -184,6 +193,7 @@ def search_by_index(query):
     }
 
 
+# 对外提供的接口
 def build_index(request):
     """
     建立倒排索引
@@ -306,3 +316,20 @@ def test_search(request):
 
 
 # 优化3：先不处理term, 只处理倒排索引posting。posting做完后，统一一次写入term
+# 优化4：使用pymongo, 使用管道，减少网络传输
+# 正在处理第514/68382个文档 文档514用时0.01s, 总用时41.28s, 平均用时0.08s
+# 正在处理第515/68382个文档 文档515用时0.03s, 总用时41.31s, 平均用时0.08s
+# 正在处理第516/68382个文档 文档516用时0.01s, 总用时41.32s, 平均用时0.08s
+# 正在处理第517/68382个文档 文档517用时0.09s, 总用时41.41s, 平均用时0.08s
+# 正在处理第518/68382个文档 文档518用时0.19s, 总用时41.60s, 平均用时0.08s
+# 正在处理第519/68382个文档 文档519用时0.03s, 总用时41.64s, 平均用时0.08s
+# 正在处理第520/68382个文档 文档520用时0.08s, 总用时41.72s, 平均用时0.08s
+# 正在处理第521/68382个文档 文档521用时0.07s, 总用时41.79s, 平均用时0.08s
+# 正在处理第522/68382个文档 文档522用时0.02s, 总用时41.81s, 平均用时0.08s
+# 正在处理第523/68382个文档 文档523用时0.01s, 总用时41.82s, 平均用时0.08s
+# 正在处理第524/68382个文档 文档524用时0.03s, 总用时41.84s, 平均用时0.08s
+# 正在处理第525/68382个文档 文档525用时0.02s, 总用时41.86s, 平均用时0.08s
+# 正在处理第526/68382个文档 文档526用时0.07s, 总用时41.94s, 平均用时0.08s
+# 正在处理第527/68382个文档 文档527用时0.06s, 总用时42.00s, 平均用时0.08s
+# 用管道统计并添加全部1025356个词条到term表用时几分钟
+
