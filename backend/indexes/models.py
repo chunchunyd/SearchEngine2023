@@ -1,6 +1,6 @@
 from django.db import models
 from common.models import LawDocument
-from mongoengine import Document, StringField, IntField, ListField
+from mongoengine import Document, StringField, IntField, ListField, FloatField
 
 
 class Term(Document):
@@ -9,6 +9,7 @@ class Term(Document):
     """
     term = StringField(max_length=100)  # 词条
     document_count = IntField()  # 出现该词条的文档数
+    idf = FloatField()  # 逆文档频率
     meta = {
         'collection': 'term',
         'indexes': [
@@ -24,11 +25,26 @@ class Posting(Document):
     doc_id = IntField()  # 文档ID
     # frequency = IntField()  # 词频
     position = ListField()  # 位置
+    freq = IntField()  # 词频
     meta = {
         'collection': 'posting',
         'indexes': [
             'term',
             'doc_id',
+            'freq'
+        ]}
+
+
+class Law_Document(Document):
+    """
+    存储文档
+    """
+    doc_id = IntField(primary_key=True)  # 文档ID
+    doc_len = IntField()  # 文档长度
+    meta = {
+        'collection': 'law_document',
+        'indexes': [
+            'doc_len'
         ]}
 
 # class Term(models.Model):

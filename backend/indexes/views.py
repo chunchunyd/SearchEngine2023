@@ -1,17 +1,12 @@
-import logging
 from django.http import JsonResponse
 from django.db import transaction
 from common.models import LawDocument, Party, Agent, Judge, Court, Procuratorate
-from indexes.models import Term, Posting
 from backend.settings import SIGN_WORDS_PATH, STOP_WORDS_PATH, DEFAULT_PAGE_SIZE, BASE_DIR
 import jieba
 import json
 import time
 import pymongo
 import os
-from rest_framework.viewsets import ModelViewSet
-from rest_framework.pagination import LimitOffsetPagination
-from .serializers import *
 
 
 @transaction.atomic
@@ -22,8 +17,6 @@ def handle_document(document, stop_words, posting):
     words = jieba.tokenize(content, mode='search')
     # 去除停用词
     words = [word for word in words if word[0] not in stop_words]
-    # # 遍历分词结果
-    # visited_words = set()  # 用于记录已经访问过的词条
 
     # 预处理词条
     word_list = {}
@@ -33,13 +26,13 @@ def handle_document(document, stop_words, posting):
         word_list[word[0]].append(word[1])
 
     posting_list = []
-
     for word, pos in word_list.items():
         # 存入mongoDB
         posting_list.append({
             'term': word,
             'doc_id': document.id,
-            'pos': pos
+            'position': pos,
+            'freq': len(pos)
         })
 
     posting.insert_many(posting_list)
@@ -106,6 +99,8 @@ def build_inverted_index():
         stop_watch = now
 
     print('\n倒排索引建立完成')
+    # 关闭连接
+    client.close()
 
 
 def build_terms():
@@ -137,39 +132,9 @@ def build_terms():
             'document_count': result['document_count']
         })
 
-
-def search_by_index(query):
-    """
-    根据query在倒排索引中搜索, 返回文档id集合
-    这里的query是用户输入的搜索内容分词后的结果，以一个list的形式传入，具体操作在search APP中完成
-    """
-    # 获取query中的所有词条
-    terms = Term.objects.filter(term__in=query)
-    # 获取每个词条的倒排索引
-    postings = Posting.objects.filter(term__in=query)
-    # 获取每个词条的倒排索引所对应的文档id和出现位置
-
-    sons = [pst.to_mongo() for pst in postings]
-    # print(sons)
-    # [SON([('_id', ObjectId('6453ce69c32402d481968f81')), ('term', '浙江'), ('doc_id', 1), ('position', [0, 1065])]),
-    # SON([('_id', ObjectId('6453ce79c32402d48196a0bc')), ('term', '浙江'), ('doc_id', 8), ('position', [0, 98, 2108])])
-    # ,...]
-
-    results = {}
-    for son in sons:
-        posting = son.to_dict()
-        # {'_id': ObjectId('6453ce69c32402d481968f81'), 'term': '浙江', 'doc_id': 1, 'position': [0, 1065]}
-        # {'_id': ObjectId('6453ce79c32402d48196a0bc'), 'term': '浙江', 'doc_id': 8, 'position': [0, 98, 2108]}
-
-        if posting['doc_id'] not in results:
-            document = LawDocument.objects.filter(id=posting['doc_id']).first()
-            results[posting['doc_id']] = {"address": document.address, "terms": {}}
-        results[posting["doc_id"]]["terms"][posting["term"]] = posting["position"]
-    # 返回结果
-    return {
-        'doc_count': len(results),
-        'doc_list': results
-    }
+    print('\nterm表建立完成')
+    # 关闭连接
+    client.close()
 
 
 # 对外提供的接口
@@ -222,33 +187,3 @@ def load_user_dict(request):
     """
     jieba.load_userdict(os.path.join(BASE_DIR, 'resources', 'user_dict.txt'))
     return JsonResponse({'msg': '用户词典加载完成'})
-
-
-def test_search(request):
-    """
-    测试搜索功能
-    """
-    query1 = request.GET.get('query1')
-    query2 = request.GET.get('query2')
-    query = [query1, query2]
-    result = search_by_index(query)
-    # result = []
-    # for document in documents:
-    #     result.append({
-    #         'address': document.address,
-    #     })
-
-    # todo:把result缓存到redis中
-    # redis.set('search_result', result)
-    # redis.expire('search_result', 60)  # 设置过期时间为60s
-
-    # 分页
-    result = list(result.items())  # 为了分页，把dict转换成list
-    page = request.GET.get('page')
-    if page is None:
-        page = 1
-    else:
-        page = int(page)
-    total = len(result)
-    result = result[(page - 1) * DEFAULT_PAGE_SIZE: page * DEFAULT_PAGE_SIZE]
-    return JsonResponse({'msg': '搜索成功', 'result': result, 'total': total})

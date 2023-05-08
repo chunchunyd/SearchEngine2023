@@ -14,7 +14,7 @@ class XmlSpider:
     爬虫逻辑(模拟，实际上是本地数据)
     """
 
-    name = "xml_spider"  # 爬虫名称, 用于区分不同的爬虫, 必须是唯一的
+    name = "xml_spider"  # 爬虫名称, 用于区分不同的爬虫
 
     def __init__(self):
         self.dir_path = ""
@@ -126,7 +126,3 @@ def spider_progress(request):
         "status": "Running"
     }
     return JsonResponse(progress)
-
-
-
-# launch_spider(None)
