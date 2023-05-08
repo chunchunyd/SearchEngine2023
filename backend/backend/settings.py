@@ -137,3 +137,7 @@ DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 STOP_WORDS_PATH = os.path.join(BASE_DIR, 'resources', 'stop_words.txt')
 SIGN_WORDS_PATH = os.path.join(BASE_DIR, 'resources', 'sign.json')
 DEFAULT_PAGE_SIZE = 10
+
+# jieba初始化(加载用户词典)
+import jieba
+jieba.load_userdict(os.path.join(BASE_DIR, 'resources', 'user_dict.txt'))

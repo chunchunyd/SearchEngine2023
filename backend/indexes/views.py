@@ -57,27 +57,27 @@ def build_inverted_index():
     posting.create_index([('term', pymongo.ASCENDING)])
     posting.create_index([('doc_id', pymongo.ASCENDING)])
 
-    stop_watch = time.time()
-    print('开始建立倒排索引')
-    # 测试发现, jieba分词对人名支持很差，所以这里从数据库手动添加人名dict
-    # 获取所有人名，构建人名dict
-    parties = Party.objects.all()
-    for party in parties:
-        jieba.add_word(party.name)
-    agents = Agent.objects.all()
-    for agent in agents:
-        jieba.add_word(agent.name)
-    judges = Judge.objects.all()
-    for judge in judges:
-        jieba.add_word(judge.name)
-    # 法院检察院名称也添加一下
-    courts = Court.objects.all()
-    for court in courts:
-        jieba.add_word(court.name)
-    procuratorates = Procuratorate.objects.all()
-    for procuratorate in procuratorates:
-        jieba.add_word(procuratorate.name)
-    print('自定义dict构建完成')
+    # stop_watch = time.time()
+    # print('开始建立倒排索引')
+    # # 测试发现, jieba分词对人名支持很差，所以这里从数据库手动添加人名dict
+    # # 获取所有人名，构建人名dict
+    # parties = Party.objects.all()
+    # for party in parties:
+    #     jieba.add_word(party.name)
+    # agents = Agent.objects.all()
+    # for agent in agents:
+    #     jieba.add_word(agent.name)
+    # judges = Judge.objects.all()
+    # for judge in judges:
+    #     jieba.add_word(judge.name)
+    # # 法院检察院名称也添加一下
+    # courts = Court.objects.all()
+    # for court in courts:
+    #     jieba.add_word(court.name)
+    # procuratorates = Procuratorate.objects.all()
+    # for procuratorate in procuratorates:
+    #     jieba.add_word(procuratorate.name)
+    # print('自定义dict构建完成')
 
     # 获取停用词
     # 先获取符号词
@@ -210,6 +210,41 @@ def build_term(request):
     return JsonResponse({'msg': '词条列表建立完成'})
 
 
+def build_user_dict(request):
+    """
+    用户词典
+    """
+    user_dict = set()
+    parties = Party.objects.all()
+    for party in parties:
+        user_dict.add(party.name)
+    agents = Agent.objects.all()
+    for agent in agents:
+        user_dict.add(agent.name)
+    judges = Judge.objects.all()
+    for judge in judges:
+        user_dict.add(judge.name)
+    # 法院检察院名称也添加一下
+    courts = Court.objects.all()
+    for court in courts:
+        user_dict.add(court.name)
+    procuratorates = Procuratorate.objects.all()
+    for procuratorate in procuratorates:
+        user_dict.add(procuratorate.name)
+    with open(os.path.join(BASE_DIR, 'resources', 'user_dict.txt'), 'w', encoding='utf-8') as f:
+        for word in user_dict:
+            f.write(word + '\n')
+    return JsonResponse({'user_dict': user_dict})
+
+
+def load_user_dict(request):
+    """
+    加载用户词典
+    """
+    jieba.load_userdict(os.path.join(BASE_DIR, 'resources', 'user_dict.txt'))
+    return JsonResponse({'msg': '用户词典加载完成'})
+
+
 def test_search(request):
     """
     测试搜索功能
@@ -332,4 +367,3 @@ def test_search(request):
 # 正在处理第526/68382个文档 文档526用时0.07s, 总用时41.94s, 平均用时0.08s
 # 正在处理第527/68382个文档 文档527用时0.06s, 总用时42.00s, 平均用时0.08s
 # 用管道统计并添加全部1025356个词条到term表用时几分钟
-

@@ -2,13 +2,15 @@
 联合查询: 通过关键词查询 + 通过倒排索引查询
 """
 import json
+import os
+
 import jieba
 import time
 from django.http import JsonResponse
 from common.models import *
 from indexes.models import *
 from indexes.views import search_by_index
-from backend.settings import SIGN_WORDS_PATH, STOP_WORDS_PATH, DEFAULT_PAGE_SIZE
+from backend.settings import SIGN_WORDS_PATH, STOP_WORDS_PATH, DEFAULT_PAGE_SIZE, BASE_DIR
 from common.serializers import *
 
 
@@ -40,27 +42,13 @@ def union_search(query):
     """
     联合查询，query为查询字符串
     """
-    st_time = time.time()
-    # 构建个人词典, TODO: 持久化载入自定义词典
-    courts = Court.objects.all()
-    for court in courts:
-        jieba.add_word(court.name)
-    procuratorates = Procuratorate.objects.all()
-    for procuratorate in procuratorates:
-        jieba.add_word(procuratorate.name)
-    parties = Party.objects.all()
-    for party in parties:
-        jieba.add_word(party.name)
-    agents = Agent.objects.all()
-    for agent in agents:
-        jieba.add_word(agent.name)
-    judges = Judge.objects.all()
-    for judge in judges:
-        jieba.add_word(judge.name)
-    print(f'个性化dict构建完成, 耗时: {time.time() - st_time}')
-
+    # st_time = time.time()
+    # # 构建个人词典, TODO: 持久化载入自定义词典
+    # jieba.load_userdict(os.path.join(BASE_DIR, 'resources', 'user_dict.txt'))
+    # print(f'个性化dict加载完成, 耗时: {time.time() - st_time}')
 
     # 分词
+    st_time = time.time()
     words = jieba.cut_for_search(query)
     # 去除停用词
     stop_words = json.load(open(SIGN_WORDS_PATH, 'r', encoding='utf-8'))
@@ -68,17 +56,19 @@ def union_search(query):
         stop_words += f.read().splitlines()
     words = [word for word in words if word not in stop_words]
 
-    print(f'分词结果: {words}')
+    print(f'分词用时:{time.time() - st_time}, 分词结果: {words}')
 
     # 关键词查询
+    st_time = time.time()
     keywords_result = search_by_keywords(words)
-
-    print(keywords_result)
+    print(f'关键词查询用时:{time.time() - st_time}')
+    # print(keywords_result)
 
     # 全文检索
+    st_time = time.time()
     full_text_result = search_by_index(words)
-
-    print(full_text_result)
+    print(f'全文检索用时:{time.time() - st_time}')
+    # print(full_text_result)
 
     return {
         'keywords_result': keywords_result,
