@@ -5,6 +5,7 @@ import json
 import jieba
 import time
 import redis
+import re
 import pymongo
 from django.http import JsonResponse
 from backend.settings import SIGN_WORDS_PATH, STOP_WORDS_PATH, DEFAULT_PAGE_SIZE, BASE_DIR, MONGO_DB
@@ -68,10 +69,16 @@ def construct_page(page, page_size, doc_list, word_list):
                     end = posting[0]['doc_len']
                 else:
                     end = posting[0]['position'][0] + 280
+
+                # 找到第一个以"号"字结尾的位置
+                title_end_1 = re.search(r"号 ", doc.full_text).span()
+                title_end_2 = re.search(r"案 ", doc.full_text).span()
+                title_end = min(title_end_1[1], title_end_2[1])
+
                 result[doc.id] = {
                     'id': doc.id,
                     'address': doc.address,
-                    'title': doc.full_text[:40],
+                    'title': doc.full_text[:title_end],
                     'short_text': doc.full_text[start:end],
                 }
                 break
