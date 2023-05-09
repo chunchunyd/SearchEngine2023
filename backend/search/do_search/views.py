@@ -73,12 +73,12 @@ def construct_page(page, page_size, doc_list, word_list):
                     'address': doc.address,
                     'title': doc.full_text[:40],
                     'short_text': doc.full_text[start:end],
-                    'word_list': word_list
                 }
                 break
     # 返回结果
     return {
         'total_page': total_page,
+        'word_list': word_list,
         'doc_list': result
     }
 
