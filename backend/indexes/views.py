@@ -32,7 +32,8 @@ def handle_document(document, stop_words, posting):
             'term': word,
             'doc_id': document.id,
             'position': pos,
-            'freq': len(pos)
+            'freq': len(pos),
+            'doc_len': len(content)
         })
 
     posting.insert_many(posting_list)
@@ -44,7 +45,7 @@ def build_inverted_index():
     """
     # 连接mongoDB
     client = pymongo.MongoClient('localhost', 27017)
-    db = client['test_pymongo']
+    db = client['search_engine']
     posting = db['posting']
     # 设置posting的词条、index
     posting.create_index([('term', pymongo.ASCENDING)])

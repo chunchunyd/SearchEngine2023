@@ -9,6 +9,7 @@ import pymongo
 from django.http import JsonResponse
 from backend.settings import SIGN_WORDS_PATH, STOP_WORDS_PATH, DEFAULT_PAGE_SIZE, BASE_DIR
 from common.serializers import *
+from analysis.views import bm25_sort
 
 
 def search_by_keywords(words):
@@ -97,7 +98,13 @@ def search_by_index(queries):
     for pst in postings:
         results.add(pst['doc_id'])
 
-    results = list(results)
+    # 无排序
+    # results = list(results)
+    # BM25排序
+    print(f'搜索结果数量{len(results)}, 开始排序')
+    st_time = time.time()
+    results = bm25_sort(results, queries)
+    print(f'BM25排序用时{time.time() - st_time}s')
 
     # 关闭mongoDB连接
     client.close()

@@ -1,5 +1,6 @@
 from django.http import JsonResponse
 import pymongo
+from math import log
 
 # Create your views here.
 # 为term预计算idf
@@ -57,3 +58,39 @@ def cal_bm25():
     # # 4. 返回文档的详细信息
     # # 5. 返回文档的高亮信息
     pass
+
+
+def bm25_sort(doc_list, word_list):
+    """
+    对文档列表进行BM25排序
+    """
+    client = pymongo.MongoClient('mongodb://localhost:27017/')
+    db = client['search_engine']
+    Law_Doc = db['law_document']
+    Posting = db['posting']
+    Term = db['term']
+    k1 = 1.5
+    b = 0.75
+    avgdl = 4261  # 平均文档长度
+    total_docs = 68582  # 文档总数
+
+    doc_scores = {doc_id: 0 for doc_id in doc_list}  # 文档分数
+
+    for word in word_list:
+        print(f'正在处理词条{word}')
+        term = list(Term.find({'term': word}))
+
+        if len(term) > 0:
+            idf = term[0]['idf']
+            postings = Posting.find({'term': word})
+            for pst in postings:
+                doc_len = Law_Doc.find({'doc_id': pst['doc_id']})[0]['doc_len']
+                doc_scores[pst['doc_id']] += \
+                    idf * pst['freq'] * (k1 + 1) / (pst['freq'] + k1 * (1 - b + b * doc_len / avgdl))
+
+    client.close()
+
+    sorted_docs = sorted(doc_scores.items(), key=lambda x: x[1], reverse=True)
+    return [doc_id for doc_id, score in sorted_docs]
+
+
