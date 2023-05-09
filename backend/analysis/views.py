@@ -1,6 +1,11 @@
+import json
+import os.path
+from backend.settings import BASE_DIR
+
 from django.http import JsonResponse
 import pymongo
 from math import log
+
 
 # Create your views here.
 # 为term预计算idf
@@ -10,6 +15,7 @@ def cal_idfs(request):
     """
     # 这部分用mongosh实现
     return JsonResponse({'status': 'success'})
+
 
 # 计算BM25得分
 def cal_bm25():
@@ -66,31 +72,42 @@ def bm25_sort(doc_list, word_list):
     """
     client = pymongo.MongoClient('mongodb://localhost:27017/')
     db = client['search_engine']
-    Law_Doc = db['law_document']
     Posting = db['posting']
     Term = db['term']
+
+    postings = list(Posting.find({'term': {'$in': word_list}, 'doc_id': {'$in': doc_list}}))
+
     k1 = 1.5
     b = 0.75
     avgdl = 4261  # 平均文档长度
-    total_docs = 68582  # 文档总数
+    total_docs = 68382  # 文档总数
 
     doc_scores = {doc_id: 0 for doc_id in doc_list}  # 文档分数
 
-    for word in word_list:
-        print(f'正在处理词条{word}')
-        term = list(Term.find({'term': word}))
+    word_idfs = {}
+    term_list = list(Term.find({'_id': {'$in': word_list}}))
+    for term in term_list:
+        word_idfs[term['_id']] = term['idf']
 
-        if len(term) > 0:
-            idf = term[0]['idf']
-            postings = Posting.find({'term': word})
-            for pst in postings:
-                doc_len = Law_Doc.find({'doc_id': pst['doc_id']})[0]['doc_len']
-                doc_scores[pst['doc_id']] += \
-                    idf * pst['freq'] * (k1 + 1) / (pst['freq'] + k1 * (1 - b + b * doc_len / avgdl))
+    print(f'全部查询词：{word_list}')
+    print(f'全部词条：{[term["_id"] for term in term_list]}')
+
+    # 按idfs降序排列, 删除idf<阈值的词条
+    idf_threshold = 0
+    # word_list = [word for word in word_list if word_idfs[word] > idf_threshold]
+    term_list = [term for term in term_list if term['idf'] > idf_threshold]
+    # word_list = sorted(word_list, key=lambda x: word_idfs[x], reverse=True)
+    term_list = sorted(term_list, key=lambda x: word_idfs[x['_id']], reverse=True)
+    print(f'参与排序的词条：{[term["_id"] for term in term_list]}')
+
+    for term in term_list:
+        idf = term['idf']
+        for pst in postings:
+            doc_scores[pst['doc_id']] += \
+                idf * pst['freq'] * (k1 + 1) / (pst['freq'] + k1 * (1 - b + b * pst['doc_len'] / avgdl))
 
     client.close()
 
     sorted_docs = sorted(doc_scores.items(), key=lambda x: x[1], reverse=True)
+    json.dump(sorted_docs, open(os.path.join(BASE_DIR, 'resources', 'sorted_docs.json'), 'w'))
     return [doc_id for doc_id, score in sorted_docs]
-
-

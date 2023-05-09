@@ -103,7 +103,7 @@ def search_by_index(queries):
     # BM25排序
     print(f'搜索结果数量{len(results)}, 开始排序')
     st_time = time.time()
-    results = bm25_sort(results, queries)
+    results = bm25_sort(list(results), queries)
     print(f'BM25排序用时{time.time() - st_time}s')
 
     # 关闭mongoDB连接

@@ -79,7 +79,6 @@ def build_inverted_index():
     for document in documents:
         cnt += 1
         print(f'\r正在处理第{cnt}/{len(documents)}个文档', end=' ')
-
         # 如果文档id小于start_doc_id，说明已经处理过，跳过
         if document.id < start_doc_id:
             print(f'文档{cnt}已处理过')
@@ -96,7 +95,8 @@ def build_inverted_index():
 
         now = time.time()
         print(
-            f'文档{cnt}用时{now - stop_watch:.2f}s, 总用时{now - start_time:.2f}s, 平均用时{(now - start_time) / (cnt - start_doc_id + 1):.2f}s')
+            f'文档{cnt}用时{now - stop_watch:.2f}s, 总用时{now - start_time:.2f}s, '
+            f'平均用时{(now - start_time) / (cnt - start_doc_id + 1):.2f}s', end='\r')
         stop_watch = now
 
     print('\n倒排索引建立完成')
@@ -109,6 +109,7 @@ def build_terms():
     根据posting表建立terms表
     """
     # 连接mongoDB
+    print('开始建立term表')
     client = pymongo.MongoClient('localhost', 27017)
     db = client['search_engine']
     posting = db['posting']
@@ -118,20 +119,29 @@ def build_terms():
                 '_id': '$term',
                 'document_count': {'$sum': 1}
             }
+        },
+        {
+            '$addFields': {
+                'idf': {
+                    '$ln': [
+                        {'$divide': [
+                            {'$add': [
+                                {'$subtract': [68582, '$document_count']},
+                                0.5
+                            ]},
+                            {'$add': ['$document_count', 0.5]}
+                        ]}
+                    ]
+                }
+            }
+        },
+        {
+            '$out': 'term'
         }
     ]
-    # 获取term的document_count
-    results = posting.aggregate(pipeline)
-    # 存入term表
-    term = db['term']
-    cnt = 0
-    for result in results:
-        cnt += 1
-        print(f'\r正在处理第{cnt}个term', end=' ')
-        term.insert_one({
-            'term': result['_id'],
-            'document_count': result['document_count']
-        })
+    print('管道创建完成，开始统计term的document_count')
+
+    posting.aggregate(pipeline)
 
     print('\nterm表建立完成')
     # 关闭连接
