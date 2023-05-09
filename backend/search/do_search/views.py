@@ -36,7 +36,7 @@ def search_by_keywords(words):
     }
 
 
-def construct_page(page, page_size, doc_list):
+def construct_page(page, page_size, doc_list, first_word):
     """
     构造分页结果
     """
@@ -50,15 +50,38 @@ def construct_page(page, page_size, doc_list):
     doc_list = doc_list[start:end]
     # 获取当前页的文档内容
     doc_list = LawDocument.objects.filter(id__in=doc_list)
+    # 构建结果
+    result = {}
+    client = pymongo.MongoClient('mongodb://localhost:27017/')
+    db = client['search_engine']
+    Posting = db['posting']
+    # 获取当前页的文档的摘要
+    for doc in doc_list:
+        # 获取文档的倒排索引
+        posting = list(Posting.find({'doc_id': doc.id, 'term': first_word}))
+        if posting[0]['position'][0] - 20 < 0:
+            start = 0
+        else:
+            start = posting[0]['position'][0] - 20
+        if posting[0]['position'][0] + 280 > posting[0]['doc_len']:
+            end = posting[0]['doc_len']
+        else:
+            end = posting[0]['position'][0] + 280
+        result[doc.id] = {
+            'id': doc.id,
+            'address': doc.address,
+            'short_text': doc.full_text[start:end]
+        }
+    # 关闭mongoDB连接
+    client.close()
     # 返回结果
     return {
         'total_page': total_page,
-        'doc_list': DocumentSerializer(doc_list, many=True).data
+        'doc_list': result
     }
-    pass
 
 
-def search_by_index(queries):
+def search_by_index(word_list):
     """
     根据query在倒排索引中搜索, 返回文档id集合
     这里的query是用户输入的搜索内容分词后的结果，以一个list的形式传入，具体操作在search APP中完成
@@ -68,20 +91,16 @@ def search_by_index(queries):
     db = client['search_engine']
     Term = db['term']
     Posting = db['posting']
-    Law_Document = db['law_document']
-
-    # # redis连接
-    # redis_conn = redis.Redis(host='localhost', port=6379, db=0)
 
     # 获取query中的所有词条
     st_time = time.time()
-    terms = Term.find({'term': {'$in': queries}})
+    terms = Term.find({'term': {'$in': word_list}})
     # print(terms[0])
     print(f'获取词条用时{time.time() - st_time}s')
 
     # 获取每个词条的倒排索引
     st_time = time.time()
-    postings = Posting.find({'term': {'$in': queries}})
+    postings = Posting.find({'term': {'$in': word_list}})
     # print(postings[0])
     # print(type(postings[0]['doc_id']))
     print(f'获取倒排索引用时{time.time() - st_time}s')
@@ -103,7 +122,7 @@ def search_by_index(queries):
     # BM25排序
     print(f'搜索结果数量{len(results)}, 开始排序')
     st_time = time.time()
-    results = bm25_sort(list(results), queries)
+    results = bm25_sort(list(results), word_list)
     print(f'BM25排序用时{time.time() - st_time}s')
 
     # 关闭mongoDB连接
@@ -121,35 +140,51 @@ def text_search(request):
         return JsonResponse({'code': 400, 'msg': 'query参数缺失'})
     page = int(request.GET.get('page', 1))  # 页码,默认为1
 
+    client = pymongo.MongoClient('mongodb://localhost:27017/')
+    db = client['search_engine']
+    Term = db['term']
+
+    # 分词
+    st_time = time.time()
+    words = jieba.cut_for_search(query)
+    # 去除停用词
+    stop_words = json.load(open(SIGN_WORDS_PATH, 'r', encoding='utf-8'))
+    with open(STOP_WORDS_PATH, 'r', encoding='utf-8') as f:
+        stop_words += f.read().splitlines()
+    word_list = [word for word in words if word not in stop_words]
+    print(f'分词用时:{time.time() - st_time}, 分词结果: {words}')
+
+    # 筛选词条
+    word_idfs = {}
+    term_list = list(Term.find({'_id': {'$in': word_list}}))
+    for term in term_list:
+        word_idfs[term['_id']] = term['idf']
+    print(f'全部查询词：{word_list}')
+    print(f'全部词条：{[term["_id"] for term in term_list]}')
+    # 按idfs降序排列, 删除idf<阈值的词条
+    idf_threshold = 0
+    word_list = sorted(word_list, key=lambda x: word_idfs[x], reverse=True)
+    term_list = sorted(term_list, key=lambda x: word_idfs[x['_id']], reverse=True)
+    word_list_for_sort = [word for word in word_list if word_idfs[word] > idf_threshold]
+    word_list_for_sort = [term for term in term_list if term['idf'] > idf_threshold]
+    print(f'参与排序的词条：{[term["_id"] for term in term_list]}')
+
     # 检查redis中是否有缓存
     redis_conn = redis.Redis(host='localhost', port=6379, db=0)
     if redis_conn.exists(query):
         print('命中redis获取缓存')
         doc_list = json.loads(redis_conn.get(query))
     else:
-        # 分词
-        st_time = time.time()
-        words = jieba.cut_for_search(query)
-        # 去除停用词
-        stop_words = json.load(open(SIGN_WORDS_PATH, 'r', encoding='utf-8'))
-        with open(STOP_WORDS_PATH, 'r', encoding='utf-8') as f:
-            stop_words += f.read().splitlines()
-        words = [word for word in words if word not in stop_words]
-
-        print(f'分词用时:{time.time() - st_time}, 分词结果: {words}')
-
         # 全文检索
         st_time = time.time()
-        doc_list = search_by_index(words)
+        doc_list = search_by_index(word_list)
         print(f'全文检索用时:{time.time() - st_time}')
-
         # 存入redis缓存
         redis_conn.set(query, json.dumps(doc_list), ex=60 * 5)  # 5分钟过期
 
     # 分页构建结果返回
     st_time = time.time()
-    result = construct_page(page, DEFAULT_PAGE_SIZE, doc_list)
-
+    result = construct_page(page, DEFAULT_PAGE_SIZE, doc_list, word_list[0])
     # print(full_text_result)
 
     return JsonResponse({
