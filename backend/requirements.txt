@@ -7,5 +7,4 @@ bs4==0.0.1
 chardet==5.1.0     # 因为bs4导入后charset_normalizer报错, 重新安装后又出现warnings, 安装这个之后warning消失
 arrow==1.2.3    # 用于处理时间
 pymongo==4.3.3   # 非关系型数据库
-mongoengine==0.27.0   # Django连接MongoDB的库, 需要安装pymongo
-djongo==1.3.6   # Django连接MongoDB的库
+django-filter==23.2

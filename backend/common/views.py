@@ -1,82 +1,95 @@
 """
 使用ModelViewSet来代替APIView
 """
-from rest_framework.viewsets import ModelViewSet
+from rest_framework.viewsets import ReadOnlyModelViewSet
 from rest_framework.pagination import LimitOffsetPagination
+from django_filters.rest_framework import DjangoFilterBackend
 from backend.settings import DEFAULT_PAGE_SIZE
 from .models import *
 from .serializers import *
+from .filters import *
 
 
-class CourtViewSet(ModelViewSet):
+class CourtViewSet(ReadOnlyModelViewSet):
     queryset = Court.objects.all()
     serializer_class = CourtSerializer
     pagination_class = LimitOffsetPagination
     pagination_class.default_limit = DEFAULT_PAGE_SIZE
 
+    filter_backends = [DjangoFilterBackend]
+    filterset_class = CourtFilterSet
 
-class ProcuratorateViewSet(ModelViewSet):
+
+class ProcuratorateViewSet(ReadOnlyModelViewSet):
     queryset = Procuratorate.objects.all()
     serializer_class = ProcuratorateSerializer
     pagination_class = LimitOffsetPagination
     pagination_class.default_limit = DEFAULT_PAGE_SIZE
 
+    filter_backends = [DjangoFilterBackend]
+    filterset_class = ProsecutionFilterSet
 
-class PartyViewSet(ModelViewSet):
+
+class PartyViewSet(ReadOnlyModelViewSet):
     queryset = Party.objects.all()
     serializer_class = PartySerializer
     pagination_class = LimitOffsetPagination
     pagination_class.default_limit = DEFAULT_PAGE_SIZE
 
 
-class AgentViewSet(ModelViewSet):
+class AgentViewSet(ReadOnlyModelViewSet):
     queryset = Agent.objects.all()
     serializer_class = AgentSerializer
     pagination_class = LimitOffsetPagination
     pagination_class.default_limit = DEFAULT_PAGE_SIZE
 
 
-class LawReferenceViewSet(ModelViewSet):
+class LawReferenceViewSet(ReadOnlyModelViewSet):
     queryset = LawReference.objects.all()
     serializer_class = LawReferenceSerializer
     pagination_class = LimitOffsetPagination
     pagination_class.default_limit = DEFAULT_PAGE_SIZE
 
 
-class JudgeViewSet(ModelViewSet):
+class JudgeViewSet(ReadOnlyModelViewSet):
     queryset = Judge.objects.all()
     serializer_class = JudgeSerializer
     pagination_class = LimitOffsetPagination
     pagination_class.default_limit = DEFAULT_PAGE_SIZE
 
 
-class DocumentViewSet(ModelViewSet):
+class DocumentViewSet(ReadOnlyModelViewSet):
     queryset = LawDocument.objects.all()
     serializer_class = DocumentSerializer
     pagination_class = LimitOffsetPagination
     pagination_class.default_limit = DEFAULT_PAGE_SIZE
 
 
-class JudgmentViewSet(ModelViewSet):
+class JudgmentViewSet(ReadOnlyModelViewSet):
     queryset = Judgment.objects.all()
     serializer_class = JudgmentSerializer
     pagination_class = LimitOffsetPagination
     pagination_class.default_limit = DEFAULT_PAGE_SIZE
 
+    filter_backends = [DjangoFilterBackend]
+    filterset_class = JudgmentFilterSet
 
-class ProsecutionViewSet(ModelViewSet):
+
+class ProsecutionViewSet(ReadOnlyModelViewSet):
     queryset = Prosecution.objects.all()
     serializer_class = ProsecutionSerializer
     pagination_class = LimitOffsetPagination
     pagination_class.default_limit = DEFAULT_PAGE_SIZE
 
+    filter_backends = [DjangoFilterBackend]
+    filterset_class = ProsecutionFilterSet
 
-class DocAgentPartyViewSet(ModelViewSet):
+
+class DocAgentPartyViewSet(ReadOnlyModelViewSet):
     queryset = DocAgentParty.objects.all()
     serializer_class = DocAgentPartySerializer
     pagination_class = LimitOffsetPagination
     pagination_class.default_limit = DEFAULT_PAGE_SIZE
-
 
 # class TagViewSet(ModelViewSet):
 #     queryset = Tag.objects.all()

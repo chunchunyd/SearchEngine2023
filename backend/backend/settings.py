@@ -40,6 +40,7 @@ INSTALLED_APPS = [
     "crawlers.apps.CrawlersConfig",
     "indexes.apps.IndexesConfig",
     "search.do_search.apps.DoSearchConfig",
+    'django_filters',
 ]
 
 MIDDLEWARE = [
