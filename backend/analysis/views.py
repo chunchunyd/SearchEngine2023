@@ -1,6 +1,6 @@
 import json
 import os.path
-from backend.settings import BASE_DIR
+from backend.settings import BASE_DIR, MONGO_DB
 
 from django.http import JsonResponse
 import pymongo
@@ -70,10 +70,8 @@ def bm25_sort(doc_list, word_list):
     """
     对文档列表进行BM25排序
     """
-    client = pymongo.MongoClient('mongodb://localhost:27017/')
-    db = client['search_engine']
-    Posting = db['posting']
-    Term = db['term']
+    Posting = MONGO_DB['posting']
+    Term = MONGO_DB['term']
 
     postings = list(Posting.find({'term': {'$in': word_list}, 'doc_id': {'$in': doc_list}}))
 
@@ -105,8 +103,6 @@ def bm25_sort(doc_list, word_list):
         for pst in postings:
             doc_scores[pst['doc_id']] += \
                 idf * pst['freq'] * (k1 + 1) / (pst['freq'] + k1 * (1 - b + b * pst['doc_len'] / avgdl))
-
-    client.close()
 
     sorted_docs = sorted(doc_scores.items(), key=lambda x: x[1], reverse=True)
     json.dump(sorted_docs, open(os.path.join(BASE_DIR, 'resources', 'sorted_docs.json'), 'w'))

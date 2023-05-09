@@ -1,7 +1,7 @@
 from django.http import JsonResponse
 from django.db import transaction
 from common.models import LawDocument, Party, Agent, Judge, Court, Procuratorate
-from backend.settings import SIGN_WORDS_PATH, STOP_WORDS_PATH, DEFAULT_PAGE_SIZE, BASE_DIR
+from backend.settings import SIGN_WORDS_PATH, STOP_WORDS_PATH, DEFAULT_PAGE_SIZE, BASE_DIR, MONGO_DB
 import jieba
 import json
 import time
@@ -44,9 +44,7 @@ def build_inverted_index():
     建立倒排索引
     """
     # 连接mongoDB
-    client = pymongo.MongoClient('localhost', 27017)
-    db = client['search_engine']
-    posting = db['posting']
+    posting = MONGO_DB['posting']
     # 设置posting的词条、index
     posting.create_index([('term', pymongo.ASCENDING)])
     posting.create_index([('doc_id', pymongo.ASCENDING)])
@@ -100,8 +98,6 @@ def build_inverted_index():
         stop_watch = now
 
     print('\n倒排索引建立完成')
-    # 关闭连接
-    client.close()
 
 
 def build_terms():
@@ -110,9 +106,7 @@ def build_terms():
     """
     # 连接mongoDB
     print('开始建立term表')
-    client = pymongo.MongoClient('localhost', 27017)
-    db = client['search_engine']
-    posting = db['posting']
+    posting = MONGO_DB['posting']
     pipeline = [
         {
             '$group': {
@@ -144,8 +138,6 @@ def build_terms():
     posting.aggregate(pipeline)
 
     print('\nterm表建立完成')
-    # 关闭连接
-    client.close()
 
 
 # 对外提供的接口

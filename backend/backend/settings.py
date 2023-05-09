@@ -84,8 +84,12 @@ DATABASES = {
 
 # mongodb
 from mongoengine import connect
-
 connect('search_engine', host='localhost', port=27017)
+
+import pymongo
+
+client = pymongo.MongoClient('mongodb://localhost:27017/')
+MONGO_DB = client['search_engine']
 
 # redis
 import redis

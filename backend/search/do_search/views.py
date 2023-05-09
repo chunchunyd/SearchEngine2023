@@ -7,7 +7,7 @@ import time
 import redis
 import pymongo
 from django.http import JsonResponse
-from backend.settings import SIGN_WORDS_PATH, STOP_WORDS_PATH, DEFAULT_PAGE_SIZE, BASE_DIR
+from backend.settings import SIGN_WORDS_PATH, STOP_WORDS_PATH, DEFAULT_PAGE_SIZE, BASE_DIR, MONGO_DB
 from common.serializers import *
 from analysis.views import bm25_sort
 
@@ -53,9 +53,7 @@ def construct_page(page, page_size, doc_list, word_list):
     doc_list = LawDocument.objects.filter(id__in=doc_list)
     # 构建结果
     result = {}
-    client = pymongo.MongoClient('mongodb://localhost:27017/')
-    db = client['search_engine']
-    Posting = db['posting']
+    Posting = MONGO_DB['posting']
     # 获取当前页的文档的摘要
     for doc in doc_list:
         # 获取文档的倒排索引
@@ -76,8 +74,6 @@ def construct_page(page, page_size, doc_list, word_list):
                     'short_text': doc.full_text[start:end]
                 }
                 break
-    # 关闭mongoDB连接
-    client.close()
     # 返回结果
     return {
         'total_page': total_page,
@@ -91,10 +87,8 @@ def search_by_index(word_list):
     这里的query是用户输入的搜索内容分词后的结果，以一个list的形式传入，具体操作在search APP中完成
     """
     # mongoDB连接
-    client = pymongo.MongoClient('mongodb://localhost:27017/')
-    db = client['search_engine']
-    Term = db['term']
-    Posting = db['posting']
+    Term = MONGO_DB['term']
+    Posting = MONGO_DB['posting']
 
     # 获取query中的所有词条
     st_time = time.time()
@@ -128,9 +122,6 @@ def search_by_index(word_list):
     st_time = time.time()
     results = bm25_sort(list(results), word_list)
     print(f'BM25排序用时{time.time() - st_time}s')
-
-    # 关闭mongoDB连接
-    client.close()
     # 返回结果
     return results
 
@@ -143,10 +134,7 @@ def text_search(request):
     if not query:
         return JsonResponse({'code': 400, 'msg': 'query参数缺失'})
     page = int(request.GET.get('page', 1))  # 页码,默认为1
-
-    client = pymongo.MongoClient('mongodb://localhost:27017/')
-    db = client['search_engine']
-    Term = db['term']
+    Term = MONGO_DB['term']
 
     # 分词
     st_time = time.time()
