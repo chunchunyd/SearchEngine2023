@@ -36,10 +36,11 @@ def search_by_keywords(words):
     }
 
 
-def construct_page(page, page_size, doc_list, first_word):
+def construct_page(page, page_size, doc_list, word_list):
     """
     构造分页结果
     """
+    # print(f'word_list: {word_list}')
     # 计算总页数
     total_page = len(doc_list) // page_size + 1
     # 计算当前页的文档起始位置
@@ -58,20 +59,23 @@ def construct_page(page, page_size, doc_list, first_word):
     # 获取当前页的文档的摘要
     for doc in doc_list:
         # 获取文档的倒排索引
-        posting = list(Posting.find({'doc_id': doc.id, 'term': first_word}))
-        if posting[0]['position'][0] - 20 < 0:
-            start = 0
-        else:
-            start = posting[0]['position'][0] - 20
-        if posting[0]['position'][0] + 280 > posting[0]['doc_len']:
-            end = posting[0]['doc_len']
-        else:
-            end = posting[0]['position'][0] + 280
-        result[doc.id] = {
-            'id': doc.id,
-            'address': doc.address,
-            'short_text': doc.full_text[start:end]
-        }
+        for word in word_list:
+            posting = list(Posting.find({'doc_id': doc.id, 'term': word}))
+            if posting:
+                if posting[0]['position'][0] - 20 < 0:
+                    start = 0
+                else:
+                    start = posting[0]['position'][0] - 20
+                if posting[0]['position'][0] + 280 > posting[0]['doc_len']:
+                    end = posting[0]['doc_len']
+                else:
+                    end = posting[0]['position'][0] + 280
+                result[doc.id] = {
+                    'id': doc.id,
+                    'address': doc.address,
+                    'short_text': doc.full_text[start:end]
+                }
+                break
     # 关闭mongoDB连接
     client.close()
     # 返回结果
@@ -184,7 +188,7 @@ def text_search(request):
 
     # 分页构建结果返回
     st_time = time.time()
-    result = construct_page(page, DEFAULT_PAGE_SIZE, doc_list, word_list[0])
+    result = construct_page(page, DEFAULT_PAGE_SIZE, doc_list, word_list)
     # print(full_text_result)
 
     return JsonResponse({
