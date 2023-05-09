@@ -71,7 +71,9 @@ def construct_page(page, page_size, doc_list, word_list):
                 result[doc.id] = {
                     'id': doc.id,
                     'address': doc.address,
-                    'short_text': doc.full_text[start:end]
+                    'title': doc.full_text[:40],
+                    'short_text': doc.full_text[start:end],
+                    'word_list': word_list
                 }
                 break
     # 返回结果
