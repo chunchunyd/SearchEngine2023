@@ -157,7 +157,7 @@ def text_search(request):
     print(f'分词用时:{time.time() - st_time}, 分词结果: {words}')
 
     # 筛选词条
-    word_idfs = {}
+    word_idfs = {word: -99 for word in word_list}
     term_list = list(Term.find({'_id': {'$in': word_list}}))
     for term in term_list:
         word_idfs[term['_id']] = term['idf']
