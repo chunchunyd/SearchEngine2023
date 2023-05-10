@@ -11,6 +11,8 @@ export function search(_this, par) {
     if (response.status === 200) {
       _this.data = d.result.doc_list
       _this.totalnum = d.result.total_page * 10
+      _this.matchkey = d.result.word_list
+      _this.computehighlight()
     } else {
       _this.$alert('error!')
     }
@@ -31,6 +33,8 @@ export function searchpage(_this, par, page) {
     if (response.status === 200) {
       _this.data = d.result.doc_list
       _this.totalnum = d.result.total_page * 10
+      _this.matchkey = d.result.word_list
+      _this.computehighlight()
     } else {
       _this.$alert('error!')
     }

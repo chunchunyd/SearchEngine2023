@@ -29,7 +29,7 @@
                     <div class="p-4">
                         <i class="fa fa-3x fa-cog text-primary mb-4"></i>
                         <h5>{{item.title}}</h5>
-                <p>{{item.short_text}}......</p>
+                <p v-html="item.short_text"></p>
                     </div>
                 </div>
             </div>
@@ -76,9 +76,11 @@ export default {
   },
   data() {
     return {
+      htmlString: 'This is a <span class="highlighted">text</span> with some',
       input: '',
       prevsearch: '',
       data: [],
+      matchkey: [],
       pageid: 0,
       totalnum: 0,
       items: [['浙江省东阳市人民法院 民事判决书 （2016）浙0783民初17571号', '原告韦斌姬为与被告韦斌强、杜满萍民间借贷纠纷一案，于2016年12月1日向本院提起诉讼，请求判令两被告归还借款10万元，并支付利息（自起诉之日起按中国人民银行同期同档次贷款基准利率计算至实际履行之日止）。本院受理后，依法由审判员甘震适用简易程序独任审判。'],
@@ -108,6 +110,21 @@ export default {
       this.$nextTick(function () {
         window.scrollTo({ behavior: 'smooth', top: el.offsetTop })
       })
+    },
+    computehighlight() {
+      // 遍历data字典
+      for (const k in this.data) {
+        let h = this.data[k].short_text
+        // 在h中匹配matchkey中的所有字符串
+        for (let j = 0; j < this.matchkey.length; j++) {
+          // 将匹配到的字符串用span标签包裹起来
+          h = h.replace(new RegExp(this.matchkey[j], 'g'), '<span class="highlighted">' + this.matchkey[j] + '</span>')
+        }
+        this.data[k].short_text = h + '......'
+      }
+    },
+    test() {
+      console.log(this.data)
     }
   },
   watch: {
