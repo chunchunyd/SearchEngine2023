@@ -71,14 +71,15 @@ def construct_page(page, page_size, doc_list, word_list):
                     end = posting[0]['position'][0] + 280
 
                 # 找到第一个以"号"字结尾的位置
-                title_end_1 = re.search(r"号 ", doc.full_text).span()
-                title_end_2 = re.search(r"案 ", doc.full_text).span()
-                title_end = min(title_end_1[1], title_end_2[1])
+                try:
+                    title_end = re.search(r"号 ", doc.full_text).span()
+                except:
+                    title_end = re.search(r"案 ", doc.full_text).span()
 
                 result[doc.id] = {
                     'id': doc.id,
                     'address': doc.address,
-                    'title': doc.full_text[:title_end],
+                    'title': doc.full_text[:title_end[1]],
                     'short_text': doc.full_text[start:end],
                 }
                 break
