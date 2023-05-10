@@ -82,21 +82,23 @@ def bm25_sort(doc_list, word_list):
 
     doc_scores = {doc_id: 0 for doc_id in doc_list}  # 文档分数
 
-    word_idfs = {}
+    # word_idfs = {}
+
     term_list = list(Term.find({'_id': {'$in': word_list}}))
-    for term in term_list:
-        word_idfs[term['_id']] = term['idf']
 
-    print(f'全部查询词：{word_list}')
-    print(f'全部词条：{[term["_id"] for term in term_list]}')
+    # for term in term_list:
+    #     word_idfs[term['_id']] = term['idf']
 
-    # 按idfs降序排列, 删除idf<阈值的词条
-    idf_threshold = 0
-    # word_list = [word for word in word_list if word_idfs[word] > idf_threshold]
-    term_list = [term for term in term_list if term['idf'] > idf_threshold]
-    # word_list = sorted(word_list, key=lambda x: word_idfs[x], reverse=True)
-    term_list = sorted(term_list, key=lambda x: word_idfs[x['_id']], reverse=True)
-    print(f'参与排序的词条：{[term["_id"] for term in term_list]}')
+    # print(f'全部查询词：{word_list}')
+    # print(f'全部词条：{[term["_id"] for term in term_list]}')
+
+    # # 按idfs降序排列, 删除idf<阈值的词条
+    # idf_threshold = 0
+    # # word_list = [word for word in word_list if word_idfs[word] > idf_threshold]
+    # term_list = [term for term in term_list if term['idf'] > idf_threshold]
+    # # word_list = sorted(word_list, key=lambda x: word_idfs[x], reverse=True)
+    # term_list = sorted(term_list, key=lambda x: word_idfs[x['_id']], reverse=True)
+    # print(f'参与排序的词条：{[term["_id"] for term in term_list]}')
 
     for term in term_list:
         idf = term['idf']

@@ -11,6 +11,7 @@ from django.http import JsonResponse
 from backend.settings import SIGN_WORDS_PATH, STOP_WORDS_PATH, DEFAULT_PAGE_SIZE, BASE_DIR, MONGO_DB
 from common.serializers import *
 from analysis.views import bm25_sort
+from search.query_parse.views import parse_query
 
 
 def search_by_keywords(words):
@@ -91,51 +92,6 @@ def construct_page(page, page_size, doc_list, word_list):
     }
 
 
-def search_by_index(word_list):
-    """
-    根据query在倒排索引中搜索, 返回文档id集合
-    这里的query是用户输入的搜索内容分词后的结果，以一个list的形式传入，具体操作在search APP中完成
-    """
-    # mongoDB连接
-    Term = MONGO_DB['term']
-    Posting = MONGO_DB['posting']
-
-    # 获取query中的所有词条
-    st_time = time.time()
-    terms = Term.find({'term': {'$in': word_list}})
-    # print(terms[0])
-    print(f'获取词条用时{time.time() - st_time}s')
-
-    # 获取每个词条的倒排索引
-    st_time = time.time()
-    postings = Posting.find({'term': {'$in': word_list}})
-    # print(postings[0])
-    # print(type(postings[0]['doc_id']))
-    print(f'获取倒排索引用时{time.time() - st_time}s')
-
-    results = set()
-
-    # for pst in postings:
-    #     if pst['doc_id'] not in results:
-    #         doc = Law_Document.find_one({'doc_id': pst['doc_id']})
-    #         results[pst['doc_id']] = {"address": doc['address'], "terms": {}}  # 这里的address是文档的地址
-    #     results[pst["doc_id"]]["terms"][pst["term"]] = pst["position"]
-    # print(f'序列化用时{time.time() - st_time}s')
-
-    for pst in postings:
-        results.add(pst['doc_id'])
-
-    # 无排序
-    # results = list(results)
-    # BM25排序
-    print(f'搜索结果数量{len(results)}, 开始排序')
-    st_time = time.time()
-    results = bm25_sort(list(results), word_list)
-    print(f'BM25排序用时{time.time() - st_time}s')
-    # 返回结果
-    return results
-
-
 def text_search(request):
     """
     全文搜索，query为查询字符串
@@ -144,49 +100,30 @@ def text_search(request):
     if not query:
         return JsonResponse({'code': 400, 'msg': 'query参数缺失'})
     page = int(request.GET.get('page', 1))  # 页码,默认为1
-    Term = MONGO_DB['term']
-
-    # 分词
-    st_time = time.time()
-    words = jieba.cut_for_search(query)
-    # 去除停用词
-    stop_words = json.load(open(SIGN_WORDS_PATH, 'r', encoding='utf-8'))
-    with open(STOP_WORDS_PATH, 'r', encoding='utf-8') as f:
-        stop_words += f.read().splitlines()
-    word_list = [word for word in words if word not in stop_words]
-    print(f'分词用时:{time.time() - st_time}, 分词结果: {words}')
-
-    # 筛选词条
-    word_idfs = {word: -99 for word in word_list}
-    term_list = list(Term.find({'_id': {'$in': word_list}}))
-    for term in term_list:
-        word_idfs[term['_id']] = term['idf']
-    print(f'全部查询词：{word_list}')
-    print(f'全部词条：{[term["_id"] for term in term_list]}')
-    # 按idfs降序排列, 删除idf<阈值的词条
-    idf_threshold = 0
-    word_list = sorted(word_list, key=lambda x: word_idfs[x], reverse=True)
-    term_list = sorted(term_list, key=lambda x: word_idfs[x['_id']], reverse=True)
-    word_list_for_sort = [word for word in word_list if word_idfs[word] > idf_threshold]
-    word_list_for_sort = [term for term in term_list if term['idf'] > idf_threshold]
-    print(f'参与排序的词条：{[term["_id"] for term in term_list]}')
 
     # 检查redis中是否有缓存
     redis_conn = redis.Redis(host='localhost', port=6379, db=0)
     if redis_conn.exists(query):
         print('命中redis获取缓存')
-        doc_list = json.loads(redis_conn.get(query))
+        doc_list, word_list = json.loads(redis_conn.get(query))
     else:
         # 全文检索
         st_time = time.time()
-        doc_list = search_by_index(word_list)
+        doc_ids, word_list, word_list_for_sort = parse_query(query)  # 返回: 文档id集合, 分词后的词条列表, 用于排序的词条列表
         print(f'全文检索用时:{time.time() - st_time}')
+
+        # 排序
+        st_time = time.time()
+        doc_list = bm25_sort(doc_ids, word_list_for_sort)
+        print(f'排序用时:{time.time() - st_time}')
+
         # 存入redis缓存
-        redis_conn.set(query, json.dumps(doc_list), ex=60 * 5)  # 5分钟过期
+        redis_conn.set(query, json.dumps((doc_list, word_list)), ex=60 * 5)  # 5分钟过期
 
     # 分页构建结果返回
     st_time = time.time()
     result = construct_page(page, DEFAULT_PAGE_SIZE, doc_list, word_list)
+    print(f'构建返回页面用时:{time.time() - st_time}')
     # print(full_text_result)
 
     return JsonResponse({
@@ -232,7 +169,6 @@ def similar_search(query):
     todo:相似查询，query为查询字符串
     """
     pass
-
 
 # def query_search(request):
 #     """
