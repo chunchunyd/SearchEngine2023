@@ -7,6 +7,7 @@ import re
 import time
 
 import jieba
+import redis
 
 from backend.settings import MONGO_DB, SIGN_WORDS_PATH, STOP_WORDS_PATH
 
@@ -68,10 +69,11 @@ def term_to_doc_ids(term_set):
     根据词条获取文档id集合
     """
     Posting = MONGO_DB['posting']
-    postings = Posting.find({'term': {'$in': list(term_set)}})
-    doc_ids = set()
-    for posting in postings:
-        doc_ids.add(posting['doc_id'])
+    pipeline = [
+        {'$match': {'term': {'$in': list(term_set)}}},
+        {'$group': {'_id': None, 'doc_ids': {'$addToSet': '$doc_id'}}}
+    ]
+    doc_ids = next(Posting.aggregate(pipeline))['doc_ids']
     return doc_ids, term_set  # 返回结果文档和包含的词条
 
 
@@ -110,12 +112,14 @@ def parse_query(query):
     st_time = time.time()
     if query.startswith('EXACTLY:'):
         query = query[8:]
+        print(f'精确查询语句：{query}')
         tokens = split_into_tokens(query)
         expr = infix_to_postfix(tokens)
         doc_ids, word_list = cal_doc_ids(expr)
         doc_ids, word_list = list(doc_ids), list(word_list)
         word_list_for_sort = word_list
     else:
+        print(f'普通查询语句：{query}')
         Term = MONGO_DB['term']
         # 去除停用词
         words = set(jieba.cut_for_search(query))

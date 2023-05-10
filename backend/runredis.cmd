@@ -1,3 +1,3 @@
-redis-server D:\\Softwares\\Coding\\Databases\\Redis\\redis.windows.conf
+redis-server D:\\Softwares\\Coding\\Databases\\Redis\\redis.windows-server.conf
 redis-server
 redis-cli

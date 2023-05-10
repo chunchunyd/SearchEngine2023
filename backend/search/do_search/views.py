@@ -72,10 +72,15 @@ def construct_page(page, page_size, doc_list, word_list):
                     end = posting[0]['position'][0] + 280
 
                 # 找到第一个以"号"字结尾的位置
-                try:
-                    title_end = re.search(r"号 ", doc.full_text).span()
-                except:
-                    title_end = re.search(r"案 ", doc.full_text).span()
+                title_end = re.search(r"号 ", doc.full_text)
+                if title_end is not None:
+                    title_end = title_end.span()
+                else:
+                    title_end = re.search(r"案 ", doc.full_text)
+                    if title_end is not None:
+                        title_end = title_end.span()
+                    else:
+                        title_end = (39, 40)
 
                 result[doc.id] = {
                     'id': doc.id,
@@ -96,26 +101,32 @@ def text_search(request):
     """
     全文搜索，query为查询字符串
     """
+    total_time = time.time()
+
     query = request.GET.get('query')
     if not query:
         return JsonResponse({'code': 400, 'msg': 'query参数缺失'})
     page = int(request.GET.get('page', 1))  # 页码,默认为1
 
+
     # 检查redis中是否有缓存
+    print(f'解析请求成功, 总用时:{time.time() - total_time}')
     redis_conn = redis.Redis(host='localhost', port=6379, db=0)
+    print(f'连接redis成功, 总用时:{time.time() - total_time}')
     if redis_conn.exists(query):
-        print('命中redis获取缓存')
+        print(f'redis获取缓存, 总用时:{time.time() - total_time}')
         doc_list, word_list = json.loads(redis_conn.get(query))
     else:
+        print(f'redis无缓存, 总用时:{time.time() - total_time}')
         # 全文检索
         st_time = time.time()
         doc_ids, word_list, word_list_for_sort = parse_query(query)  # 返回: 文档id集合, 分词后的词条列表, 用于排序的词条列表
-        print(f'全文检索用时:{time.time() - st_time}')
+        print(f'全文检索用时:{time.time() - st_time}s')
 
         # 排序
         st_time = time.time()
         doc_list = bm25_sort(doc_ids, word_list_for_sort)
-        print(f'排序用时:{time.time() - st_time}')
+        print(f'排序用时:{time.time() - st_time}s')
 
         # 存入redis缓存
         redis_conn.set(query, json.dumps((doc_list, word_list)), ex=60 * 5)  # 5分钟过期
@@ -123,8 +134,9 @@ def text_search(request):
     # 分页构建结果返回
     st_time = time.time()
     result = construct_page(page, DEFAULT_PAGE_SIZE, doc_list, word_list)
-    print(f'构建返回页面用时:{time.time() - st_time}')
+    print(f'构建返回页面用时:{time.time() - st_time}s')
     # print(full_text_result)
+    print(f'总用时:{time.time() - total_time}s')
 
     return JsonResponse({
         'code': 200,
