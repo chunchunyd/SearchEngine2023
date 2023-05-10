@@ -110,9 +110,7 @@ def text_search(request):
 
 
     # 检查redis中是否有缓存
-    print(f'解析请求成功, 总用时:{time.time() - total_time}')
     redis_conn = redis.Redis(host='localhost', port=6379, db=0)
-    print(f'连接redis成功, 总用时:{time.time() - total_time}')
     if redis_conn.exists(query):
         print(f'redis获取缓存, 总用时:{time.time() - total_time}')
         doc_list, word_list = json.loads(redis_conn.get(query))
@@ -129,7 +127,7 @@ def text_search(request):
         print(f'排序用时:{time.time() - st_time}s')
 
         # 存入redis缓存
-        redis_conn.set(query, json.dumps((doc_list, word_list)), ex=60 * 5)  # 5分钟过期
+        redis_conn.set(query, json.dumps((doc_list, word_list)), ex=60 * 60 * 3)  # 3小时过期
 
     # 分页构建结果返回
     st_time = time.time()
