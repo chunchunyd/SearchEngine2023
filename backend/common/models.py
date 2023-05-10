@@ -112,7 +112,14 @@ class LawReference(models.Model):
         ]
 
     def __str__(self):
-        return self.law_name
+        detail = self.law_name
+        if self.law_clause:
+            detail += self.law_clause
+        if self.law_clause_item:
+            detail += self.law_clause_item
+        if self.law_item:
+            detail += self.law_item
+        return detail
 
 
 class Judge(models.Model):

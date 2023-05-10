@@ -58,7 +58,12 @@ def construct_page(page, page_size, doc_list, word_list):
     Posting = MONGO_DB['posting']
     # 获取当前页的文档的摘要
     for doc in doc_list:
-        # 获取文档的倒排索引
+        result[doc.id] = {
+            'id': doc.id,
+            'address': doc.address,
+        }
+
+        # 找到doc中第一个出现的词条，用于摘要
         for word in word_list:
             posting = list(Posting.find({'doc_id': doc.id, 'term': word}))
             if posting:
@@ -82,13 +87,29 @@ def construct_page(page, page_size, doc_list, word_list):
                     else:
                         title_end = (39, 40)
 
-                result[doc.id] = {
-                    'id': doc.id,
-                    'address': doc.address,
-                    'title': doc.full_text[:title_end[1]],
-                    'short_text': doc.full_text[start:end],
-                }
+                result[doc.id]['title'] = doc.full_text[:title_end[1]]
+                result[doc.id]['short_text'] = doc.full_text[start:end]
                 break
+
+        # 获取文档的类型，添加对应的信息
+        doc_type = doc.doc_type
+        if doc_type == '判决书' or doc_type == '裁定书' or doc_type == '调解书' or doc_type == '决定书':
+            doc = Judgment.objects.get(id=doc.id)
+            result[doc.id]['court_id'] = doc.court.id
+            result[doc.id]['court_name'] = doc.court.name
+            result[doc.id]['judges'] = []
+            for judge in doc.judge.all():
+                result[doc.id]['judges'].append({'judge_id': judge.id, 'judge_name': judge.name})
+            result[doc.id]['law_refs'] = []
+            for law in doc.law_reference.all():
+                result[doc.id]['law_refs'].append({'law_id': law.id, 'law_detail': str(law)})
+        elif doc_type == '起诉书' or doc_type == '不起诉书':
+            doc = Prosecution.objects.get(id=doc.id)
+            result[doc.id]['procuratorate_id'] = doc.procuratorate.id
+            result[doc.id]['procuratorate'] = doc.procuratorate.name
+            result[doc.id]['to_court_id'] = doc.court.id
+            result[doc.id]['to_court_name'] = doc.court.name
+
     # 返回结果
     return {
         'total_page': total_page,
