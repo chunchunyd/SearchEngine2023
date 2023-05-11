@@ -61,7 +61,6 @@ class XmlSpider:
         self.total_count = len(self.xml_files)
         self.current_count = 0
 
-
     def parse(self, start_time):
         """
         解析xml文件
@@ -78,23 +77,31 @@ class XmlSpider:
                 print(f', 总计用时：{time.time() - start_time}秒')
             print(f"\r当前进度：{self.current_count}/{self.total_count}", end='')
             xml_path = os.path.join(self.dir_path, xml_file)
-            with open(xml_path, 'r', encoding='utf-8') as f:
-                xml_content = f.read()
-                soup = BeautifulSoup(xml_content, features="xml")
-                # 文书种类
-                doc_type = find_node(soup, 'WSZL').get('value')
-                if doc_type == '判决书' or doc_type == '裁定书' or doc_type == '调解书' or doc_type == '决定书':
-                    # 处理判决书
-                    handle_judgment(soup, xml_file)
-                elif doc_type == '起诉书' or doc_type == '不起诉书':
-                    # 处理起诉书
-                    handle_prosecution(soup, xml_file)
-                elif doc_type == '':
-                    # 坏网页
-                    continue
-                else:
-                    # 处理其他文书
-                    handle_document(soup, xml_file)
+
+            # 解析单个xml文件
+            self.parse_one(xml_path)
+
+    def parse_one(self, xml_path):
+        """
+        解析单个xml文件
+        """
+        with open(xml_path, 'r', encoding='utf-8') as f:
+            xml_content = f.read()
+            soup = BeautifulSoup(xml_content, features="xml")
+            # 文书种类
+            doc_type = find_node(soup, 'WSZL').get('value')
+            if doc_type == '判决书' or doc_type == '裁定书' or doc_type == '调解书' or doc_type == '决定书':
+                # 处理判决书
+                handle_judgment(soup, xml_file)
+            elif doc_type == '起诉书' or doc_type == '不起诉书':
+                # 处理起诉书
+                handle_prosecution(soup, xml_file)
+            elif doc_type == '':
+                # 坏网页
+                return
+            else:
+                # 处理其他文书
+                handle_document(soup, xml_file)
 
 
 SPIDER = XmlSpider()
@@ -122,7 +129,44 @@ def spider_progress(request):
     progress = {
         "total_count": SPIDER.total_count,
         "current_count": SPIDER.current_count,
-        "file_name": SPIDER.relative_xml_paths[SPIDER.current_count - 1],
+        "file_name": SPIDER.xml_files[SPIDER.current_count - 1],
         "status": "Running"
     }
     return JsonResponse(progress)
+
+
+def upload_xml(request):
+    """
+    上传xml文件
+    TODO:鉴权
+    """
+    if request.method != 'POST':
+        return JsonResponse({
+            "status": "Error",
+            "message": "请求方法错误"
+        })
+    xml_file = request.FILES.get('xml_file')
+    if not xml_file:
+        return JsonResponse({
+            "status": "Error",
+            "message": "上传的文件为空"
+        })
+    xml_file_name = xml_file.name
+    xml_file_path = os.path.join(STATICFILES_DIRS[0], xml_file_name)
+    with open(xml_file_path, 'wb') as f:
+        for chunk in xml_file.chunks():
+            f.write(chunk)
+
+    SPIDER.set_dir(STATICFILES_DIRS[0])
+
+    try:
+        SPIDER.parse_one(xml_file_path)
+        return JsonResponse({
+            "status": "Done",
+            "file_name": xml_file_name
+        })
+    except Exception as e:
+        return JsonResponse({
+            "status": "Error",
+            "message": f"Invalid file: {str(e)}",
+        })
