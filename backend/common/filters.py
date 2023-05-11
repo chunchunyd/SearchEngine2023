@@ -37,6 +37,7 @@ class JudgmentFilterSet(FilterSet):
     """
     Judgment过滤器
     """
+    address = filters.CharFilter(field_name='address', lookup_expr='iexact')
     doc_type = filters.CharFilter(field_name='doc_type', lookup_expr='iexact')
     case_number = filters.CharFilter(field_name='case_number', lookup_expr='iexact')
     case_type = filters.CharFilter(field_name='case_type', lookup_expr='iexact')
@@ -59,6 +60,7 @@ class ProsecutionFilterSet(FilterSet):
     """
     Prosecution过滤器
     """
+    address = filters.CharFilter(field_name='address', lookup_expr='iexact')
     doc_type = filters.CharFilter(field_name='doc_type', lookup_expr='iexact')
     case_number = filters.CharFilter(field_name='case_number', lookup_expr='iexact')
     case_type = filters.CharFilter(field_name='case_type', lookup_expr='iexact')

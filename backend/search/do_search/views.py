@@ -3,7 +3,7 @@
 """
 import json
 import os
-
+import bs4
 import jieba
 import time
 import redis
@@ -14,6 +14,7 @@ from backend.settings import SIGN_WORDS_PATH, STOP_WORDS_PATH, DEFAULT_PAGE_SIZE
 from common.models import *
 from common.serializers import *
 from analysis.views import bm25_sort
+
 from search.query_parse.views import parse_query
 
 
@@ -252,9 +253,22 @@ def similar_search(request):
         for chunk in xml_file.chunks():
             f.write(chunk)
 
-    os.remove(xml_file_path)
-    return JsonResponse({
-        "status": "Error",
-        "message": f"Invalid file: {str(e)}",
-    })
+    try:
+        # todo: 解析xml文件
+
+        # todo: 结构化数据返回相似结果，例如同法院、同法官、同当事人等
+
+        # todo: 对全文进行相似度计算，返回相似结果
+
+        return JsonResponse({
+            "status": "Done",
+            "file_name": xml_file_name
+        })
+    except Exception as e:
+        # 删除文件
+        os.remove(xml_file_path)
+        return JsonResponse({
+            "status": "Error",
+            "message": f"Invalid file: {str(e)}",
+        })
 
