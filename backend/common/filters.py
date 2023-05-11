@@ -33,6 +33,17 @@ class ProcuratorateFilterSet(FilterSet):
         fields = ['name', 'district_code', 'province', 'city', 'county', 'level']
 
 
+class LawDocumentFilterSet(FilterSet):
+    """
+    LawDocument过滤器
+    """
+    address = filters.CharFilter(field_name='address', lookup_expr='iexact')
+
+    class Meta:
+        model = LawDocument
+        fields = ['address']
+
+
 class JudgmentFilterSet(FilterSet):
     """
     Judgment过滤器
@@ -53,7 +64,7 @@ class JudgmentFilterSet(FilterSet):
     class Meta:
         model = Judgment
         fields = ['doc_type', 'case_number', 'case_type', 'judgment_date', 'court_id', 'court_name',
-                  'plaintiff', 'defendant', 'agent', 'law_reference', 'judge']
+                  'plaintiff', 'defendant', 'agent', 'law_reference', 'judge', 'address']
 
 
 class ProsecutionFilterSet(FilterSet):
@@ -73,4 +84,4 @@ class ProsecutionFilterSet(FilterSet):
     class Meta:
         model = Prosecution
         fields = ['doc_type', 'case_number', 'case_type', 'p_date', 'court_id', 'procuratorate_id',
-                  'procuratorate_name', 'defendant']
+                  'procuratorate_name', 'defendant', 'address']
