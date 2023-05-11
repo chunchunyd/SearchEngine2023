@@ -14,6 +14,14 @@
   color: #0d6efd;
 }
 
+.displayboard {
+  position: relative;
+  top: 10px;
+  left: 3%;
+  width: 94%;
+}
+
+
 /**_________________________________**/
 
 
@@ -21,9 +29,11 @@
 /********** Template CSS **********/
 :root {
   --primary: #86B817;
+  --mycolor: #dddddd;
   --secondary: #FE8800;
   --light: #F5F5F5;
   --dark: #14141F;
+  --mycolor2: #000000
 }
 
 .fw-medium {
@@ -246,7 +256,12 @@
 /*** Service ***/
 .service-item {
   box-shadow: 0 0 45px rgba(0, 0, 0, .08);
-  transition: .5s;
+  transition: .3s;
+}
+
+.service-item2 {
+  box-shadow: 0 0 45px rgba(0, 0, 0, .08);
+  transition: .3s;
 }
 
 .service-item:hover {
@@ -254,11 +269,23 @@
 }
 
 .service-item * {
-  transition: .5s;
+  transition: .3s;
 }
 
 .service-item:hover * {
   color: var(--light) !important;
+}
+
+.service-item2:hover {
+  background: var(--mycolor);
+}
+
+.service-item2 * {
+  transition: .3s;
+}
+
+.service-item2:hover * {
+  color: var(--mycolor2) !important;
 }
 
 

@@ -1,14 +1,5 @@
-export function _ParseXml() {
-  var stringContainingXMLSource = '<!DOCTYPE html> <html lang="en"> <head> <title>wuyujin1997</title> </head> <body> <div id="wyj"> <h2><a href="https://wuyujin.blog.csdn.net/">wuyujin1997 DOMParser demo</a></h2> </div> </body> </html>'
-  var parser = new DOMParser()
-  var doc = parser.parseFromString(stringContainingXMLSource, 'text/html')
-  console.log('type: ', Object.prototype.toString.call(doc))
-  console.log(doc)
-  console.log(doc.querySelector('div#wyj'))
-  console.log(doc.getElementById('wyj').textContent)
-}
-
-export function ParseXml(str) {
+export function ParseXml(_this, str) {
+  console.log(111)
   var parser = new DOMParser()
   var doc = parser.parseFromString(str, 'text/xml')
   const data = {}
@@ -268,5 +259,5 @@ export function ParseXml(str) {
   } catch (err) {
     data.JAND = ''
   }
-  console.log(data)
+  _this.parsedata = data
 }

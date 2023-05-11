@@ -1,4 +1,3 @@
-// com_user.js中的函数用于 用户注册、登录、修改个人信息时与后端的通信
 import axios from 'axios'
 
 export function search(_this, par) {
@@ -52,6 +51,7 @@ export function getxml(_this, addr) {
     const d = response.data
     if (response.status === 200) {
       _this.xml_data = d
+      _this.parsexml()
     } else {
       _this.$alert('error!')
     }

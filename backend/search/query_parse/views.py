@@ -68,11 +68,13 @@ def term_to_doc_ids(term_set):
     根据词条获取文档id集合
     """
     Posting = MONGO_DB['posting']
-    postings = Posting.find({'term': {'$in': list(term_set)}})
-    doc_ids = set()
-    for posting in postings:
-        doc_ids.add(posting['doc_id'])
-    return doc_ids, term_set  # 返回结果文档和包含的词条
+    # postings = Posting.find({'term': {'$in': list(term_set)}})
+    pipeline = [
+        {'$match':{'term':{'$in':list(term_set)}}},
+        {'$group':{'_id':None,'doc_ids':{'$addToSet':'$doc_id'}}}
+    ]
+    result = next(Posting.aggregate(pipeline=pipeline))["doc_ids"]
+    return result, term_set  # 返回结果文档和包含的词条
 
 
 def cal_doc_ids(expr):
@@ -123,7 +125,9 @@ def parse_query(query):
         with open(STOP_WORDS_PATH, 'r', encoding='utf-8') as f:
             stop_words += f.read().splitlines()
         words = words - set(stop_words)
+        print(f'分词结束，查询耗时：{time.time()-st_time}')
         doc_ids, word_list = term_to_doc_ids(words)
+        print(f'检索结束，查询耗时：{time.time()-st_time}')
         doc_ids, word_list = list(doc_ids), list(word_list)
         word_list_for_sort = []
         word_idfs = {word: -99 for word in word_list}
@@ -140,6 +144,6 @@ def parse_query(query):
 
     print(f'查询词条：{word_list}')
     print(f'排序词条：{word_list_for_sort}')
-    print(f'查询耗时：{time.time() - st_time}')
+    print(f'查询总耗时：{time.time() - st_time}')
 
     return doc_ids, word_list, word_list_for_sort
