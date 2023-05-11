@@ -206,13 +206,13 @@ def handle_document(soup: bs4.BeautifulSoup, relative_xml_path: str):
     full_text = find_node(soup, 'QW').get('value')  # 文书内容
 
     # 更新或创建文书
-    LawDocument.objects.update_or_create(address=address,
-                                         defaults={
-                                          'agency': agency,
-                                          'doc_name': doc_name,
-                                          'doc_type': doc_type,
-                                          'full_text': full_text
-                                      })
+    return LawDocument.objects.update_or_create(address=address,
+                                                defaults={
+                                                    'agency': agency,
+                                                    'doc_name': doc_name,
+                                                    'doc_type': doc_type,
+                                                    'full_text': full_text
+                                                })[0]
 
 
 @transaction.atomic
@@ -295,6 +295,8 @@ def handle_judgment(soup: bs4.BeautifulSoup, relative_xml_path: str):
     for judge_node in judge_node_list:
         judgment[0].judge.add(handle_judge(judge_node))
 
+    return judgment[0]
+
 
 @transaction.atomic
 def handle_prosecution(soup: bs4.BeautifulSoup, relative_xml_path: str):
@@ -345,3 +347,5 @@ def handle_prosecution(soup: bs4.BeautifulSoup, relative_xml_path: str):
         defendant_node_list = soup.find_all('CUS_BBQSRXX')  # 被不起诉人信息
     for defendant_node in defendant_node_list:
         prosecution[0].defendant.add(handle_party(defendant_node))
+
+    return prosecution[0]

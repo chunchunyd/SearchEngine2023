@@ -137,7 +137,7 @@ def parse_query(query):
         print(f'普通查询语句：{query}')
         Term = MONGO_DB['term']
         # 去除停用词
-        words = set(jieba.cut_for_search(query))
+        words = set(jieba.cut_for_search(query))    # todo：这里的分词方式可能需要调整，重复的词条是否需要保留？
         stop_words = json.load(open(SIGN_WORDS_PATH, 'r', encoding='utf-8'))
         with open(STOP_WORDS_PATH, 'r', encoding='utf-8') as f:
             stop_words += f.read().splitlines()

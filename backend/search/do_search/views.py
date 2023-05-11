@@ -2,16 +2,19 @@
 联合查询: 通过关键词查询 + 通过倒排索引查询
 """
 import json
+import os
+import bs4
 import jieba
 import time
 import redis
 import re
 import pymongo
 from django.http import JsonResponse
-from backend.settings import SIGN_WORDS_PATH, STOP_WORDS_PATH, DEFAULT_PAGE_SIZE, BASE_DIR, MONGO_DB
+from backend.settings import SIGN_WORDS_PATH, STOP_WORDS_PATH, DEFAULT_PAGE_SIZE, BASE_DIR, MONGO_DB, STATICFILES_DIRS
 from common.models import *
 from common.serializers import *
 from analysis.views import bm25_sort
+
 from search.query_parse.views import parse_query
 
 
@@ -229,23 +232,43 @@ def key_search(request):
     })
 
 
-def similar_search(query):
+def similar_search(request):
     """
-    todo:相似查询，query为查询字符串
+    上传一个xml文件，返回相似文档
     """
-    pass
+    if request.method != 'POST':
+        return JsonResponse({
+            "status": "Error",
+            "message": "请求方法错误"
+        })
+    xml_file = request.FILES.get('xml_file')
+    if not xml_file:
+        return JsonResponse({
+            "status": "Error",
+            "message": "上传的文件为空"
+        })
+    xml_file_name = xml_file.name
+    xml_file_path = os.path.join(STATICFILES_DIRS[1], f'user_upload_{xml_file_name}_tmp')
+    with open(xml_file_path, 'wb') as f:
+        for chunk in xml_file.chunks():
+            f.write(chunk)
 
-# def query_search(request):
-#     """
-#     搜索接口
-#     """
-#     query = request.GET.get('query')
-#     if not query:
-#         return JsonResponse({'code': 400, 'msg': 'query参数缺失'})
-#     # 联合查询
-#     result = union_search(query)
-#     # # 相似查询
-#     # similar_search(query)
-#     return JsonResponse({'code': 200,
-#                          'msg': 'ok',
-#                          'data': result})
+    try:
+        # todo: 解析xml文件
+
+        # todo: 结构化数据返回相似结果，例如同法院、同法官、同当事人等
+
+        # todo: 对全文进行相似度计算，返回相似结果
+
+        return JsonResponse({
+            "status": "Done",
+            "file_name": xml_file_name
+        })
+    except Exception as e:
+        # 删除文件
+        os.remove(xml_file_path)
+        return JsonResponse({
+            "status": "Error",
+            "message": f"Invalid file: {str(e)}",
+        })
+

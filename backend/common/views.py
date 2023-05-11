@@ -64,6 +64,9 @@ class DocumentViewSet(ReadOnlyModelViewSet):
     pagination_class = LimitOffsetPagination
     pagination_class.default_limit = DEFAULT_PAGE_SIZE
 
+    filter_backends = [DjangoFilterBackend]
+    filterset_class = LawDocumentFilterSet
+
 
 class JudgmentViewSet(ReadOnlyModelViewSet):
     queryset = Judgment.objects.all()

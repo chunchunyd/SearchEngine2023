@@ -10,7 +10,11 @@ import os
 
 
 @transaction.atomic
-def handle_document(document, stop_words, posting):
+def handle_document(document, stop_words, Posting, Term=None):
+    """
+    处理文档，建立Posting
+    如果Term不为None，则同时建立Term
+    """
     # 获取文档内容
     content = document.full_text
     # 用jieba分词
@@ -36,7 +40,19 @@ def handle_document(document, stop_words, posting):
             'doc_len': len(content)
         })
 
-    posting.insert_many(posting_list)
+    Posting.insert_many(posting_list)
+
+    # 这里主要是为了给上传的新文件使用
+    if Term is not None:
+        # 存入term
+        for word in word_list:
+            term = Term.find({'term': word})
+            if term is None:
+                Term.insert_one({'term': word, 'document_count': 1})
+            else:
+                term['document_count'] += 1
+        # 暂时不为新文件预计算idf，因为新文件上传后实际上total_doc_count和avg_doc_len都改变了，所以需要对全体重新计算idf
+        # TODO: 重新计算total_doc_count和avg_doc_len，并修改bm25_sort方法，使其能够使用上传文件后这些更新后的值
 
 
 def build_inverted_index():
@@ -44,10 +60,10 @@ def build_inverted_index():
     建立倒排索引
     """
     # 连接mongoDB
-    posting = MONGO_DB['posting']
+    Posting = MONGO_DB['posting']
     # 设置posting的词条、index
-    posting.create_index([('term', pymongo.ASCENDING)])
-    posting.create_index([('doc_id', pymongo.ASCENDING)])
+    Posting.create_index([('term', pymongo.ASCENDING)])
+    Posting.create_index([('doc_id', pymongo.ASCENDING)])
 
     stop_watch = time.time()
     # 获取停用词
@@ -85,9 +101,9 @@ def build_inverted_index():
         # 如果文档id等于start_doc_id，说明是上次中断的文档，需要删除posting中的相关记录
         if document.id == start_doc_id:
             print(f'文档{cnt}是上次中断的文档，需要删除posting中的相关记录')
-            posting.delete_many({'doc_id': document.id})
+            Posting.delete_many({'doc_id': document.id})
 
-        handle_document(document, stop_words, posting)
+        handle_document(document, stop_words, Posting)
         build_setting['start_doc_id'] = cnt + 1
         json.dump(build_setting, open(os.path.join(BASE_DIR, 'indexes', 'build_setting.json'), 'w', encoding='utf-8'))
 
@@ -98,6 +114,29 @@ def build_inverted_index():
         stop_watch = now
 
     print('\n倒排索引建立完成')
+
+
+def build_inverted_index_and_term_for_one(law_document):
+    """
+    为单文件建立倒排索引
+    """
+    # 连接mongoDB
+    Posting = MONGO_DB['posting']
+    Term = MONGO_DB['term']
+    # 设置posting的词条、index
+    Posting.create_index([('term', pymongo.ASCENDING)])
+    Posting.create_index([('doc_id', pymongo.ASCENDING)])
+
+    stop_watch = time.time()
+    # 获取停用词
+    # 先获取符号词
+    stop_words = json.load(open(SIGN_WORDS_PATH, 'r', encoding='utf-8'))
+    # stop_words.txt文件中，可以不断添加新的停用词
+    with open(STOP_WORDS_PATH, 'r', encoding='utf-8') as f:
+        stop_words += f.read().splitlines()
+    print('停用词获取完成')
+
+    handle_document(law_document, stop_words, Posting, Term)
 
 
 def build_terms():

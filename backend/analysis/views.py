@@ -102,6 +102,8 @@ def bm25_sort(doc_list, word_list):
 
     for term in term_list:
         idf = term['idf']
+        if idf is None:
+            idf = log((total_docs - term['document_count'] + 0.5) / (term['document_count'] + 0.5))
         for pst in postings:
             doc_scores[pst['doc_id']] += \
                 idf * pst['freq'] * (k1 + 1) / (pst['freq'] + k1 * (1 - b + b * pst['doc_len'] / avgdl))
@@ -109,3 +111,13 @@ def bm25_sort(doc_list, word_list):
     sorted_docs = sorted(doc_scores.items(), key=lambda x: x[1], reverse=True)
     # json.dump(sorted_docs, open(os.path.join(BASE_DIR, 'resources', 'sorted_docs.json'), 'w'))
     return [doc_id for doc_id, score in sorted_docs]
+
+
+# 计算两篇文章相似度
+def cal_similarity(text_0, text_1):
+    """
+    计算两篇文章的相似度
+    """
+    # 1. 分词
+    # 2. 向量化
+    # 3. 计算相似度
