@@ -9,6 +9,7 @@ import re
 import pymongo
 from django.http import JsonResponse
 from backend.settings import SIGN_WORDS_PATH, STOP_WORDS_PATH, DEFAULT_PAGE_SIZE, BASE_DIR, MONGO_DB
+from common.models import *
 from common.serializers import *
 from analysis.views import bm25_sort
 from search.query_parse.views import parse_query
@@ -118,6 +119,28 @@ def construct_page(page, page_size, doc_list, word_list):
     }
 
 
+def filter_result(doc_list, kwargs):
+    """
+    根据其他参数过滤结果
+    """
+    doc_list_filtered = set(doc_list)
+    # 法院信息搜索
+    if 'court_id' in kwargs and kwargs['court_id']:     # 如果有court_id参数且不为空
+        print(f'court_id: {kwargs["court_id"][0]}')
+        docs = Judgment.objects.filter(id__in=doc_list, court_id=kwargs['court_id'][0])
+        docs = [doc.id for doc in docs]
+        doc_list_filtered = doc_list_filtered.intersection(set(docs))
+    if 'judge' in kwargs and kwargs['judge']:
+        for judge_id in kwargs['judge']:
+            print(f'judge_id: {judge_id}')
+            docs = Judgment.objects.filter(id__in=doc_list, judge__id=judge_id)
+            docs = [doc.id for doc in docs]
+            doc_list_filtered = doc_list_filtered.intersection(set(docs))
+    doc_list_filtered = sorted(list(doc_list_filtered), key=lambda x: doc_list.index(x))
+
+    return doc_list_filtered
+
+
 def text_search(request):
     """
     全文搜索，query为查询字符串
@@ -128,7 +151,12 @@ def text_search(request):
     if not query:
         return JsonResponse({'code': 400, 'msg': 'query参数缺失'})
     page = int(request.GET.get('page', 1))  # 页码,默认为1
-
+    # 把其他参数读入到kwargs中
+    kwargs = {}
+    for key, value in request.GET.items():
+        if key != 'query' and key != 'page':
+            kwargs[key] = request.GET.getlist(key)
+    print(f'query: {query}, page: {page}, kwargs: {kwargs}')
 
     # 检查redis中是否有缓存
     redis_conn = redis.Redis(host='localhost', port=6379, db=0)
@@ -149,6 +177,12 @@ def text_search(request):
 
         # 存入redis缓存
         redis_conn.set(query, json.dumps((doc_list, word_list)), ex=60 * 60 * 3)  # 3小时过期
+
+    # 根据kwargs筛选搜索结果
+    st_time = time.time()
+    if len(kwargs) > 0:
+        doc_list = filter_result(doc_list, kwargs)
+    print(f'筛选用时:{time.time() - st_time}s')
 
     # 分页构建结果返回
     st_time = time.time()
