@@ -107,5 +107,5 @@ def bm25_sort(doc_list, word_list):
                 idf * pst['freq'] * (k1 + 1) / (pst['freq'] + k1 * (1 - b + b * pst['doc_len'] / avgdl))
 
     sorted_docs = sorted(doc_scores.items(), key=lambda x: x[1], reverse=True)
-    json.dump(sorted_docs, open(os.path.join(BASE_DIR, 'resources', 'sorted_docs.json'), 'w'))
+    # json.dump(sorted_docs, open(os.path.join(BASE_DIR, 'resources', 'sorted_docs.json'), 'w'))
     return [doc_id for doc_id, score in sorted_docs]

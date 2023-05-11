@@ -7,6 +7,7 @@ import re
 import time
 
 import jieba
+import redis
 
 from backend.settings import MONGO_DB, SIGN_WORDS_PATH, STOP_WORDS_PATH
 
@@ -67,14 +68,28 @@ def term_to_doc_ids(term_set):
     """
     根据词条获取文档id集合
     """
+    print(f'查询词条：{term_set}')
     Posting = MONGO_DB['posting']
-    # postings = Posting.find({'term': {'$in': list(term_set)}})
-    pipeline = [
-        {'$match':{'term':{'$in':list(term_set)}}},
-        {'$group':{'_id':None,'doc_ids':{'$addToSet':'$doc_id'}}}
-    ]
-    result = next(Posting.aggregate(pipeline=pipeline))["doc_ids"]
-    return result, term_set  # 返回结果文档和包含的词条
+    redis_conn = redis.Redis(host='localhost', port=6379, db=1)
+    doc_ids = set()
+    for term in term_set:
+        if redis_conn.exists(term):
+            print(f'关键词{term}在缓存中', end=' ')
+            doc_ids |= set(json.loads(redis_conn.get(term)))
+        else:
+            print(f'关键词{term}不在缓存中', end=' ')
+            pipeline = [
+                {'$match': {'term': term}},
+                {'$group': {'_id': None, 'doc_ids': {'$addToSet': '$doc_id'}}},
+            ]
+            try:
+                doc_id = next(Posting.aggregate(pipeline))['doc_ids']
+            except:
+                doc_id = []
+            redis_conn.set(term, json.dumps(doc_id), ex=60 * 60 * 3)  # 3小时过期
+            doc_ids |= set(doc_id)
+    print('\n')
+    return list(doc_ids), term_set  # 返回结果文档和包含的词条
 
 
 def cal_doc_ids(expr):
@@ -112,12 +127,14 @@ def parse_query(query):
     st_time = time.time()
     if query.startswith('EXACTLY:'):
         query = query[8:]
+        print(f'精确查询语句：{query}')
         tokens = split_into_tokens(query)
         expr = infix_to_postfix(tokens)
         doc_ids, word_list = cal_doc_ids(expr)
         doc_ids, word_list = list(doc_ids), list(word_list)
         word_list_for_sort = word_list
     else:
+        print(f'普通查询语句：{query}')
         Term = MONGO_DB['term']
         # 去除停用词
         words = set(jieba.cut_for_search(query))
@@ -142,7 +159,6 @@ def parse_query(query):
         word_list.sort(key=lambda x: word_idfs[x], reverse=True)
         word_list_for_sort.sort(key=lambda x: word_idfs[x], reverse=True)
 
-    print(f'查询词条：{word_list}')
     print(f'排序词条：{word_list_for_sort}')
     print(f'查询总耗时：{time.time() - st_time}')
 
