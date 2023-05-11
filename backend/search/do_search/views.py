@@ -2,13 +2,15 @@
 联合查询: 通过关键词查询 + 通过倒排索引查询
 """
 import json
+import os
+
 import jieba
 import time
 import redis
 import re
 import pymongo
 from django.http import JsonResponse
-from backend.settings import SIGN_WORDS_PATH, STOP_WORDS_PATH, DEFAULT_PAGE_SIZE, BASE_DIR, MONGO_DB
+from backend.settings import SIGN_WORDS_PATH, STOP_WORDS_PATH, DEFAULT_PAGE_SIZE, BASE_DIR, MONGO_DB, STATICFILES_DIRS
 from common.models import *
 from common.serializers import *
 from analysis.views import bm25_sort
@@ -229,23 +231,30 @@ def key_search(request):
     })
 
 
-def similar_search(query):
+def similar_search(request):
     """
-    todo:相似查询，query为查询字符串
+    上传一个xml文件，返回相似文档
     """
-    pass
+    if request.method != 'POST':
+        return JsonResponse({
+            "status": "Error",
+            "message": "请求方法错误"
+        })
+    xml_file = request.FILES.get('xml_file')
+    if not xml_file:
+        return JsonResponse({
+            "status": "Error",
+            "message": "上传的文件为空"
+        })
+    xml_file_name = xml_file.name
+    xml_file_path = os.path.join(STATICFILES_DIRS[1], f'user_upload_{xml_file_name}_tmp')
+    with open(xml_file_path, 'wb') as f:
+        for chunk in xml_file.chunks():
+            f.write(chunk)
 
-# def query_search(request):
-#     """
-#     搜索接口
-#     """
-#     query = request.GET.get('query')
-#     if not query:
-#         return JsonResponse({'code': 400, 'msg': 'query参数缺失'})
-#     # 联合查询
-#     result = union_search(query)
-#     # # 相似查询
-#     # similar_search(query)
-#     return JsonResponse({'code': 200,
-#                          'msg': 'ok',
-#                          'data': result})
+    os.remove(xml_file_path)
+    return JsonResponse({
+        "status": "Error",
+        "message": f"Invalid file: {str(e)}",
+    })
+

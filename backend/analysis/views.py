@@ -102,6 +102,8 @@ def bm25_sort(doc_list, word_list):
 
     for term in term_list:
         idf = term['idf']
+        if idf is None:
+            idf = log((total_docs - term['document_count'] + 0.5) / (term['document_count'] + 0.5))
         for pst in postings:
             doc_scores[pst['doc_id']] += \
                 idf * pst['freq'] * (k1 + 1) / (pst['freq'] + k1 * (1 - b + b * pst['doc_len'] / avgdl))

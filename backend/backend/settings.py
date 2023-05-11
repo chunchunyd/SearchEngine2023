@@ -140,6 +140,7 @@ USE_TZ = True
 STATIC_URL = "static/"
 STATICFILES_DIRS = (
     os.path.join(BASE_DIR, "resources", "static"),  # 项目中静态文件的目录1: 网页文件
+    os.path.join(BASE_DIR, "resources", "user_uploads"),  # 项目中静态文件的目录1: 网页文件
 )
 
 # Default primary key field type
