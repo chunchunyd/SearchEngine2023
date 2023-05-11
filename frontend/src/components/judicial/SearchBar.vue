@@ -121,6 +121,12 @@ export default {
           h = h.replace(new RegExp(this.matchkey[j], 'g'), '<span class="highlighted">' + this.matchkey[j] + '</span>')
         }
         this.data[k].short_text = h + '......'
+        // 构造relatedata
+        this.data[k].relatedata = {
+          court_id: this.data[k].court_id,
+          court_name: this.data[k].court_name,
+          judges: this.data[k].judges
+        }
       }
     },
     test() {

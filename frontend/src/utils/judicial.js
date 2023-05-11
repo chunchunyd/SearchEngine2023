@@ -60,3 +60,132 @@ export function getxml(_this, addr) {
     _this.$alert('error!')
   })
 }
+
+export function searchcourt(_this) {
+  axios.get('/api/court', {
+    params: {
+    }
+  }).then((response) => {
+    const d = response.data
+    if (response.status === 200) {
+      _this.data = d.results
+      _this.totalnum = d.count
+    } else {
+      _this.$alert('error!')
+    }
+  }).catch(function (error) {
+    console.log(error)
+    _this.$alert('error!')
+  })
+}
+
+export function searchcourtpage(_this, page) {
+  axios.get('/api/court', {
+    params: {
+      offset: (page - 1) * 10
+    }
+  }).then((response) => {
+    const d = response.data
+    if (response.status === 200) {
+      _this.data = d.results
+      _this.totalnum = d.count
+    } else {
+      _this.$alert('error!')
+    }
+  }).catch(function (error) {
+    console.log(error)
+    _this.$alert('error!')
+  })
+}
+export function searchjudge(_this) {
+  axios.get('/api/judge', {
+    params: {
+    }
+  }).then((response) => {
+    const d = response.data
+    if (response.status === 200) {
+      _this.data = d.results
+      _this.totalnum = d.count
+    } else {
+      _this.$alert('error!')
+    }
+  }).catch(function (error) {
+    console.log(error)
+    _this.$alert('error!')
+  })
+}
+
+export function searchjudgepage(_this, page) {
+  axios.get('/api/judge', {
+    params: {
+      offset: (page - 1) * 10
+    }
+  }).then((response) => {
+    const d = response.data
+    if (response.status === 200) {
+      _this.data = d.results
+      _this.totalnum = d.count
+    } else {
+      _this.$alert('error!')
+    }
+  }).catch(function (error) {
+    console.log(error)
+    _this.$alert('error!')
+  })
+}
+
+export function getrelatedata(_this, type, id) {
+  let par = {}
+  if (type === 0) {
+    par = {
+      court_id: id
+    }
+  } else {
+    par = {
+      judge: id
+    }
+  }
+  axios.get('/api/judgment', {
+    params: par
+  }).then((response) => {
+    const d = response.data
+    if (response.status === 200) {
+      _this.data = d.results
+      _this.totalnum = d.count
+    } else {
+      _this.$alert('error!')
+    }
+  }).catch(function (error) {
+    console.log(error)
+    _this.$alert('error!')
+  })
+}
+
+export function getrelatedatapage(_this, type, id, page) {
+  let par = {}
+  if (type === 0) {
+    par = {
+      court_id: id,
+      offset: (page - 1) * 10
+    }
+  } else {
+    par = {
+      judge: id,
+      offset: (page - 1) * 10
+    }
+  }
+  axios.get('/api/judgment', {
+    params: par
+  }).then((response) => {
+    const d = response.data
+    if (response.status === 200) {
+      _this.data = d.results
+      _this.totalnum = d.count
+    } else {
+      _this.$alert('error!')
+    }
+  }).catch(function (error) {
+    console.log(error)
+    _this.$alert('error!')
+  })
+}

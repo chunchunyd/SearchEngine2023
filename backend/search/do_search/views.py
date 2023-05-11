@@ -154,7 +154,7 @@ def text_search(request):
     # 把其他参数读入到kwargs中
     kwargs = {}
     for key, value in request.GET.items():
-        if key != 'query' and key != 'page':
+        if key != 'query' and key != 'page' and value:
             kwargs[key] = request.GET.getlist(key)
     print(f'query: {query}, page: {page}, kwargs: {kwargs}')
 

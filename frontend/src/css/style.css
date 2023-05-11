@@ -21,6 +21,19 @@
   width: 94%;
 }
 
+.courtpic {
+  background:  url(../../public/court.jpg);
+  background-position: center center;
+  background-repeat: no-repeat;
+  background-size: cover;
+}
+
+.judgepic {
+  background:  url(../../public/judge.jpg);
+  background-position: center center;
+  background-repeat: no-repeat;
+  background-size: cover;
+}
 
 /**_________________________________**/
 
