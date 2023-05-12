@@ -1,5 +1,5 @@
 export function ParseXml(_this, str) {
-  console.log(111)
+  // 解析xml数据
   var parser = new DOMParser()
   var doc = parser.parseFromString(str, 'text/xml')
   const data = {}

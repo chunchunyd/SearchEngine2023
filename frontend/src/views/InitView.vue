@@ -18,7 +18,7 @@
     <SearchBar v-show="status==0"
     :to_display="to_display"></SearchBar>
     <DisplayBar  v-show="status==1"
-    :addr="display_idx"></DisplayBar>
+    :addr="display_idx" :to_relate="to_relate"></DisplayBar>
     <AllCourt  v-show="status==2"
     :to_relate="to_relate"></AllCourt>
     <AllJudge  v-show="status==3"
@@ -50,7 +50,7 @@ export default {
       relatetype: 0,
       relateid: 0,
       relatetext: '',
-      prevstatus: -1
+      prevstatus: []
     }
   },
   mounted() {
@@ -58,31 +58,32 @@ export default {
   methods: {
     to_display (addr) {
       this.display_idx = addr
-      this.prevstatus = this.status
+      this.prevstatus.push(this.status)
       this.status = 1
     },
     to_relate (type, id, text) {
       this.relatetype = type
       this.relateid = id
       this.relatetext = text
-      this.prevstatus = this.status
+      this.prevstatus.push(this.status)
       this.status = 4
     },
     back() {
-      if (this.prevstatus >= 0) {
-        this.status = this.prevstatus
-        this.prevstatus = -1
+      if (this.prevstatus.length > 0) {
+        // 弹出prevstatus数组的最后一项
+        this.status = this.prevstatus.pop()
       }
     },
     home() {
+      this.prevstatus.push(this.status)
       this.status = 0
     },
     court() {
-      this.prevstatus = this.status
+      this.prevstatus.push(this.status)
       this.status = 2
     },
     judge() {
-      this.prevstatus = this.status
+      this.prevstatus.push(this.status)
       this.status = 3
     }
   }

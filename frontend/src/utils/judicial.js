@@ -43,6 +43,41 @@ export function searchpage(_this, par, page) {
   })
 }
 
+function getcarddata(_this) {
+  axios.get('/api/court/' + _this.court, {
+    params: {
+    }
+  }).then((response) => {
+    const d = response.data
+    if (response.status === 200) {
+      _this.courtdata = d
+    } else {
+      _this.$alert('error!')
+    }
+  }).catch(function (error) {
+    console.log(error)
+    _this.$alert('error!')
+  })
+  _this.judgedata = []
+  //  遍历_this.judge数组
+  for (let i = 0; i < _this.judge.length; i++) {
+    axios.get('/api/judge/' + _this.judge[i], {
+      params: {
+      }
+    }).then((response) => {
+      const d = response.data
+      if (response.status === 200) {
+        _this.judgedata.push(d)
+      } else {
+        _this.$alert('error!')
+      }
+    }).catch(function (error) {
+      console.log(error)
+      _this.$alert('error!')
+    })
+  }
+}
+
 export function getxml(_this, addr) {
   axios.get('/' + addr, {
     params: {
@@ -52,6 +87,24 @@ export function getxml(_this, addr) {
     if (response.status === 200) {
       _this.xml_data = d
       _this.parsexml()
+    } else {
+      _this.$alert('error!')
+    }
+  }).catch(function (error) {
+    console.log(error)
+    _this.$alert('error!')
+  })
+
+  axios.get('/api/judgment', {
+    params: {
+      address: addr
+    }
+  }).then((response) => {
+    const d = response.data
+    if (response.status === 200) {
+      _this.court = d.results[0].court
+      _this.judge = d.results[0].judge
+      getcarddata(_this)
     } else {
       _this.$alert('error!')
     }

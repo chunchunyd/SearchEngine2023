@@ -14,10 +14,47 @@
         </div>
     </div>
   </el-collapse-item>
-  <el-collapse-item name="2">
+
+ <el-collapse-item name="2">
+    <template v-slot:title>
+        <h6 class="text-black px-3">法院和审判员信息</h6>
+    </template>
+<div class="row g-4">
+      <div class="col-lg-3" data-wow-delay="0.1s">
+            <div class="p-4">
+                 <el-card class="box-card">
+                 <div slot="header" class="clearfix">
+                   <span class="myfont">{{this.courtdata.name}}</span>
+                   <el-button size="small" v-on:click="display(0, this.courtdata.id, this.courtdata.name)">检索</el-button>
+                 </div>
+                 <div class="text item">省份：{{this.courtdata.province}}</div>
+                 <div class="text item">城市：{{this.courtdata.city}}</div>
+                 <div class="text item">级别：{{this.courtdata.level}}</div>
+                 <div class="text item">代码：{{this.courtdata.code}}</div>
+                 </el-card>
+            </div>
+        </div>
+        <div v-for="item in this.judgedata" :key="item" class="col-lg-3" data-wow-delay="0.1s">
+            <div class="p-4">
+                 <el-card class="box-card">
+                 <div slot="header" class="clearfix">
+                   <span class="myfont">{{item.name}}</span>
+                   <el-button size="small" v-on:click="display(1, item.id, item.name)">检索</el-button>
+                 </div>
+                 <br/>
+                 <div class="text item">单位：{{cut(item.full_name)}}</div>
+                 <br/><br/>
+                 </el-card>
+            </div>
+        </div>
+    </div>
+</el-collapse-item>
+
+  <el-collapse-item name="3">
     <template v-slot:title>
         <h6 class="text-black px-3">详细信息</h6>
     </template>
+
     <el-main>
       <el-descriptions size="large" border :column="6"  direction="vertical">
         <el-descriptions-item label="文书制作单位">{{parsedata.WSZZDW}}</el-descriptions-item>
@@ -64,6 +101,11 @@ export default {
     addr: {
       type: String,
       default: () => ''
+    },
+    to_relate: {
+      // 回调函数
+      type: Function,
+      default: () => {}
     }
   },
   computed: {
@@ -72,7 +114,12 @@ export default {
     return {
       xml_data: '',
       parsedata: {},
-      activeName: ['1', '2']
+      activeName: ['1', '2', '3'],
+      ww: [1, 2, 3, 4],
+      court: -1,
+      judge: [],
+      courtdata: {},
+      judgedata: []
     }
   },
   methods: {
@@ -95,6 +142,18 @@ export default {
       document.body.appendChild(link)
       link.click()
       URL.revokeObjectURL(url)
+    },
+    cut (str) {
+      // 截取str中'_'之后的字符
+      const idx = str.indexOf('_')
+      return str.slice(idx + 1)
+    },
+    display (type, id, text) {
+      this.to_relate(type, id, text)
+      const el = document.getElementsByClassName('alltop')[0]
+      this.$nextTick(function () {
+        window.scrollTo({ behavior: 'smooth', top: el.offsetTop })
+      })
     }
   },
   watch: {
