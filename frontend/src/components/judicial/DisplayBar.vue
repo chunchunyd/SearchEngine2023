@@ -1,5 +1,5 @@
 <template>
-<div>
+<div v-if="this.status==1">
   <div class="displayboard">
   <el-collapse v-model="activeName">
   <el-collapse-item name="1">
@@ -15,7 +15,7 @@
     </div>
   </el-collapse-item>
 
- <el-collapse-item name="2">
+ <el-collapse-item name="2"  v-if="this.allview">
     <template v-slot:title>
         <h6 class="text-black px-3">法院和审判员信息</h6>
     </template>
@@ -50,7 +50,7 @@
     </div>
 </el-collapse-item>
 
-  <el-collapse-item name="3">
+  <el-collapse-item name="3" v-if="this.allview">
     <template v-slot:title>
         <h6 class="text-black px-3">详细信息</h6>
     </template>
@@ -109,10 +109,15 @@ export default {
     }
   },
   computed: {
+    allview: function () {
+      return this.type === '判决书' || this.type === '裁定书' || this.type === '调解书' || this.type === '决定书' || this.type === '应诉通知书' || this.type === '起诉状'
+    }
   },
   data() {
     return {
+      status: 0,
       xml_data: '',
+      type: '',
       parsedata: {},
       activeName: ['1', '2', '3'],
       ww: [1, 2, 3, 4],
@@ -159,6 +164,7 @@ export default {
   watch: {
     addr: {
       handler(addr) {
+        this.status = 0
         this.getdata(addr)
       }
     }

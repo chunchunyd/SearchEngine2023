@@ -91,6 +91,7 @@ export default {
 </script>
 
 <style scoped lang="scss">
+@import '@/css/style.css';
 a {
   color: #ffffff;
 }
