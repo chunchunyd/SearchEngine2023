@@ -89,7 +89,7 @@ def term_to_doc_ids(term_set):
             redis_conn.set(term, json.dumps(doc_id), ex=60 * 60 * 3)  # 3小时过期
             doc_ids |= set(doc_id)
     print('\n')
-    return list(doc_ids), term_set  # 返回结果文档和包含的词条
+    return doc_ids, term_set  # 返回结果文档和包含的词条
 
 
 def cal_doc_ids(expr):

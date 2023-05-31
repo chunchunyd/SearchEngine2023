@@ -9,7 +9,22 @@
                         <h1 class="display-3 text-white mb-3 animated slideInDown">司法检索</h1>
                         <div class="position-relative w-75 mx-auto animated slideInDown">
                             <input class="form-control border-0 rounded-pill w-100 py-3 ps-4 pe-5" v-model="input" type="text" placeholder="例如：高启强 黑社会性质罪 京海市">
-                            <button type="button" class="btn btn-primary rounded-pill py-2 px-4 position-absolute top-0 end-0 me-2" v-on:click="click_search" style="margin-top: 7px;">检索</button>
+                            <button type="button" class="btn btn-primary rounded-pill py-2 px-4 position-absolute top-0 end-1 me-2" v-on:click="click_search" style="margin-top: 7px;">检索</button>
+                            <el-upload
+                              class="upload-demo"
+                              :before-upload="upload"
+                              multiple
+                              :limit="1"
+                              :show-file-list="false">
+                              <button type="button" class="btn btn-primary rounded-pill py-2 px-4 position-absolute top-0 end-0 me-2" style="margin-top: 7px;">上传</button>
+                            </el-upload>
+                        </div>
+                        <div>
+                            <el-checkbox v-model="checked" style="color: #ffffff">精确匹配</el-checkbox>
+                            <span>\s</span>
+                            <el-tooltip :content="tips" placement="bottom" effect="light">
+                              <span style="color: #ffffff; font-size:16px">?</span>
+                            </el-tooltip>
                         </div>
                     </div>
                 </div>
@@ -17,6 +32,7 @@
         </div>
     </div>
     <!-- Navbar & Hero End -->
+
     <div v-if="this.status">
     <!-- Service Start -->
     <div class="container-xxl">
@@ -77,6 +93,7 @@ export default {
   },
   data() {
     return {
+      tips: '支持多个检索词以交(&)、并(|)、补(-)等逻辑进行精确匹配。例如：“((豆浆 | 油条) & 包子) - 刑事”',
       htmlString: 'This is a <span class="highlighted">text</span> with some',
       input: '',
       prevsearch: '',
@@ -85,6 +102,8 @@ export default {
       pageid: 0,
       totalnum: 0,
       status: 0,
+      checked: false,
+      filecontent: '',
       items: [['浙江省东阳市人民法院 民事判决书 （2016）浙0783民初17571号', '原告韦斌姬为与被告韦斌强、杜满萍民间借贷纠纷一案，于2016年12月1日向本院提起诉讼，请求判令两被告归还借款10万元，并支付利息（自起诉之日起按中国人民银行同期同档次贷款基准利率计算至实际履行之日止）。本院受理后，依法由审判员甘震适用简易程序独任审判。'],
         ['浙江省东阳市人民法院 民事判决书 （2016）浙0783民初17571号', '原告韦斌姬为与被告韦斌强、杜满萍民间借贷纠纷一案，于2016年12月1日向本院提起诉讼，请求判令两被告归还借款10万元，并支付利息（自起诉之日起按中国人民银行同期同档次贷款基准利率计算至实际履行之日止）。本院受理后，依法由审判员甘震适用简易程序独任审判。'],
         ['浙江省东阳市人民法院 民事判决书 （2016）浙0783民初17571号', '原告韦斌姬为与被告韦斌强、杜满萍民间借贷纠纷一案，于2016年12月1日向本院提起诉讼，请求判令两被告归还借款10万元，并支付利息（自起诉之日起按中国人民银行同期同档次贷款基准利率计算至实际履行之日止）。本院受理后，依法由审判员甘震适用简易程序独任审判。'],
@@ -96,7 +115,11 @@ export default {
       if (this.input !== '') {
         this.prevsearch = this.input
         this.status = 0
-        search(this, this.input)
+        if (this.checked) {
+          search(this, 'EXACTLY: ' + this.input)
+        } else {
+          search(this, this.input)
+        }
       }
     },
     display(addr) {
@@ -131,6 +154,16 @@ export default {
           judges: this.data[k].judges
         }
       }
+    },
+    upload(file) {
+      // 读取文件内容,将内容赋值给input
+      const reader = new FileReader()
+      reader.onload = () => {
+        this.filecontent = reader.result
+        console.log(this.filecontent)
+      }
+      reader.readAsText(file)
+      return false
     },
     test() {
       console.log(this.data)

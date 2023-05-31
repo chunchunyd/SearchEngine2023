@@ -110,7 +110,7 @@ export default {
   },
   computed: {
     allview: function () {
-      return this.type === '判决书' || this.type === '裁定书' || this.type === '调解书' || this.type === '决定书' || this.type === '应诉通知书' || this.type === '起诉状'
+      return this.type === '判决书' || this.type === '裁定书' || this.type === '调解书' || this.type === '决定书'
     }
   },
   data() {

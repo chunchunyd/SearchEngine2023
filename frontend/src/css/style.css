@@ -39,6 +39,8 @@
   font-size: 15px;
 }
 
+.end-1{right:11% !important}
+
 /**_________________________________**/
 
 
@@ -506,7 +508,7 @@
   border-right: none;
 }
 
-.py-xxx{padding-top:0rem !important;padding-bottom:1.6rem !important}
+.py-xxx{padding-top:0rem !important;padding-bottom:1.4rem !important}
 
 
 /*!

@@ -14,11 +14,11 @@ export function search(_this, par) {
       _this.computehighlight()
       _this.status = 1
     } else {
-      _this.$alert('error!')
+      _this.$alert('search error!')
     }
   }).catch(function (error) {
     console.log(error)
-    _this.$alert('error!')
+    _this.$alert('search error!')
   })
 }
 
@@ -36,11 +36,11 @@ export function searchpage(_this, par, page) {
       _this.matchkey = d.result.word_list
       _this.computehighlight()
     } else {
-      _this.$alert('error!')
+      _this.$alert('searchpage error!')
     }
   }).catch(function (error) {
     console.log(error)
-    _this.$alert('error!')
+    _this.$alert('searchpage error!')
   })
 }
 
@@ -54,11 +54,11 @@ function getcarddata(_this) {
       _this.courtdata = d
       _this.status += 1
     } else {
-      _this.$alert('error!')
+      _this.$alert('getcarddata error!')
     }
   }).catch(function (error) {
     console.log(error)
-    _this.$alert('error!')
+    _this.$alert('getcarddata error!')
   })
   _this.judgedata = []
   //  遍历_this.judge数组
@@ -72,11 +72,11 @@ function getcarddata(_this) {
         _this.judgedata.push(d)
         _this.status += 1
       } else {
-        _this.$alert('error!')
+        _this.$alert('getcarddata error!')
       }
     }).catch(function (error) {
       console.log(error)
-      _this.$alert('error!')
+      _this.$alert('getcarddata error!')
     })
   }
 }
@@ -92,11 +92,11 @@ export function getxml(_this, addr) {
       _this.xml_data = d
       _this.parsexml()
     } else {
-      _this.$alert('error!')
+      _this.$alert('getxml error1!')
     }
   }).catch(function (error) {
     console.log(error)
-    _this.$alert('error!')
+    _this.$alert('getxml error2!')
   })
 
   // 串行获得doc_type，根据doc_type并行解析数据、获得卡片信息等
@@ -108,7 +108,7 @@ export function getxml(_this, addr) {
     const d = response.data
     if (response.status === 200) {
       _this.type = d.results[0].doc_type
-      if (_this.type === '判决书' || _this.type === '裁定书' || _this.type === '调解书' || _this.type === '决定书' || _this.type === '应诉通知书' || _this.type === '起诉状') {
+      if (_this.type === '判决书' || _this.type === '裁定书' || _this.type === '调解书' || _this.type === '决定书') {
         axios.get('/api/judgment/', {
           params: {
             address: addr
@@ -121,19 +121,21 @@ export function getxml(_this, addr) {
             _this.status = -_this.judge.length
             getcarddata(_this)
           } else {
-            _this.$alert('error!')
+            _this.$alert('getxml error3!')
           }
         }).catch(function (error) {
           console.log(error)
-          _this.$alert('error!')
+          _this.$alert('getxml error4!')
         })
+      } else {
+        _this.status = 1
       }
     } else {
-      _this.$alert('error!')
+      _this.$alert('getxml error5!')
     }
   }).catch(function (error) {
     console.log(error)
-    _this.$alert('error!')
+    _this.$alert('getxml error6!')
   })
 }
 
@@ -147,11 +149,11 @@ export function searchcourt(_this) {
       _this.data = d.results
       _this.totalnum = d.count
     } else {
-      _this.$alert('error!')
+      _this.$alert('searchcourt error!')
     }
   }).catch(function (error) {
     console.log(error)
-    _this.$alert('error!')
+    _this.$alert('searchcourt error!')
   })
 }
 
@@ -166,11 +168,11 @@ export function searchcourtpage(_this, page) {
       _this.data = d.results
       _this.totalnum = d.count
     } else {
-      _this.$alert('error!')
+      _this.$alert('searchcourtpage error!')
     }
   }).catch(function (error) {
     console.log(error)
-    _this.$alert('error!')
+    _this.$alert('searchcourtpage error!')
   })
 }
 export function searchjudge(_this) {
@@ -183,11 +185,11 @@ export function searchjudge(_this) {
       _this.data = d.results
       _this.totalnum = d.count
     } else {
-      _this.$alert('error!')
+      _this.$alert('searchjudge error!')
     }
   }).catch(function (error) {
     console.log(error)
-    _this.$alert('error!')
+    _this.$alert('searchjudge error!')
   })
 }
 
@@ -202,11 +204,11 @@ export function searchjudgepage(_this, page) {
       _this.data = d.results
       _this.totalnum = d.count
     } else {
-      _this.$alert('error!')
+      _this.$alert('searchjudgepage error!')
     }
   }).catch(function (error) {
     console.log(error)
-    _this.$alert('error!')
+    _this.$alert('searchjudgepage error!')
   })
 }
 
@@ -230,11 +232,11 @@ export function getrelatedata(_this, type, id) {
       _this.totalnum = d.count
       _this.status = 1
     } else {
-      _this.$alert('error!')
+      _this.$alert('getrelatedata error!')
     }
   }).catch(function (error) {
     console.log(error)
-    _this.$alert('error!')
+    _this.$alert('getrelatedata error!')
   })
 }
 
@@ -259,10 +261,10 @@ export function getrelatedatapage(_this, type, id, page) {
       _this.data = d.results
       _this.totalnum = d.count
     } else {
-      _this.$alert('error!')
+      _this.$alert('getrelatedatapage error!')
     }
   }).catch(function (error) {
     console.log(error)
-    _this.$alert('error!')
+    _this.$alert('getrelatedatapage error!')
   })
 }
