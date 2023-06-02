@@ -150,17 +150,16 @@ def test_iter(request):
     测试迭代器
     """
     from .doc2vec import MyDocs
-    docs = MyDocs()
+    docs = MyDocs(False)
     cnt = 0
     st_time = time.time()
     for doc in docs:
         # print(doc)
-        print(cnt,end='\r')
+        # print(cnt, end='\r')
         cnt += 1
-        if cnt > 1000:
-            break
-    print(f'用时{time.time() - st_time}s')
+    print(f'\n用时{time.time() - st_time}s')
     return JsonResponse('test_iter ok', safe=False)  # safe=False表示允许返回非字典类型的数据
+
 
 def test_doc2vec(request):
     """
