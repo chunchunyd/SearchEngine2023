@@ -8,3 +8,8 @@ chardet==5.1.0     # 因为bs4导入后charset_normalizer报错, 重新安装后
 arrow==1.2.3    # 用于处理时间
 pymongo==4.3.3   # 非关系型数据库
 django-filter==23.2
+numpy~=1.24.3
+gensim=4.3.0
+beautifulsoup4~=4.12.2
+redis~=4.5.5
+mongoengine~=0.27.0

@@ -1,10 +1,14 @@
 import json
 import os.path
-from backend.settings import BASE_DIR, MONGO_DB
+import time
+import jieba
+
+from backend.settings import BASE_DIR, MONGO_DB, SIGN_WORDS_PATH, STOP_WORDS_PATH
 
 from django.http import JsonResponse
 import pymongo
 from math import log
+import numpy as np
 
 
 # Create your views here.
@@ -114,10 +118,54 @@ def bm25_sort(doc_list, word_list):
 
 
 # 计算两篇文章相似度
-def cal_similarity(text_0, text_1):
+def find_similarity(text):
     """
     计算两篇文章的相似度
     """
+    Posting = MONGO_DB['posting']
+    Term = MONGO_DB['term']
+
     # 1. 分词
+    word_list = jieba.cut_for_search(text)
+    stop_words = json.load(open(SIGN_WORDS_PATH, 'r', encoding='utf-8'))
+    with open(STOP_WORDS_PATH, 'r', encoding='utf-8') as f:
+        stop_words += f.read().splitlines()
+    word_list = [word for word in word_list if word not in stop_words]
+
     # 2. 向量化
-    # 3. 计算相似度
+    word_cnt = {}
+    for word in word_list:
+        if word not in word_cnt:
+            word_cnt[word] = 0
+        word_cnt[word] += 1
+    word_vector = np.zeros(len(word_list))
+    for i, word in enumerate(word_list):
+        word_vector[i] = word_cnt[word]
+
+    # 3. todo 计算相似度
+
+
+def test_iter(request):
+    """
+    测试迭代器
+    """
+    from .doc2vec import MyDocs
+    docs = MyDocs()
+    cnt = 0
+    st_time = time.time()
+    for doc in docs:
+        # print(doc)
+        print(cnt,end='\r')
+        cnt += 1
+        if cnt > 1000:
+            break
+    print(f'用时{time.time() - st_time}s')
+    return JsonResponse('test_iter ok', safe=False)  # safe=False表示允许返回非字典类型的数据
+
+def test_doc2vec(request):
+    """
+    测试doc2vec
+    """
+    from .doc2vec import train_doc2vec
+    train_doc2vec()
+    return JsonResponse('test_doc2vec ok', safe=False)  # safe=False表示允许返回非字典类型的数据

@@ -14,6 +14,7 @@ from backend.settings import SIGN_WORDS_PATH, STOP_WORDS_PATH, DEFAULT_PAGE_SIZE
 from common.models import *
 from common.serializers import *
 from analysis.views import bm25_sort
+from crawlers.handlers import find_node
 
 from search.query_parse.views import parse_query
 
@@ -133,7 +134,7 @@ def filter_result(doc_list, kwargs):
     """
     doc_list_filtered = set(doc_list)
     # 法院信息搜索
-    if 'court_id' in kwargs and kwargs['court_id']:     # 如果有court_id参数且不为空
+    if 'court_id' in kwargs and kwargs['court_id']:  # 如果有court_id参数且不为空
         print(f'court_id: {kwargs["court_id"][0]}')
         docs = Judgment.objects.filter(id__in=doc_list, court_id=kwargs['court_id'][0])
         docs = [doc.id for doc in docs]
@@ -259,9 +260,47 @@ def similar_search(request):
             f.write(chunk)
 
     try:
-        # todo: 解析xml文件
-
-        # todo: 结构化数据返回相似结果，例如同法院、同法官、同当事人等
+        result = {
+            "key_search": {
+                "court": [],
+                "judge": [],
+                "party": [],
+                "lawref": [],
+            },
+            "text_search": {}
+        }
+        # todo: 解析xml文件, 结构化数据返回相似结果，例如同法院、同法官、同当事人等
+        with open(xml_file_path, 'r', encoding='utf-8') as f:
+            xml_content = f.read()
+            soup = bs4.BeautifulSoup(xml_content, features="xml")
+            # 法院id
+            court_name = find_node(soup, 'BZFYMC').get('value')
+            try:
+                court = Court.objects.filter(name=court_name).first()
+                result['key_search']['court'].append((court_name, court.id))
+            except Exception as e:
+                result['key_search']['court'].append((court_name, -1))
+                print(f'法院名字未找到: {str(e)}')
+            # 法官id
+            judge_node_list = soup.find_all('CUS_FGCY')
+            for judge_node in judge_node_list:
+                judge_name = find_node(judge_node, 'FGRYXM').get('value')
+                try:
+                    judge = Judge.objects.filter(name=judge_name).first()
+                    result['key_search']['judge'].append((judge_name, judge.id))
+                except Exception as e:
+                    result['key_search']['judge'].append((judge_name, -1))
+                    print(f'法官名字未找到: {str(e)}')
+            # # 法条id
+            # lawref_node_list = soup.find_all('FLFTFZ')
+            # lawref_list = []
+            # lawref_full_name_list = []
+            # for lawref_node in lawref_node_list:
+            #     lawref_name = find_node(lawref_node, 'MC').get('value')
+            #     for clause in lawref_node.findChildren('T'):  # 条
+            #         clause_items = clause.findChildren('K')
+            #         if not clause_items:
+            #             lawref = LawReference.objects.filter(law_name=lawref_name,law_clause=clause.get('value')).first()
 
         # todo: 对全文进行相似度计算，返回相似结果
 
@@ -276,4 +315,3 @@ def similar_search(request):
             "status": "Error",
             "message": f"Invalid file: {str(e)}",
         })
-
