@@ -10,13 +10,15 @@ import redis
 import re
 import pymongo
 from django.http import JsonResponse
-from backend.settings import SIGN_WORDS_PATH, STOP_WORDS_PATH, DEFAULT_PAGE_SIZE, BASE_DIR, MONGO_DB, STATICFILES_DIRS
+from backend.settings import SIGN_WORDS_PATH, STOP_WORDS_PATH, DEFAULT_PAGE_SIZE, BASE_DIR, MONGO_DB, STATICFILES_DIRS, \
+    USER_DICT_PATH
 from common.models import *
 from common.serializers import *
 from analysis.views import bm25_sort
 from crawlers.handlers import find_node
 
 from search.query_parse.views import parse_query
+from analysis.views import get_similar_docs
 
 
 def search_by_keywords(words):
@@ -68,7 +70,21 @@ def construct_page(page, page_size, doc_list, word_list):
             'address': doc.address,
         }
 
+        # 找到第一个以"号"字结尾的位置
+        title_end = re.search(r"号 ", doc.full_text)
+        if title_end is not None:
+            title_end = title_end.span()
+        else:
+            title_end = re.search(r"案 ", doc.full_text)
+            if title_end is not None:
+                title_end = title_end.span()
+            else:
+                title_end = (39, 40)
+        result[doc.id]['title'] = doc.full_text[:title_end[1]]
+
         # 找到doc中第一个出现的词条，用于摘要
+        start = 0
+        end = 300
         for word in word_list:
             posting = list(Posting.find({'doc_id': doc.id, 'term': word}))
             if posting:
@@ -80,21 +96,8 @@ def construct_page(page, page_size, doc_list, word_list):
                     end = posting[0]['doc_len']
                 else:
                     end = posting[0]['position'][0] + 280
-
-                # 找到第一个以"号"字结尾的位置
-                title_end = re.search(r"号 ", doc.full_text)
-                if title_end is not None:
-                    title_end = title_end.span()
-                else:
-                    title_end = re.search(r"案 ", doc.full_text)
-                    if title_end is not None:
-                        title_end = title_end.span()
-                    else:
-                        title_end = (39, 40)
-
-                result[doc.id]['title'] = doc.full_text[:title_end[1]]
-                result[doc.id]['short_text'] = doc.full_text[start:end]
                 break
+        result[doc.id]['short_text'] = doc.full_text[start:end]
 
         # # 获取文档的类型，添加对应的信息
         # doc_type = doc.doc_type
@@ -260,53 +263,42 @@ def similar_search(request):
             f.write(chunk)
 
     try:
-        result = {
-            "key_search": {
-                "court": [],
-                "judge": [],
-                "party": [],
-                "lawref": [],
-            },
-            "text_search": {}
-        }
-        # todo: 解析xml文件, 结构化数据返回相似结果，例如同法院、同法官、同当事人等
+        # 解析xml文件, 获取全文
         with open(xml_file_path, 'r', encoding='utf-8') as f:
             xml_content = f.read()
             soup = bs4.BeautifulSoup(xml_content, features="xml")
-            # 法院id
-            court_name = find_node(soup, 'BZFYMC').get('value')
-            try:
-                court = Court.objects.filter(name=court_name).first()
-                result['key_search']['court'].append((court_name, court.id))
-            except Exception as e:
-                result['key_search']['court'].append((court_name, -1))
-                print(f'法院名字未找到: {str(e)}')
-            # 法官id
-            judge_node_list = soup.find_all('CUS_FGCY')
-            for judge_node in judge_node_list:
-                judge_name = find_node(judge_node, 'FGRYXM').get('value')
-                try:
-                    judge = Judge.objects.filter(name=judge_name).first()
-                    result['key_search']['judge'].append((judge_name, judge.id))
-                except Exception as e:
-                    result['key_search']['judge'].append((judge_name, -1))
-                    print(f'法官名字未找到: {str(e)}')
-            # # 法条id
-            # lawref_node_list = soup.find_all('FLFTFZ')
-            # lawref_list = []
-            # lawref_full_name_list = []
-            # for lawref_node in lawref_node_list:
-            #     lawref_name = find_node(lawref_node, 'MC').get('value')
-            #     for clause in lawref_node.findChildren('T'):  # 条
-            #         clause_items = clause.findChildren('K')
-            #         if not clause_items:
-            #             lawref = LawReference.objects.filter(law_name=lawref_name,law_clause=clause.get('value')).first()
+            full_text = soup.find('QW').get('value')
+        # 分词 + 去除停用词 + 筛选出user_dict中的词
+        words = jieba.lcut(full_text)
+        stop_words = json.load(open(SIGN_WORDS_PATH, 'r', encoding='utf-8'))
+        with open(STOP_WORDS_PATH, 'r', encoding='utf-8') as f:
+            stop_words += f.read().splitlines()
+        with open(USER_DICT_PATH, 'r', encoding='utf-8') as f:
+            user_dict = json.load(f)
+        word_list = []
+        user_word_list = []
+        for word in words:
+            if word not in stop_words:
+                word_list.append(word)
+                if word in user_dict:
+                    user_word_list.append(word)
+        print(f'user_word_list: {user_word_list}')
+        # 关键词查询
+        keywords_result = search_by_keywords(user_word_list)
 
-        # todo: 对全文进行相似度计算，返回相似结果
+        # 对全文进行文本相似搜索
+        similar_docs = get_similar_docs(word_list, 20)
+        similar_result = construct_page(1, 30, similar_docs, [])
+        # 删除文件
+        os.remove(xml_file_path)
 
         return JsonResponse({
             "status": "Done",
-            "file_name": xml_file_name
+            "result": {
+                "keywords_result": keywords_result,
+                "similar_result": similar_result,
+            },
+            "message": "上传成功",
         })
     except Exception as e:
         # 删除文件
@@ -315,3 +307,14 @@ def similar_search(request):
             "status": "Error",
             "message": f"Invalid file: {str(e)}",
         })
+
+
+def test_similar(request):
+    user_dict = []
+    with open(os.path.join(BASE_DIR, 'resources', 'user_dict.txt'), 'r', encoding='utf-8') as f:
+        for line in f.readlines():
+            user_dict.append(line.strip())
+
+    with open(os.path.join(BASE_DIR, 'resources', 'user_dict.json'), 'w', encoding='utf-8') as f:
+        json.dump(user_dict, f, ensure_ascii=False)
+    return JsonResponse("ok", safe=False)
