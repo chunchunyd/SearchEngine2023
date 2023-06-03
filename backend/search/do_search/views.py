@@ -10,12 +10,15 @@ import redis
 import re
 import pymongo
 from django.http import JsonResponse
-from backend.settings import SIGN_WORDS_PATH, STOP_WORDS_PATH, DEFAULT_PAGE_SIZE, BASE_DIR, MONGO_DB, STATICFILES_DIRS
+from backend.settings import SIGN_WORDS_PATH, STOP_WORDS_PATH, DEFAULT_PAGE_SIZE, BASE_DIR, MONGO_DB, STATICFILES_DIRS, \
+    USER_DICT_PATH
 from common.models import *
 from common.serializers import *
 from analysis.views import bm25_sort
+from crawlers.handlers import find_node
 
 from search.query_parse.views import parse_query
+from analysis.views import get_similar_docs
 
 
 def search_by_keywords(words):
@@ -67,7 +70,21 @@ def construct_page(page, page_size, doc_list, word_list):
             'address': doc.address,
         }
 
+        # 找到第一个以"号"字结尾的位置
+        title_end = re.search(r"号 ", doc.full_text)
+        if title_end is not None:
+            title_end = title_end.span()
+        else:
+            title_end = re.search(r"案 ", doc.full_text)
+            if title_end is not None:
+                title_end = title_end.span()
+            else:
+                title_end = (39, 40)
+        result[doc.id]['title'] = doc.full_text[:title_end[1]]
+
         # 找到doc中第一个出现的词条，用于摘要
+        start = 0
+        end = 300
         for word in word_list:
             posting = list(Posting.find({'doc_id': doc.id, 'term': word}))
             if posting:
@@ -79,21 +96,8 @@ def construct_page(page, page_size, doc_list, word_list):
                     end = posting[0]['doc_len']
                 else:
                     end = posting[0]['position'][0] + 280
-
-                # 找到第一个以"号"字结尾的位置
-                title_end = re.search(r"号 ", doc.full_text)
-                if title_end is not None:
-                    title_end = title_end.span()
-                else:
-                    title_end = re.search(r"案 ", doc.full_text)
-                    if title_end is not None:
-                        title_end = title_end.span()
-                    else:
-                        title_end = (39, 40)
-
-                result[doc.id]['title'] = doc.full_text[:title_end[1]]
-                result[doc.id]['short_text'] = doc.full_text[start:end]
                 break
+        result[doc.id]['short_text'] = doc.full_text[start:end]
 
         # # 获取文档的类型，添加对应的信息
         # doc_type = doc.doc_type
@@ -133,7 +137,7 @@ def filter_result(doc_list, kwargs):
     """
     doc_list_filtered = set(doc_list)
     # 法院信息搜索
-    if 'court_id' in kwargs and kwargs['court_id']:     # 如果有court_id参数且不为空
+    if 'court_id' in kwargs and kwargs['court_id']:  # 如果有court_id参数且不为空
         print(f'court_id: {kwargs["court_id"][0]}')
         docs = Judgment.objects.filter(id__in=doc_list, court_id=kwargs['court_id'][0])
         docs = [doc.id for doc in docs]
@@ -170,7 +174,7 @@ def text_search(request):
     redis_conn = redis.Redis(host='localhost', port=6379, db=0)
     if redis_conn.exists(query):
         print(f'redis获取缓存, 总用时:{time.time() - total_time}')
-        doc_list, word_list = json.loads(redis_conn.get(query))
+        doc_list, word_list, keywords_result = json.loads(redis_conn.get(query))
     else:
         print(f'redis无缓存, 总用时:{time.time() - total_time}')
         # 全文检索
@@ -183,8 +187,17 @@ def text_search(request):
         doc_list = bm25_sort(doc_ids, word_list_for_sort)
         print(f'排序用时:{time.time() - st_time}s')
 
+        # 结构化信息
+        user_word_list = []
+        with open(USER_DICT_PATH, 'r', encoding='utf-8') as f:
+            user_dict = json.load(f)
+        for word in word_list:
+            if word in user_dict:
+                user_word_list.append(word)
+        keywords_result = search_by_keywords(user_word_list)
+
         # 存入redis缓存
-        redis_conn.set(query, json.dumps((doc_list, word_list)), ex=60 * 60 * 3)  # 3小时过期
+        redis_conn.set(query, json.dumps((doc_list, word_list, keywords_result)), ex=60 * 60 * 3)  # 3小时过期
 
     # 根据kwargs筛选搜索结果
     st_time = time.time()
@@ -202,39 +215,40 @@ def text_search(request):
     return JsonResponse({
         'code': 200,
         'msg': 'ok',
-        'result': result
+        'result': result,
+        'keywords_result': keywords_result
     })
 
 
-def key_search(request):
-    """
-    关键词搜索，query为查询字符串
-    """
-    query = request.GET.get('query')
-    if not query:
-        return JsonResponse({'code': 400, 'msg': 'query参数缺失'})
-    # 分词
-    st_time = time.time()
-    words = jieba.cut_for_search(query)
-    # 去除停用词
-    stop_words = json.load(open(SIGN_WORDS_PATH, 'r', encoding='utf-8'))
-    with open(STOP_WORDS_PATH, 'r', encoding='utf-8') as f:
-        stop_words += f.read().splitlines()
-    words = [word for word in words if word not in stop_words]
-
-    print(f'分词用时:{time.time() - st_time}, 分词结果: {words}')
-
-    # 关键词查询
-    st_time = time.time()
-    keywords_result = search_by_keywords(words)
-    print(f'关键词查询用时:{time.time() - st_time}')
-    # print(keywords_result)
-
-    return JsonResponse({
-        'code': 200,
-        'msg': 'ok',
-        'result': keywords_result,
-    })
+# def key_search(request):
+#     """
+#     关键词搜索，query为查询字符串
+#     """
+#     query = request.GET.get('query')
+#     if not query:
+#         return JsonResponse({'code': 400, 'msg': 'query参数缺失'})
+#     # 分词
+#     st_time = time.time()
+#     words = jieba.cut_for_search(query)
+#     # 去除停用词
+#     stop_words = json.load(open(SIGN_WORDS_PATH, 'r', encoding='utf-8'))
+#     with open(STOP_WORDS_PATH, 'r', encoding='utf-8') as f:
+#         stop_words += f.read().splitlines()
+#     words = [word for word in words if word not in stop_words]
+#
+#     print(f'分词用时:{time.time() - st_time}, 分词结果: {words}')
+#
+#     # 关键词查询
+#     st_time = time.time()
+#     keywords_result = search_by_keywords(words)
+#     print(f'关键词查询用时:{time.time() - st_time}')
+#     # print(keywords_result)
+#
+#     return JsonResponse({
+#         'code': 200,
+#         'msg': 'ok',
+#         'result': keywords_result,
+#     })
 
 
 def similar_search(request):
@@ -259,15 +273,42 @@ def similar_search(request):
             f.write(chunk)
 
     try:
-        # todo: 解析xml文件
+        # 解析xml文件, 获取全文
+        with open(xml_file_path, 'r', encoding='utf-8') as f:
+            xml_content = f.read()
+            soup = bs4.BeautifulSoup(xml_content, features="xml")
+            full_text = soup.find('QW').get('value')
+        # 分词 + 去除停用词 + 筛选出user_dict中的词
+        words = jieba.lcut(full_text)
+        stop_words = json.load(open(SIGN_WORDS_PATH, 'r', encoding='utf-8'))
+        with open(STOP_WORDS_PATH, 'r', encoding='utf-8') as f:
+            stop_words += f.read().splitlines()
+        with open(USER_DICT_PATH, 'r', encoding='utf-8') as f:
+            user_dict = json.load(f)
+        word_list = []
+        user_word_list = []
+        for word in words:
+            if word not in stop_words:
+                word_list.append(word)
+                if word in user_dict:
+                    user_word_list.append(word)
+        print(f'user_word_list: {user_word_list}')
+        # 关键词查询
+        keywords_result = search_by_keywords(user_word_list)
 
-        # todo: 结构化数据返回相似结果，例如同法院、同法官、同当事人等
-
-        # todo: 对全文进行相似度计算，返回相似结果
+        # 对全文进行文本相似搜索
+        similar_docs = get_similar_docs(word_list, 20)
+        similar_result = construct_page(1, 30, similar_docs, [])
+        # 删除文件
+        os.remove(xml_file_path)
 
         return JsonResponse({
             "status": "Done",
-            "file_name": xml_file_name
+            "result": {
+                "keywords_result": keywords_result,
+                "similar_result": similar_result,
+            },
+            "message": "上传成功",
         })
     except Exception as e:
         # 删除文件
@@ -277,3 +318,13 @@ def similar_search(request):
             "message": f"Invalid file: {str(e)}",
         })
 
+
+def test_similar(request):
+    user_dict = []
+    with open(os.path.join(BASE_DIR, 'resources', 'user_dict.txt'), 'r', encoding='utf-8') as f:
+        for line in f.readlines():
+            user_dict.append(line.strip())
+
+    with open(os.path.join(BASE_DIR, 'resources', 'user_dict.json'), 'w', encoding='utf-8') as f:
+        json.dump(user_dict, f, ensure_ascii=False)
+    return JsonResponse("ok", safe=False)

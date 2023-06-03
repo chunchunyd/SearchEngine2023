@@ -111,7 +111,7 @@ def cal_doc_ids(expr):
             left = stack.pop()
             stack.append((left[0] - right[0], left[1] - right[1]))
         else:
-            stack.append(term_to_doc_ids({token}))
+            stack.append((term_to_doc_ids({token})))
 
     return stack.pop()
 
@@ -137,14 +137,14 @@ def parse_query(query):
         print(f'普通查询语句：{query}')
         Term = MONGO_DB['term']
         # 去除停用词
-        words = set(jieba.cut_for_search(query))    # todo：这里的分词方式可能需要调整，重复的词条是否需要保留？
+        words = set(jieba.cut_for_search(query))  # todo：这里的分词方式可能需要调整，重复的词条是否需要保留？
         stop_words = json.load(open(SIGN_WORDS_PATH, 'r', encoding='utf-8'))
         with open(STOP_WORDS_PATH, 'r', encoding='utf-8') as f:
             stop_words += f.read().splitlines()
         words = words - set(stop_words)
-        print(f'分词结束，查询耗时：{time.time()-st_time}')
+        print(f'分词结束，查询耗时：{time.time() - st_time}')
         doc_ids, word_list = term_to_doc_ids(words)
-        print(f'检索结束，查询耗时：{time.time()-st_time}')
+        print(f'检索结束，查询耗时：{time.time() - st_time}')
         doc_ids, word_list = list(doc_ids), list(word_list)
         word_list_for_sort = []
         word_idfs = {word: -99 for word in word_list}

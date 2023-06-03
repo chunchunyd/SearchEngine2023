@@ -138,41 +138,41 @@ def spider_progress(request):
     return JsonResponse(progress)
 
 
-def upload_xml(request):
-    """
-    上传xml文件
-    TODO:鉴权
-    """
-    if request.method != 'POST':
-        return JsonResponse({
-            "status": "Error",
-            "message": "请求方法错误"
-        })
-    xml_file = request.FILES.get('xml_file')
-    if not xml_file:
-        return JsonResponse({
-            "status": "Error",
-            "message": "上传的文件为空"
-        })
-    xml_file_name = xml_file.name
-    xml_file_path = os.path.join(STATICFILES_DIRS[0], f'user_upload_{xml_file_name}')
-    with open(xml_file_path, 'wb') as f:
-        for chunk in xml_file.chunks():
-            f.write(chunk)
-
-    try:
-        doc = SPIDER.parse_one(xml_file_path, xml_file_name)
-        # 建立索引
-        build_inverted_index_and_term_for_one(doc)
-
-        return JsonResponse({
-            "status": "Done",
-            "file_name": xml_file_name
-        })
-    except Exception as e:
-        # 删除文件
-        os.remove(xml_file_path)
-        return JsonResponse({
-            "status": "Error",
-            "message": f"Invalid file: {str(e)}",
-        })
+# def upload_xml(request):
+#     """
+#     上传xml文件
+#     TODO:鉴权
+#     """
+#     if request.method != 'POST':
+#         return JsonResponse({
+#             "status": "Error",
+#             "message": "请求方法错误"
+#         })
+#     xml_file = request.FILES.get('xml_file')
+#     if not xml_file:
+#         return JsonResponse({
+#             "status": "Error",
+#             "message": "上传的文件为空"
+#         })
+#     xml_file_name = xml_file.name
+#     xml_file_path = os.path.join(STATICFILES_DIRS[0], f'user_upload_{xml_file_name}')
+#     with open(xml_file_path, 'wb') as f:
+#         for chunk in xml_file.chunks():
+#             f.write(chunk)
+#
+#     try:
+#         doc = SPIDER.parse_one(xml_file_path, xml_file_name)
+#         # 建立索引
+#         build_inverted_index_and_term_for_one(doc)
+#
+#         return JsonResponse({
+#             "status": "Done",
+#             "file_name": xml_file_name
+#         })
+#     except Exception as e:
+#         # 删除文件
+#         os.remove(xml_file_path)
+#         return JsonResponse({
+#             "status": "Error",
+#             "message": f"Invalid file: {str(e)}",
+#         })

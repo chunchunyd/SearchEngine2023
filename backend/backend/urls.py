@@ -25,4 +25,5 @@ urlpatterns = [
     path("api/", include("crawlers.urls")),
     path("api/", include("indexes.urls")),
     path("api/", include("search.do_search.urls")),
+    path("api/", include("analysis.urls")),
 ] + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
