@@ -29,18 +29,18 @@ def search_by_keywords(words):
     courts = Court.objects.filter(name__in=words)
     # 检察院信息搜索
     procuratorates = Procuratorate.objects.filter(name__in=words)
-    # 当事人信息搜索
-    parties = Party.objects.filter(name__in=words)
-    # 代理人信息搜索
-    agents = Agent.objects.filter(name__in=words)
+    # # 当事人信息搜索
+    # parties = Party.objects.filter(name__in=words)
+    # # 代理人信息搜索
+    # agents = Agent.objects.filter(name__in=words)
     # 审判人员信息搜索
     judges = Judge.objects.filter(name__in=words)
 
     return {
         'courts': CourtSerializer(courts, many=True).data,
         'procuratorates': ProcuratorateSerializer(procuratorates, many=True).data,
-        'parties': PartySerializer(parties, many=True).data,
-        'agents': AgentSerializer(agents, many=True).data,
+        # 'parties': PartySerializer(parties, many=True).data,
+        # 'agents': AgentSerializer(agents, many=True).data,
         'judges': JudgeSerializer(judges, many=True).data
     }
 
