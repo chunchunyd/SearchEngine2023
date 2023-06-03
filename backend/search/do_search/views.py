@@ -174,7 +174,7 @@ def text_search(request):
     redis_conn = redis.Redis(host='localhost', port=6379, db=0)
     if redis_conn.exists(query):
         print(f'redis获取缓存, 总用时:{time.time() - total_time}')
-        doc_list, word_list = json.loads(redis_conn.get(query))
+        doc_list, word_list, keywords_result = json.loads(redis_conn.get(query))
     else:
         print(f'redis无缓存, 总用时:{time.time() - total_time}')
         # 全文检索
@@ -187,8 +187,17 @@ def text_search(request):
         doc_list = bm25_sort(doc_ids, word_list_for_sort)
         print(f'排序用时:{time.time() - st_time}s')
 
+        # 结构化信息
+        user_word_list = []
+        with open(USER_DICT_PATH, 'r', encoding='utf-8') as f:
+            user_dict = json.load(f)
+        for word in word_list:
+            if word in user_dict:
+                user_word_list.append(word)
+        keywords_result = search_by_keywords(user_word_list)
+
         # 存入redis缓存
-        redis_conn.set(query, json.dumps((doc_list, word_list)), ex=60 * 60 * 3)  # 3小时过期
+        redis_conn.set(query, json.dumps((doc_list, word_list, keywords_result)), ex=60 * 60 * 3)  # 3小时过期
 
     # 根据kwargs筛选搜索结果
     st_time = time.time()
@@ -206,39 +215,40 @@ def text_search(request):
     return JsonResponse({
         'code': 200,
         'msg': 'ok',
-        'result': result
+        'result': result,
+        'keywords_result': keywords_result
     })
 
 
-def key_search(request):
-    """
-    关键词搜索，query为查询字符串
-    """
-    query = request.GET.get('query')
-    if not query:
-        return JsonResponse({'code': 400, 'msg': 'query参数缺失'})
-    # 分词
-    st_time = time.time()
-    words = jieba.cut_for_search(query)
-    # 去除停用词
-    stop_words = json.load(open(SIGN_WORDS_PATH, 'r', encoding='utf-8'))
-    with open(STOP_WORDS_PATH, 'r', encoding='utf-8') as f:
-        stop_words += f.read().splitlines()
-    words = [word for word in words if word not in stop_words]
-
-    print(f'分词用时:{time.time() - st_time}, 分词结果: {words}')
-
-    # 关键词查询
-    st_time = time.time()
-    keywords_result = search_by_keywords(words)
-    print(f'关键词查询用时:{time.time() - st_time}')
-    # print(keywords_result)
-
-    return JsonResponse({
-        'code': 200,
-        'msg': 'ok',
-        'result': keywords_result,
-    })
+# def key_search(request):
+#     """
+#     关键词搜索，query为查询字符串
+#     """
+#     query = request.GET.get('query')
+#     if not query:
+#         return JsonResponse({'code': 400, 'msg': 'query参数缺失'})
+#     # 分词
+#     st_time = time.time()
+#     words = jieba.cut_for_search(query)
+#     # 去除停用词
+#     stop_words = json.load(open(SIGN_WORDS_PATH, 'r', encoding='utf-8'))
+#     with open(STOP_WORDS_PATH, 'r', encoding='utf-8') as f:
+#         stop_words += f.read().splitlines()
+#     words = [word for word in words if word not in stop_words]
+#
+#     print(f'分词用时:{time.time() - st_time}, 分词结果: {words}')
+#
+#     # 关键词查询
+#     st_time = time.time()
+#     keywords_result = search_by_keywords(words)
+#     print(f'关键词查询用时:{time.time() - st_time}')
+#     # print(keywords_result)
+#
+#     return JsonResponse({
+#         'code': 200,
+#         'msg': 'ok',
+#         'result': keywords_result,
+#     })
 
 
 def similar_search(request):
