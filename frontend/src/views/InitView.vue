@@ -16,7 +16,7 @@
     </div>
     <!-- Topbar End -->
     <SearchBar v-show="status==0"
-    :to_display="to_display"></SearchBar>
+    :to_display="to_display" :to_relate="to_relate"></SearchBar>
     <DisplayBar  v-show="status==1"
     :addr="display_idx" :to_relate="to_relate"></DisplayBar>
     <AllCourt  v-show="status==2"

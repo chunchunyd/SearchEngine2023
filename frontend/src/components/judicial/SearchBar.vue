@@ -33,44 +33,200 @@
     </div>
     <!-- Navbar & Hero End -->
 
-    <div v-if="this.status">
-    <!-- Service Start -->
-    <div class="container-xxl">
-        <div class="container">
-            <div class="text-center wow fadeInUp" data-wow-delay="0.1s">
-                <h6 class="section-title bg-white text-center text-primary px-3">相关条目</h6>
-            </div>
-            <div class="allresult row g-4">
-                <div v-for="item in data" :key="item" class="service-item rounded pt-3" v-on:click="display(item.address)">
-                    <div class="p-4">
-                        <i class="fa fa-3x fa-cog text-primary mb-4"></i>
-                        <h5>{{item.title}}</h5>
-                <p v-html="item.short_text"></p>
-                    </div>
-                </div>
-            </div>
-        </div>
+    <div v-if="this.status==1 && !this.avail">
+      <!-- Service Start -->
+          <div class="container-xxl">
+              <div class="container">
+                  <div class="text-center wow fadeInUp" data-wow-delay="0.1s">
+                      <h6 class="section-title bg-white text-center text-primary px-3">相关条目</h6>
+                  </div>
+                  <div class="allresult row g-4">
+                      <div v-for="item in data" :key="item" class="service-item rounded pt-3" v-on:click="display(item.address)">
+                          <div class="p-4">
+                              <i class="fa fa-3x fa-cog text-primary mb-4"></i>
+                              <h5>{{item.title}}</h5>
+                      <p v-html="item.short_text"></p>
+                          </div>
+                      </div>
+                  </div>
+              </div>
+          </div>
+          <!-- Service End -->
+          <div class="pagebar allwidth">
+                  <div class="block centerblock">
+                    <el-pagination
+                    @current-change="changepage"
+                    background
+                    :hide-on-single-page="true"
+                    layout="prev, pager, next"
+                    :total="this.totalnum"
+                    :page-size="10"
+                    :pager-count="15">
+                    </el-pagination>
+                  </div>
+          </div>
     </div>
-    <!-- Service End -->
-    <div class="pagebar allwidth">
-            <div class="block centerblock">
-              <el-pagination
-              @current-change="changepage"
-              background
-              :hide-on-single-page="true"
-              layout="prev, pager, next"
-              :total="this.totalnum"
-              :page-size="10"
-              :pager-count="15">
-              </el-pagination>
-            </div>
+
+    <div v-if="this.status==1 && this.avail">
+      <el-row>
+        <el-col :span="1"><div></div></el-col>
+        <el-col :span="15">
+          <!-- Service Start -->
+          <div class="container-xxl">
+              <div class="container">
+                  <div class="text-center wow fadeInUp" data-wow-delay="0.1s">
+                      <h6 class="section-title bg-white text-center text-primary px-3">相关条目</h6>
+                  </div>
+                  <div class="allresult row g-4">
+                      <div v-for="item in data" :key="item" class="service-item rounded pt-3" v-on:click="display(item.address)">
+                          <div class="p-4">
+                              <i class="fa fa-3x fa-cog text-primary mb-4"></i>
+                              <h5>{{item.title}}</h5>
+                      <p v-html="item.short_text"></p>
+                          </div>
+                      </div>
+                  </div>
+              </div>
+          </div>
+          <!-- Service End -->
+          <div class="pagebar allwidth">
+                  <div class="block centerblock">
+                    <el-pagination
+                    @current-change="changepage"
+                    background
+                    :hide-on-single-page="true"
+                    layout="prev, pager, next"
+                    :total="this.totalnum"
+                    :page-size="10"
+                    :pager-count="15">
+                    </el-pagination>
+                  </div>
+          </div>
+        </el-col>
+        <el-col :span="7">
+          <!-- Service Start -->
+          <div class="container-xxl" v-if="this.court_avail">
+              <div class="container">
+                  <div class="text-center wow fadeInUp" data-wow-delay="0.1s">
+                      <h6 class="section-title bg-white text-center text-primary px-3">相关法院</h6>
+                  </div>
+                  <div class="allresult row g-4">
+                      <div v-for="item in court" :key="item" class="service-item rounded pt-3" v-on:click="display_relate(item.id, item.name)">
+                          <div class="p-4">
+                              <i class="fa fa-3x fa-globe text-primary mb-4"></i>
+                              <h5>{{item.name}}</h5>
+                              <p>{{item.province}} | {{item.city}} | {{item.level}} | {{item.code}}</p>
+                          </div>
+                      </div>
+                  </div>
+              </div>
+              <br/>
+          </div>
+          <!-- Service End -->
+
+          <!-- Service Start -->
+          <div class="container-xxl"  v-if="this.judge_avail">
+              <div class="container">
+                  <div class="text-center wow fadeInUp" data-wow-delay="0.1s">
+                      <h6 class="section-title bg-white text-center text-primary px-3">相关法官</h6>
+                  </div>
+                  <div class="allresult row g-4">
+                      <div v-for="item in judge" :key="item" class="service-item rounded pt-3" v-on:click="display_relate(item.id, item.name)">
+                          <div class="p-4">
+                            <i class="fa fa-3x fa-globe text-primary mb-4"></i>
+                            <h5>{{item.name}}</h5>
+                            <p>{{cut(item.full_name)}}</p>
+                        </div>
+                      </div>
+                  </div>
+              </div>
+          </div>
+          <!-- Service End -->
+        </el-col>
+        <el-col :span="1"><div></div></el-col>
+      </el-row>
     </div>
+
+    <div v-if="this.status==2">
+      <el-row>
+        <el-col :span="1"><div></div></el-col>
+        <el-col :span="15">
+          <!-- Service Start -->
+          <div class="container-xxl">
+              <div class="container">
+                  <div class="text-center wow fadeInUp" data-wow-delay="0.1s">
+                      <h6 class="section-title bg-white text-center text-primary px-3">相似条目</h6>
+                  </div>
+                  <div class="allresult row g-4">
+                      <div v-for="item in similardata" :key="item" class="service-item rounded pt-3" v-on:click="display(item.address)">
+                          <div class="p-4">
+                              <i class="fa fa-3x fa-cog text-primary mb-4"></i>
+                              <h5>{{item.title}}</h5>
+                              <p>{{item.short_text}}......</p>
+                          </div>
+                      </div>
+                  </div>
+              </div>
+          </div>
+          <!-- Service End -->
+        </el-col>
+        <el-col :span="7">
+          <!-- Service Start -->
+          <div class="container-xxl">
+              <div class="container">
+                  <div class="text-center wow fadeInUp" data-wow-delay="0.1s">
+                      <h6 class="section-title bg-white text-center text-primary px-3">相似法院</h6>
+                  </div>
+                  <div class="allresult row g-4">
+                      <div v-for="item in similarcourt" :key="item" class="service-item rounded pt-3" v-on:click="display_relate(item.id, item.name)">
+                          <div class="p-4">
+                              <i class="fa fa-3x fa-globe text-primary mb-4"></i>
+                              <h5>{{item.name}}</h5>
+                              <p>{{item.province}} | {{item.city}} | {{item.level}} | {{item.code}}</p>
+                          </div>
+                      </div>
+                  </div>
+              </div>
+          </div>
+          <!-- Service End -->
+          <br/>
+          <!-- Service Start -->
+          <div class="container-xxl">
+              <div class="container">
+                  <div class="text-center wow fadeInUp" data-wow-delay="0.1s">
+                      <h6 class="section-title bg-white text-center text-primary px-3">相似法官</h6>
+                  </div>
+                  <div class="allresult row g-4">
+                      <div v-for="item in similarjudge" :key="item" class="service-item rounded pt-3" v-on:click="display_relate(item.id, item.name)">
+                          <div class="p-4">
+                            <i class="fa fa-3x fa-globe text-primary mb-4"></i>
+                            <h5>{{item.name}}</h5>
+                            <p>{{cut(item.full_name)}}</p>
+                        </div>
+                      </div>
+                  </div>
+              </div>
+          </div>
+          <!-- Service End -->
+        </el-col>
+        <el-col :span="1"><div></div></el-col>
+      </el-row>
+    </div>
+
+    <div v-if="this.status==3">
+      <div class="container-xxl">
+          <div class="container">
+              <div class="text-center wow fadeInUp" data-wow-delay="0.1s">
+                  <h6 class="section-title bg-white text-center text-primary px-3">加载中...</h6>
+              </div>
+          </div>
+      </div>
     </div>
 </div>
 </template>
 
 <script>
-import { search, searchpage } from '@/utils/judicial.js'
+import { search, searchpage, similarsearch } from '@/utils/judicial.js'
 export default {
   name: 'SearchBar',
   components: {
@@ -80,16 +236,23 @@ export default {
       // 回调函数
       type: Function,
       default: () => {}
+    },
+    to_relate: {
+      // 回调函数
+      type: Function,
+      default: () => {}
     }
   },
   computed: {
-    // usedata: function () {
-    //  const tmp = []
-    //  for (i in this.data.doc_list) {
-    //    tmp.push([key, value])
-    //  }
-    //  return tmp
-    // }
+    avail: function () {
+      return this.court.length > 0 || this.judge.length > 0
+    },
+    court_avail: function () {
+      return this.court.length > 0
+    },
+    judge_avail: function () {
+      return this.judge.length > 0
+    }
   },
   data() {
     return {
@@ -98,26 +261,29 @@ export default {
       input: '',
       prevsearch: '',
       data: [],
+      court: [],
+      judge: [],
       matchkey: [],
       pageid: 0,
       totalnum: 0,
+      // status=1表示有搜索结果，status=0表示无搜索结果, status=2表示有相似结果，status=3表示正在搜索
       status: 0,
       checked: false,
       filecontent: '',
-      items: [['浙江省东阳市人民法院 民事判决书 （2016）浙0783民初17571号', '原告韦斌姬为与被告韦斌强、杜满萍民间借贷纠纷一案，于2016年12月1日向本院提起诉讼，请求判令两被告归还借款10万元，并支付利息（自起诉之日起按中国人民银行同期同档次贷款基准利率计算至实际履行之日止）。本院受理后，依法由审判员甘震适用简易程序独任审判。'],
-        ['浙江省东阳市人民法院 民事判决书 （2016）浙0783民初17571号', '原告韦斌姬为与被告韦斌强、杜满萍民间借贷纠纷一案，于2016年12月1日向本院提起诉讼，请求判令两被告归还借款10万元，并支付利息（自起诉之日起按中国人民银行同期同档次贷款基准利率计算至实际履行之日止）。本院受理后，依法由审判员甘震适用简易程序独任审判。'],
-        ['浙江省东阳市人民法院 民事判决书 （2016）浙0783民初17571号', '原告韦斌姬为与被告韦斌强、杜满萍民间借贷纠纷一案，于2016年12月1日向本院提起诉讼，请求判令两被告归还借款10万元，并支付利息（自起诉之日起按中国人民银行同期同档次贷款基准利率计算至实际履行之日止）。本院受理后，依法由审判员甘震适用简易程序独任审判。'],
-        ['浙江省东阳市人民法院 民事判决书 （2016）浙0783民初17571号', '原告韦斌姬为与被告韦斌强、杜满萍民间借贷纠纷一案，于2016年12月1日向本院提起诉讼，请求判令两被告归还借款10万元，并支付利息（自起诉之日起按中国人民银行同期同档次贷款基准利率计算至实际履行之日止）。本院受理后，依法由审判员甘震适用简易程序独任审判。']]
+      similardata: [],
+      similarcourt: [],
+      similarjudge: []
     }
   },
   methods: {
     click_search() {
       if (this.input !== '') {
-        this.prevsearch = this.input
-        this.status = 0
+        this.status = 3
         if (this.checked) {
+          this.prevsearch = 'EXACTLY: ' + this.input
           search(this, 'EXACTLY: ' + this.input)
         } else {
+          this.prevsearch = this.input
           search(this, this.input)
         }
       }
@@ -157,13 +323,30 @@ export default {
     },
     upload(file) {
       // 读取文件内容,将内容赋值给input
-      const reader = new FileReader()
-      reader.onload = () => {
-        this.filecontent = reader.result
-        console.log(this.filecontent)
-      }
-      reader.readAsText(file)
+      this.status = 3
+      const formData = new FormData()
+      formData.append('xml_file', file)
+      similarsearch(this, formData)
+      // const reader = new FileReader()
+      // reader.onload = () => {
+      //   this.filecontent = reader.result
+      //   console.log(this.filecontent)
+      //   similarsearch(this, this.filecontent)
+      // }
+      // reader.readAsText(file)
       return false
+    },
+    display_relate (id, text) {
+      this.to_relate(1, id, text)
+      const el = document.getElementsByClassName('alltop')[0]
+      this.$nextTick(function () {
+        window.scrollTo({ behavior: 'smooth', top: el.offsetTop })
+      })
+    },
+    cut (str) {
+      // 截取str中'_'之后的字符
+      const idx = str.indexOf('_')
+      return str.slice(idx + 1)
     },
     test() {
       console.log(this.data)

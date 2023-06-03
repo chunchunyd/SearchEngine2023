@@ -11,6 +11,8 @@ export function search(_this, par) {
       _this.data = d.result.doc_list
       _this.totalnum = d.result.total_page * 10
       _this.matchkey = d.result.word_list
+      _this.court = d.keywords_result.courts
+      _this.judge = d.keywords_result.judges
       _this.computehighlight()
       _this.status = 1
     } else {
@@ -266,5 +268,23 @@ export function getrelatedatapage(_this, type, id, page) {
   }).catch(function (error) {
     console.log(error)
     _this.$alert('getrelatedatapage error!')
+  })
+}
+
+export function similarsearch(_this, form) {
+  axios.post('/api/similar_search/', form
+  ).then((response) => {
+    const d = response.data
+    if (response.status === 200) {
+      _this.similardata = d.result.similar_result.doc_list
+      _this.similarcourt = d.result.keywords_result.courts
+      _this.similarjudge = d.result.keywords_result.judges
+      _this.status = 2
+    } else {
+      _this.$alert('similarsearch error!')
+    }
+  }).catch(function (error) {
+    console.log(error)
+    _this.$alert('similarsearch error!')
   })
 }
