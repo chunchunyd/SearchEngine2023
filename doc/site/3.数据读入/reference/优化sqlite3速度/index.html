@@ -1,0 +1,404 @@
+
+<!doctype html>
+<html lang="zh" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+        <meta name="description" content="搜索引擎文档">
+      
+      
+      
+      
+      
+      <link rel="icon" href="../../../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.4.2, mkdocs-material-9.1.8">
+    
+    
+      
+        <title>优化sqlite3速度 - My Docs</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../../assets/stylesheets/main.ded33207.min.css">
+      
+        
+        <link rel="stylesheet" href="../../../assets/stylesheets/palette.a0c5b2b5.min.css">
+      
+      
+
+    
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+      <link rel="stylesheet" href="../../../resources/css/extra.css">
+    
+    <script>__md_scope=new URL("../../..",location),__md_hash=e=>[...e].reduce((e,_)=>(e<<5)-e+_.charCodeAt(0),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+    
+  </head>
+  
+  
+    
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="purple" data-md-color-accent="indigo">
+  
+    
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+  
+
+<header class="md-header md-header--shadow" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="页眉">
+    <a href="../../.." title="My Docs" class="md-header__button md-logo" aria-label="My Docs" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54Z"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3V6m0 5h18v2H3v-2m0 5h18v2H3v-2Z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            My Docs
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              优化sqlite3速度
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+    
+    
+    
+      <label class="md-header__button md-icon" for="__search">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.516 6.516 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5Z"/></svg>
+      </label>
+      <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="搜索" placeholder="搜索" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.516 6.516 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5Z"/></svg>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12Z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="查找">
+        
+        <button type="reset" class="md-search__icon md-icon" title="清空当前内容" aria-label="清空当前内容" tabindex="-1">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12 19 6.41Z"/></svg>
+        </button>
+      </nav>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            正在初始化搜索引擎
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+    
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+<nav class="md-nav md-nav--primary" aria-label="导航栏" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../../.." title="My Docs" class="md-nav__button md-logo" aria-label="My Docs" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54Z"/></svg>
+
+    </a>
+    My Docs
+  </label>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../.." class="md-nav__link">
+        Home
+      </a>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+      
+      
+      <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2" >
+      
+      
+      
+        <label class="md-nav__link" for="__nav_2" id="__nav_2_label" tabindex="0">
+          0.设计
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_2_label" aria-expanded="false">
+        <label class="md-nav__title" for="__nav_2">
+          <span class="md-nav__icon md-icon"></span>
+          0.设计
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../0.%E6%90%9C%E7%B4%A2%E5%BC%95%E6%93%8E%E8%AE%BE%E8%AE%A1/1.%20%E6%9E%B6%E6%9E%84/" class="md-nav__link">
+        1.架构
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../0.%E6%90%9C%E7%B4%A2%E5%BC%95%E6%93%8E%E8%AE%BE%E8%AE%A1/3.%20%E5%88%86%E6%9E%90%E6%96%87%E4%B9%A6/" class="md-nav__link">
+        2.分析文书
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="目录">
+  
+  
+  
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+  <h1>优化sqlite3速度</h1>
+
+<p>0 前言
+SQLite数据库由于其简单、灵活、轻量、开源，已经被越来越多的被应用到中小型应用中。甚至有人说，SQLite完全可以用来取代c语言中的文件读写操作。因此我最近编写有关遥感数据处理的程序的时候，也将SQLite引入进来，以提高数据的结构化程度，并且提高大数据的处理能力（SQLite最高支持2PB大小的数据）。但是最开始，我发现，直接使用SQL语句的插入效率简直低的令人发指的。后来不断查文档、查资料，才发现了一条快速的“数据插入”之路。本文就以插入数据为例，整合网上和资料书中的各种提高SQLite效率的方法，给出提高SQLite数据插入效率的完整方法。（大神们勿喷）</p>
+<p>1 数据</p>
+<p>我使用的电脑是Win7 64位系统，使用VC2010编译，SQLIte版本为3.7.15.2 ，电脑CPU为二代i3处理器，内存6G。</p>
+<p>实验之前，先建立要插入数据的表:</p>
+<pre><code class="language-sql">create table t1 (id integer , x integer , y integer， weight real)
+</code></pre>
+<p>2 慢速——最粗暴的方法</p>
+<p>SQLite的API中直接执行SQL的函数是：</p>
+<pre><code class="language-c++">int sqlite3_exec(  sqlite3*,    const char *sql,   int (*callback)(void*,int,char**,char**),   void *,   char **errmsg)
+</code></pre>
+<p>直接使用INSERT语句的字符串进行插入，程序部分代码（完整代码见后文），如下：</p>
+<pre><code class="language-c++">for(int i=0;i&lt;nCount;++i)
+{
+    std::stringstream ssm;
+    ssm&lt;&lt;&quot;insert into t1 values(&quot;&lt;&lt;i&lt;&lt;&quot;,&quot;&lt;&lt;i*2&lt;&lt;&quot;,&quot;&lt;&lt;i/2&lt;&lt;&quot;,&quot;&lt;&lt;i*i&lt;&lt;&quot;)&quot;;
+    sqlite3_exec(db,ssm.str().c_str(),0,0,0);
+}
+</code></pre>
+<p>这个程序运行的太慢了，我已经没时间等待了，估算了一下，基本上是  7.826 条/s</p>
+<p>3 中速——显式开启事务</p>
+<p>所谓”事务“就是指一组SQL命令，这些命令要么一起执行，要么都不被执行。在SQLite中，<strong>每调用一次sqlite3_exec()函数，就会隐式地开启了一个事务</strong>，如果插入一条数据，就调用该函数一次，事务就会被反复地开启、关闭，会增大IO量。如果在插入数据前显式开启事务，插入后再一起提交，则会大大提高IO效率，进而加数据快插入速度。</p>
+<p>开启事务只需在上述代码的前后各加一句开启与提交事务的命令即可：</p>
+<pre><code class="language-c++">sqlite3_exec(db,&quot;begin;&quot;,0,0,0);
+for(int i=0;i&lt;nCount;++i)
+{
+    std::stringstream ssm;
+    ssm&lt;&lt;&quot;insert into t1 values(&quot;&lt;&lt;i&lt;&lt;&quot;,&quot;&lt;&lt;i*2&lt;&lt;&quot;,&quot;&lt;&lt;i/2&lt;&lt;&quot;,&quot;&lt;&lt;i*i&lt;&lt;&quot;)&quot;;
+    sqlite3_exec(db,ssm.str().c_str(),0,0,0);
+}
+sqlite3_exec(db,&quot;commit;&quot;,0,0,0);
+</code></pre>
+<p>显式开启事务后，这个程序运行起来明显快很多，估算效率达到了34095条/s，较原始方法提升约5000倍。</p>
+<p>4 高速——写同步(synchronous)</p>
+<p>我要使用一个遥感处理算法处理10000*10000的影像，中间有一步需要插入100000000条数据到数据库中，如果按照开启事务后的速度34095条/s，则需要100000000÷34095 = 2932秒 = 48.9分，仍然不能够接受，所以我接着找提升速度的方法。终于，在有关讲解SQLite配置的资料中，看到了“写同步”选项。</p>
+<p>在SQLite中，数据库配置的参数都由编译指示（pragma）来实现的，而其中synchronous选项有三种可选状态，分别是full、normal、off。这篇博客以及官方文档里面有详细讲到这三种参数的设置。简要说来，full写入速度最慢，但保证数据是安全的，不受断电、系统崩溃等影响，而off可以加速数据库的一些操作，但如果系统崩溃或断电，则数据库可能会损毁。</p>
+<p>SQLite3中，该选项的默认值就是full，如果我们再插入数据前将其改为off，则会提高效率。如果仅仅将SQLite当做一种临时数据库的话，完全没必要设置为full。在代码中，设置方法就是在打开数据库之后，直接插入以下语句：</p>
+<pre><code class="language-c++">sqlite3_exec(db,&quot;PRAGMA synchronous = OFF; &quot;,0,0,0);
+</code></pre>
+<p>此时，经过测试，插入速度已经变成了 41851条/s，也就是说，插入100000000条数据，需要2389秒 = 39.8分。</p>
+<p>5 极速——执行准备</p>
+<p>虽然写同步设为off后，速度又有小幅提升，但是仍然较慢。我又一次踏上了寻找提高SQLite插入效率方法的道路上。终于，我发现，SQLite执行SQL语句的时候，有两种方式：一种是使用前文提到的函数sqlite3_exec()，该函数直接调用包含SQL语句的字符串；另一种方法就是“执行准备”（类似于存储过程）操作，即先将SQL语句编译好，然后再一步一步（或一行一行）地执行。如果采用前者的话，就算开起了事务，SQLite仍然要对循环中每一句SQL语句进行“词法分析”和“语法分析”，这对于同时插入大量数据的操作来说，简直就是浪费时间。因此，要进一步提高插入效率的话，就应该使用后者。</p>
+<p>“执行准备”主要分为三大步骤：</p>
+<p>1.调用函数</p>
+<pre><code class="language-c++">int sqlite3_prepare_v2( sqlite3 *db,  const char *zSql,  int nByte,  sqlite3_stmt **ppStmt,  const char **pzTail);
+</code></pre>
+<p>并且声明一个指向sqlite3_stmt对象的指针，该函数对参数化的SQL语句zSql进行编译，将编译后的状态存入ppStmt中。</p>
+<p>2.调用函数 sqlite3_step() ，这个函数就是执行一步（本例中就是插入一行），如果函数返回的是SQLite_ROW则说明仍在继续执行，否则则说明已经执行完所有操作；</p>
+<p>3.调用函数 sqlite3_finalize()，关闭语句。</p>
+<p>关于执行准备的API的具体语法，详见官方文档。本文中执行准备的c++代码如下：</p>
+<pre><code class="language-c++">sqlite3_exec(db,&quot;begin;&quot;,0,0,0);
+    sqlite3_stmt *stmt;
+    const char* sql = &quot;insert into t1 values(?,?,?,?)&quot;;
+    sqlite3_prepare_v2(db,sql,strlen(sql),&amp;stmt,0);
+
+    for(int i=0;i&lt;nCount;++i)
+    {       
+        sqlite3_reset(stmt);
+        sqlite3_bind_int(stmt,1,i);
+        sqlite3_bind_int(stmt,1,i*2);
+        sqlite3_bind_int(stmt,1,i/2);
+        sqlite3_bind_double(stmt,1,i*i);
+    }
+    sqlite3_finalize(stmt);
+    sqlite3_exec(db,&quot;commit;&quot;,0,0,0);
+</code></pre>
+<p>此时测试数据插入效率为： 265816条/s，也就是说，插入100000000条数据，需要376秒 = 6.27分。这个速度已经很满意了。</p>
+<p>5 总结</p>
+<p>综上所述啊，SQLite插入数据效率最快的方式就是：事务+关闭写同步+执行准备（存储过程），如果对数据库安全性有要求的话，就开启写同步。</p>
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+        </div>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    <script id="__config" type="application/json">{"base": "../../..", "features": [], "search": "../../../assets/javascripts/workers/search.208ed371.min.js", "translations": {"clipboard.copied": "\u5df2\u590d\u5236", "clipboard.copy": "\u590d\u5236", "search.result.more.one": "\u5728\u8be5\u9875\u4e0a\u8fd8\u6709 1 \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.more.other": "\u5728\u8be5\u9875\u4e0a\u8fd8\u6709 # \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.none": "\u6ca1\u6709\u627e\u5230\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.one": "\u627e\u5230 1 \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.other": "# \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.placeholder": "\u952e\u5165\u4ee5\u5f00\u59cb\u641c\u7d22", "search.result.term.missing": "\u7f3a\u5c11", "select.version": "\u9009\u62e9\u5f53\u524d\u7248\u672c"}}</script>
+    
+    
+      <script src="../../../assets/javascripts/bundle.51198bba.min.js"></script>
+      
+    
+  </body>
+</html>

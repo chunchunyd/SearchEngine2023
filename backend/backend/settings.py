@@ -41,6 +41,7 @@ INSTALLED_APPS = [
     "indexes.apps.IndexesConfig",
     "search.do_search.apps.DoSearchConfig",
     'django_filters',
+    'django_extensions',
 ]
 
 MIDDLEWARE = [

@@ -1,0 +1,672 @@
+
+<!doctype html>
+<html lang="zh" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+        <meta name="description" content="搜索引擎文档">
+      
+      
+      
+      
+      
+      <link rel="icon" href="../../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.4.2, mkdocs-material-9.1.8">
+    
+    
+      
+        <title>2. 一个例子 - My Docs</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../assets/stylesheets/main.ded33207.min.css">
+      
+        
+        <link rel="stylesheet" href="../../assets/stylesheets/palette.a0c5b2b5.min.css">
+      
+      
+
+    
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+      <link rel="stylesheet" href="../../resources/css/extra.css">
+    
+    <script>__md_scope=new URL("../..",location),__md_hash=e=>[...e].reduce((e,_)=>(e<<5)-e+_.charCodeAt(0),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+    
+  </head>
+  
+  
+    
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="purple" data-md-color-accent="indigo">
+  
+    
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+  
+
+<header class="md-header md-header--shadow" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="页眉">
+    <a href="../.." title="My Docs" class="md-header__button md-logo" aria-label="My Docs" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54Z"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3V6m0 5h18v2H3v-2m0 5h18v2H3v-2Z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            My Docs
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              2. 一个例子
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+    
+    
+    
+      <label class="md-header__button md-icon" for="__search">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.516 6.516 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5Z"/></svg>
+      </label>
+      <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="搜索" placeholder="搜索" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.516 6.516 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5Z"/></svg>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12Z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="查找">
+        
+        <button type="reset" class="md-search__icon md-icon" title="清空当前内容" aria-label="清空当前内容" tabindex="-1">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12 19 6.41Z"/></svg>
+        </button>
+      </nav>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            正在初始化搜索引擎
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+    
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+<nav class="md-nav md-nav--primary" aria-label="导航栏" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../.." title="My Docs" class="md-nav__button md-logo" aria-label="My Docs" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54Z"/></svg>
+
+    </a>
+    My Docs
+  </label>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../.." class="md-nav__link">
+        Home
+      </a>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+      
+      
+      <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2" >
+      
+      
+      
+        <label class="md-nav__link" for="__nav_2" id="__nav_2_label" tabindex="0">
+          0.设计
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_2_label" aria-expanded="false">
+        <label class="md-nav__title" for="__nav_2">
+          <span class="md-nav__icon md-icon"></span>
+          0.设计
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../1.%20%E6%9E%B6%E6%9E%84/" class="md-nav__link">
+        1.架构
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../3.%20%E5%88%86%E6%9E%90%E6%96%87%E4%B9%A6/" class="md-nav__link">
+        2.分析文书
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="目录">
+  
+  
+  
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+  <h1>2. 一个例子</h1>
+
+<p>```&lt;?xml version="1.0" encoding="UTF-8"?&gt;</p>
+<p><writ>
+  <QW nameCN="全文" oValue="......">
+    <WS nameCN="文首" value="浙江省东阳市人民法院 民事判决书 （2016）浙0783民初17571号 ">
+      <WSZZDW nameCN="文书制作单位" value="法院"/>
+      <FYWSZL nameCN="法院文书种类" value="裁判文书"/>
+      <JBFY nameCN="经办法院" value="浙江省东阳市人民法院">
+        <FYCJM nameCN="法院层级码" value="B84"/>
+        <BZFYMC nameCN="标准法院名称" value="东阳市人民法院"/>
+        <FYJB nameCN="法院级别" value="基层"/>
+        <XZQH_P nameCN="行政区划(省)" value="浙江"/>
+        <XZQH_C nameCN="行政区划(市)" value="金华市"/>
+      </JBFY>
+      <WSMC nameCN="文书名称" value="民事判决书"/>
+      <AH nameCN="案号" value="（2016）浙0783民初17571号">
+        <ZH nameCN="字号" value="民初字"/>
+        <AJLB_YJ nameCN="案件类型_一级" value="民事案件">
+          <AJLB_EJ nameCN="案件类型_二级" value="民事一审案件"/>
+        </AJLB_YJ>
+        <LAND nameCN="立案年度" value="2016"/>
+        <FYJC nameCN="法院简称" value="浙0783"/>
+        <AHSXH nameCN="案号顺序号" value="17571"/>
+      </AH>
+      <AJLB nameCN="案件类别" value="民事案件"/>
+      <WSZL nameCN="文书种类" value="判决书"/>
+      <SPCX nameCN="审判程序" value="一审案件"/>
+      <AJLX nameCN="案件类型" value="民事一审案件"/>
+    </WS>
+    <DSR nameCN="当事人" value="......">
+      <QSF nameCN="起诉方" value="原告：韦斌姬，女，1972年9月22日出生，汉族，住东阳市。">
+        <SSCYR nameCN="诉讼参与人" value="韦斌姬"/>
+        <SSSF nameCN="诉讼身份" value="原告"/>
+        <DSRLX nameCN="当事人类型" value="自然人"/>
+        <XB nameCN="性别" value="女"/>
+        <MZ nameCN="民族" value="汉族"/>
+        <CSRQ nameCN="出生日期" value="1972年9月22日"/>
+        <DSRDZ nameCN="当事人地址" value="东阳市"/>
+        <GJ nameCN="国籍" value="中国"/>
+        <DSRLB nameCN="当事人类别" value="原告"/>
+        <BSSSDW nameCN="本审诉讼地位" value="原告"/>
+        <ZRRSF nameCN="自然人身份" value="其他"/>
+      </QSF>
+      <YSF nameCN="应诉方" value="被告：韦斌强，男，1969年6月17日出生，汉族，住东阳市。">
+        <SSCYR nameCN="诉讼参与人" value="韦斌强"/>
+        <SSSF nameCN="诉讼身份" value="被告"/>
+        <DSRLX nameCN="当事人类型" value="自然人"/>
+        <XB nameCN="性别" value="男"/>
+        <MZ nameCN="民族" value="汉族"/>
+        <CSRQ nameCN="出生日期" value="1969年6月17日"/>
+        <DSRDZ nameCN="当事人地址" value="东阳市"/>
+        <GJ nameCN="国籍" value="中国"/>
+        <DSRLB nameCN="当事人类别" value="被告"/>
+        <BSSSDW nameCN="本审诉讼地位" value="被告"/>
+        <ZRRSF nameCN="自然人身份" value="其他"/>
+      </YSF>
+      <YSF nameCN="应诉方" value="被告：杜满萍，女，1968年11月25日出生，汉族，住东阳市。">
+        <SSCYR nameCN="诉讼参与人" value="杜满萍"/>
+        <SSSF nameCN="诉讼身份" value="被告"/>
+        <DSRLX nameCN="当事人类型" value="自然人"/>
+        <XB nameCN="性别" value="女"/>
+        <MZ nameCN="民族" value="汉族"/>
+        <CSRQ nameCN="出生日期" value="1968年11月25日"/>
+        <DSRDZ nameCN="当事人地址" value="东阳市"/>
+        <GJ nameCN="国籍" value="中国"/>
+        <DSRLB nameCN="当事人类别" value="被告"/>
+        <BSSSDW nameCN="本审诉讼地位" value="被告"/>
+        <ZRRSF nameCN="自然人身份" value="其他"/>
+      </YSF>
+      <DLR nameCN="代理人" value="委托代理人：陈菊华、贾凌珂。">
+        <SSCYR nameCN="诉讼参与人" value="陈菊华"/>
+        <SSSF nameCN="诉讼身份" value="委托代理人"/>
+        <DSRLX nameCN="当事人类型" value="自然人"/>
+        <GJ nameCN="国籍" value="中国"/>
+        <DSRLB nameCN="当事人类别" value="代理人"/>
+        <CYRSSDW nameCN="参与人诉讼地位" value="诉讼代理人"/>
+        <DLDXJH nameCN="代理对象集合">
+          <DLDX nameCN="代理对象" value="韦斌强"/>
+          <DLDX nameCN="代理对象" value="杜满萍"/>
+        </DLDXJH>
+        <DLZL nameCN="代理种类" value="委托代理"/>
+        <DLRBHRZYLX nameCN="代理人辩护人职业类型" value="非法务人员"/>
+        <BHRHSSDLRLX nameCN="辩护人或诉讼代理人类型" value="法院许可的其他公民"/>
+        <ZRRSF nameCN="自然人身份" value="其他"/>
+      </DLR>
+      <DLR nameCN="代理人" value="委托代理人：陈菊华、贾凌珂。">
+        <SSCYR nameCN="诉讼参与人" value="贾凌珂"/>
+        <SSSF nameCN="诉讼身份" value="委托代理人"/>
+        <DSRLX nameCN="当事人类型" value="自然人"/>
+        <GJ nameCN="国籍" value="中国"/>
+        <DSRLB nameCN="当事人类别" value="代理人"/>
+        <CYRSSDW nameCN="参与人诉讼地位" value="诉讼代理人"/>
+        <DLDXJH nameCN="代理对象集合">
+          <DLDX nameCN="代理对象" value="韦斌强"/>
+          <DLDX nameCN="代理对象" value="杜满萍"/>
+        </DLDXJH>
+        <DLZL nameCN="代理种类" value="委托代理"/>
+        <DLRBHRZYLX nameCN="代理人辩护人职业类型" value="非法务人员"/>
+        <BHRHSSDLRLX nameCN="辩护人或诉讼代理人类型" value="法院许可的其他公民"/>
+        <ZRRSF nameCN="自然人身份" value="其他"/>
+      </DLR>
+      <GTSS nameCN="共同诉讼" value="是"/>
+    </DSR>
+    <SSJL nameCN="诉讼记录" value=" ......">
+      <KTSL nameCN="开庭审理" value="是"/>
+      <KTSLXX nameCN="开庭审理信息" value="公开审理"/>
+      <KTRQ nameCN="开庭日期" value="2017年7月6日"/>
+      <QSRQ nameCN="起诉日期" value="2016年12月1日"/>
+      <AY nameCN="案由" value="民间借贷纠纷">
+        <WZAY nameCN="完整案由" value="民间借贷纠纷"/>
+        <AYDM nameCN="案由代码" value="9181"/>
+        <FJM nameCN="分级码" value="002004001024004"/>
+        <CUS_AYDM nameCN="案由代码" value="9181"/>
+      </AY>
+      <SSQQ nameCN="诉讼请求" value=""/>
+      <YSAJSYCX nameCN="一审案件适用程序" value="简易程序"/>
+      <DRSP nameCN="独任审判" value="是"/>
+      <JYZPT nameCN="简易转普通" value="否"/>
+      <YSAJLY nameCN="一审案件来源" value="新收"/>
+      <SPZZ nameCN="审判组织" value="独任庭"/>
+      <CTDSRXX nameCN="出庭当事人信息">
+        <CTRXM nameCN="出庭人姓名" value="韦斌姬">
+          <SSDW nameCN="诉讼地位" value="原告"/>
+        </CTRXM>
+        <CTRXM nameCN="出庭人姓名" value="韦斌强">
+          <SSDW nameCN="诉讼地位" value="被告"/>
+        </CTRXM>
+        <CTRXM nameCN="出庭人姓名" value="贾凌珂">
+          <SSDW nameCN="诉讼地位" value="诉讼代理人"/>
+        </CTRXM>
+      </CTDSRXX>
+      <SFBGSYCX nameCN="是否变更适用程序" value="否"/>
+    </SSJL>
+    <AJJBQK nameCN="案件基本情况" value=" ...... ">
+      <CMSSD nameCN="查明事实段" value="......">
+        <SFQDSMHT nameCN="是否签订书面合同" value="是"/>
+        <HTDBQKSFCZ nameCN="合同担保情况是否存在" value="否"/>
+      </CMSSD>
+      <BGRFS nameCN="被告人反诉" value="未提起反诉"/>
+    </AJJBQK>
+    <CPFXGC nameCN="裁判分析过程" value="......">
+      <AY nameCN="案由" value="民间借贷纠纷">
+        <WZAY nameCN="完整案由" value="民间借贷纠纷"/>
+        <AYDM nameCN="案由代码" value="9181"/>
+        <FJM nameCN="分级码" value="002004001024004"/>
+      </AY>
+      <FLFTYY nameCN="法律法条引用">
+        <FLFTFZ nameCN="法律法条分组">
+          <MC nameCN="名称" value="《中华人民共和国合同法》"/>
+          <T nameCN="条" value="第二百零六条"/>
+          <T nameCN="条" value="第二百零七条"/>
+        </FLFTFZ>
+      </FLFTYY>
+      <CUS_FLFT_FZ_RY nameCN="法律法条分组冗余">
+        <CUS_FLFT_RY nameCN="法律法条" value="《中华人民共和国合同法》第二百零六条"/>
+        <CUS_FLFT_RY nameCN="法律法条" value="《中华人民共和国合同法》第二百零七条"/>
+      </CUS_FLFT_FZ_RY>
+    </CPFXGC>
+    <PJJG nameCN="判决结果" value=" ......">
+      <GXQYY nameCN="提出管辖权异议" value="否"/>
+      <YSJAFS nameCN="一审结案方式" value="判决"/>
+      <PJJGNR nameCN="判决结果内容" value="......">
+        <PJZRCDFS nameCN="判决责任承担方式" value="继续履行"/>
+        <ZFLX nameCN="支付利息" value="是"/>
+        <PJJE nameCN="判决金额">
+          <JE nameCN="金额" value="76000元"/>
+          <JELX nameCN="金额类型" value="借款"/>
+        </PJJE>
+        <QLR nameCN="权利人" value="韦斌姬">
+          <DXLX nameCN="对象类型" value="权利人"/>
+          <SSDW nameCN="诉讼地位" value="原告"/>
+        </QLR>
+        <YWR nameCN="义务人" value="韦斌强">
+          <DXLX nameCN="对象类型" value="义务人"/>
+          <SSDW nameCN="诉讼地位" value="被告"/>
+        </YWR>
+        <YWR nameCN="义务人" value="杜满萍">
+          <DXLX nameCN="对象类型" value="义务人"/>
+          <SSDW nameCN="诉讼地位" value="被告"/>
+        </YWR>
+        <PJZXQX nameCN="判决执行期限" value="十日"/>
+        <CUS_WYAJDPJ nameCN="违约案件的判决 " value="返还原告金额"/>
+      </PJJGNR>
+      <PJJGNR nameCN="判决结果内容" value="二、驳回原告韦斌姬的其他诉讼请求。">
+        <PJZRCDFS nameCN="判决责任承担方式" value="驳回诉讼请求"/>
+        <CUS_WYAJDPJ nameCN="违约案件的判决 " value="驳回原告部分请求"/>
+      </PJJGNR>
+      <SFZCYGSSQQ nameCN="是否支持原告诉讼请求" value="部分支持部分不支持"/>
+      <SFTHAJSSF nameCN="是否退还案件诉讼费" value="否"/>
+      <KSSZ nameCN="可上诉至" value="浙江省金华市中级人民法院"/>
+      <SSTJCL nameCN="上诉提交材料" value="上诉状，并按对方当事人的人数提出副本"/>
+      <SSQX nameCN="上诉期限" value="十五日"/>
+      <SSFCD nameCN="诉讼费承担">
+        <SSFCDJL nameCN="诉讼费承担记录" value="......">
+          <SSFJE nameCN="诉讼费金额" value="1150元">
+            <SSFZL nameCN="诉讼费种类" value="受理费"/>
+          </SSFJE>
+          <SSFZJE nameCN="诉讼费总金额">
+            <JELH nameCN="金额量化" value="1150"/>
+          </SSFZJE>
+          <SSFCDFZ nameCN="诉讼费承担分组" value="由原告韦斌姬负担276元">
+            <CDR nameCN="承担人" value="韦斌姬">
+              <CDRDW nameCN="承担人地位" value="原告"/>
+              <CDJE nameCN="承担金额">
+                <JELH nameCN="金额量化" value="276"/>
+              </CDJE>
+              <CDFS nameCN="承担方式" value="个人独立承担该金额"/>
+            </CDR>
+            <CDJE nameCN="承担金额">
+              <JELH nameCN="金额量化" value="276"/>
+            </CDJE>
+            <TQQZJE nameCN="提取前置金额" value="......"/>
+            <JNQK nameCN="交纳情况" value="未交纳"/>
+          </SSFCDFZ>
+          <SSFCDFZ nameCN="诉讼费承担分组" value="由被告韦斌强、杜满萍负担874元">
+            <CDR nameCN="承担人" value="韦斌强">
+              <CDRDW nameCN="承担人地位" value="被告"/>
+              <CDJE nameCN="承担金额">
+                <JELH nameCN="金额量化" value="874"/>
+              </CDJE>
+              <CDFS nameCN="承担方式" value="与他人共同承担该金额"/>
+            </CDR>
+            <CDR nameCN="承担人" value="杜满萍">
+              <CDRDW nameCN="承担人地位" value="被告"/>
+              <CDJE nameCN="承担金额">
+                <JELH nameCN="金额量化" value="874"/>
+              </CDJE>
+              <CDFS nameCN="承担方式" value="与他人共同承担该金额"/>
+            </CDR>
+            <CDJE nameCN="承担金额">
+              <JELH nameCN="金额量化" value="874"/>
+            </CDJE>
+            <TQQZJE nameCN="提取前置金额" value="案件受理费2300元，减半收取1150元，由原告韦斌姬负担276元，由被告韦斌强、杜满萍负担874元"/>
+            <JNQK nameCN="交纳情况" value="未交纳"/>
+          </SSFCDFZ>
+          <SSFJSFJB nameCN="诉讼费是否减半" value="是"/>
+        </SSFCDJL>
+        <SSFCDJL nameCN="诉讼费承担记录" value="鉴定费3200元（已由被告杜满萍预交），由被告杜满萍负担。">
+          <SSFJE nameCN="诉讼费金额" value="3200元">
+            <SSFZL nameCN="诉讼费种类" value="鉴定费"/>
+          </SSFJE>
+          <SSFZJE nameCN="诉讼费总金额">
+            <JELH nameCN="金额量化" value="3200"/>
+          </SSFZJE>
+          <SSFCDFZ nameCN="诉讼费承担分组" value="由被告杜满萍负担">
+            <CDR nameCN="承担人" value="杜满萍">
+              <CDRDW nameCN="承担人地位" value="被告"/>
+              <CDJE nameCN="承担金额">
+                <JELH nameCN="金额量化" value="3200"/>
+              </CDJE>
+              <CDFS nameCN="承担方式" value="个人独立承担该金额"/>
+            </CDR>
+            <TQQZJE nameCN="提取前置金额" value="鉴定费3200元（），由被告杜满萍负担"/>
+            <JNQK nameCN="交纳情况" value="未交纳"/>
+          </SSFCDFZ>
+          <SSFJSFJB nameCN="诉讼费是否减半" value="否"/>
+        </SSFCDJL>
+        <SSFYJJL nameCN="诉讼费预交记录" value="案件受理费2300元，减半收取1150元，由原告韦斌姬负担276元，由被告韦斌强、杜满萍负担874元；鉴定费3200元（已由被告杜满萍预交），由被告杜满萍负担。">
+          <SSFJE nameCN="诉讼费金额" value="1150元">
+            <SSFZL nameCN="诉讼费种类" value="受理费"/>
+          </SSFJE>
+          <SSFZJE nameCN="诉讼费总金额">
+            <JELH nameCN="金额量化" value="1150"/>
+          </SSFZJE>
+          <SSFYJFZ nameCN="诉讼费预交分组" value="已由被告杜满萍预交">
+            <YJR nameCN="预交人" value="杜满萍">
+              <YJRDW nameCN="预交人地位" value="被告"/>
+              <YJFS nameCN="预交方式" value="个人独立预交该金额"/>
+            </YJR>
+            <TQQZJE nameCN="提取前置金额" value="......"/>
+          </SSFYJFZ>
+        </SSFYJJL>
+      </SSFCD>
+      <BQCSFZ nameCN="保全措施分组" value="其他诉讼请求。">
+        <BQCS nameCN="保全措施" value="其他"/>
+      </BQCSFZ>
+      <BQCC nameCN="保全财产" value="76000元">
+        <JELH nameCN="金额量化" value="76000"/>
+      </BQCC>
+      <CUS_JABDE nameCN="结案标的额">
+        <CUS_JE nameCN="金额" value="76000元"/>
+      </CUS_JABDE>
+      <CUS_JABDZE nameCN="结案标的总额" value="76000元"/>
+    </PJJG>
+    <WW nameCN="文尾" value=" 审判员甘震 二〇一七年七月七日 代书记员许天瑶 ">
+      <CPSJ nameCN="裁判时间" value="2017年7月7日">
+        <JAND nameCN="结案年度" value="2017"/>
+        <CUS_JANYR nameCN="结案年月日" value="2017年7月7日"/>
+        <CUS_JANY nameCN="结案年月" value="2017-7"/>
+        <CUS_JAYF nameCN="结案月份" value="7"/>
+      </CPSJ>
+      <SPZZCY nameCN="审判组织成员">
+        <SPRYXM nameCN="审判人员姓名" value="甘震"/>
+        <SPRYJS nameCN="审判人员角色" value="审判员"/>
+      </SPZZCY>
+      <SPZZCY nameCN="审判组织成员">
+        <SPRYXM nameCN="审判人员姓名" value="许天瑶"/>
+        <SPRYJS nameCN="审判人员角色" value="代书记员"/>
+      </SPZZCY>
+      <LKRQ nameCN="落款日期" value="2017年7月7日"/>
+      <CUS_FGCY nameCN="法官成员">
+        <FGRYXM nameCN="法官人员姓名" value="甘震"/>
+        <FGRYJS nameCN="法官人员角色" value="审判员"/>
+        <FGRYWZ nameCN="法官人员完整" value="甘震_浙江省东阳市人民法院"/>
+      </CUS_FGCY>
+    </WW>
+    <WSSFMH nameCN="文书是否模糊" value="否"/>
+    <CUS_SJX nameCN="时间线" value="时间线">
+      <CUS_SJ nameCN="时间">
+        <CUS_DLLY nameCN="段落来源" value="查明事实段"/>
+        <CUS_YW nameCN="原文" value="......"/>
+        <CUS_SJYW nameCN="时间原文" value="......"/>
+        <CUS_JTSJ nameCN="具体时间" value="2011年4月25日"/>
+      </CUS_SJ>
+    </CUS_SJX>
+  </QW> </p>
+<p><CUS_FJD nameCN="附加段" oValue="是" value="是">
+    <AJLB nameCN="案件类别" oValue="民事案件" value="民事案件"/>
+    <SPCX nameCN="审判程序" oValue="一审案件" value="一审案件"/>
+    <CUS_AY nameCN="民事案由" oValue="民间借贷纠纷">
+      <WZAY nameCN="完整案由" oValue="民间借贷纠纷" value="民间借贷纠纷"/>
+      <AYDM nameCN="案由代码" oValue="9181" value="9181"/>
+      <FJM nameCN="分级码" oValue="002004001024004" value="002004001024004"/>
+      <FAYDM nameCN="父案由代码" oValue="9177" value="9177"/>
+      <FAY nameCN="父案由" oValue="借款合同纠纷" value="借款合同纠纷"/>
+    </CUS_AY>
+  </CUS_FJD>
+  <CUS_CPWS_CPFXGC nameCN="自定义_裁判文书_裁判分析过程" oValue="本院依照《中华人民共和国合同法》第二百零六条、第二百零七条之规定，判决如下：" value="本院依照《中华人民共和国合同法》第二百零六条、第二百零七条之规定，判决如下："/>
+  <CUS_CPWS_CMSSD nameCN="......" value="......"/>
+  <CUS_CPWS_DSR nameCN="自定义_裁判文书_当事人" oValue="原告：......" value="......"/>
+  <CUS_CPWS_PJJG nameCN="自定义_裁判文书_判决结果" oValue=" 一、法院。"/>
+  <CUS_CPWS_QW nameCN="自定义_裁判文书_全文" oValue="浙江 "/>
+  <FT value="《中华人民共和国合同法》第二百零七条"/>
+  <FTRY value="《中华人民共和国合同法》第二百零七条" errorValue="《中华人民共和国合同法》第二百零七条"/>
+  <FT value="《中华人民共和国合同法》第二百零六条"/>
+  <FTRY value="《中华人民共和国合同法》第二百零六条" errorValue="《中华人民共和国合同法》第二百零六条"/>
+</writ>
+```</p>
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+        </div>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    <script id="__config" type="application/json">{"base": "../..", "features": [], "search": "../../assets/javascripts/workers/search.208ed371.min.js", "translations": {"clipboard.copied": "\u5df2\u590d\u5236", "clipboard.copy": "\u590d\u5236", "search.result.more.one": "\u5728\u8be5\u9875\u4e0a\u8fd8\u6709 1 \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.more.other": "\u5728\u8be5\u9875\u4e0a\u8fd8\u6709 # \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.none": "\u6ca1\u6709\u627e\u5230\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.one": "\u627e\u5230 1 \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.other": "# \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.placeholder": "\u952e\u5165\u4ee5\u5f00\u59cb\u641c\u7d22", "search.result.term.missing": "\u7f3a\u5c11", "select.version": "\u9009\u62e9\u5f53\u524d\u7248\u672c"}}</script>
+    
+    
+      <script src="../../assets/javascripts/bundle.51198bba.min.js"></script>
+      
+    
+  </body>
+</html>
