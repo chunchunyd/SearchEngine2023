@@ -34,14 +34,17 @@ def search_by_keywords(words):
     # # 代理人信息搜索
     # agents = Agent.objects.filter(name__in=words)
     # 审判人员信息搜索
-    judges = Judge.objects.filter(name__in=words)
+    judges = list(JudgeSerializer(Judge.objects.filter(full_name__in=words), many=True).data)
+    for judge in list(JudgeSerializer(Judge.objects.filter(name__in=words), many=True).data):
+        if judge not in judges:
+            judges.append(judge)
 
     return {
         'courts': CourtSerializer(courts, many=True).data,
         'procuratorates': ProcuratorateSerializer(procuratorates, many=True).data,
         # 'parties': PartySerializer(parties, many=True).data,
         # 'agents': AgentSerializer(agents, many=True).data,
-        'judges': JudgeSerializer(judges, many=True).data
+        'judges': judges,
     }
 
 
@@ -276,8 +279,14 @@ def similar_search(request):
         # 解析xml文件, 获取全文
         with open(xml_file_path, 'r', encoding='utf-8') as f:
             xml_content = f.read()
-            soup = bs4.BeautifulSoup(xml_content, features="xml")
-            full_text = soup.find('QW').get('value')
+            print(xml_file_path)
+            if xml_file_path.endswith('.xml_tmp'):
+                soup = bs4.BeautifulSoup(xml_content, features="xml")
+                full_text = soup.find('QW').get('value')
+                judges = soup.find_all('FGRYWZ')
+                judge_list = [judge.get('value') for judge in judges]
+            elif xml_file_path.endswith('.txt_tmp'):
+                full_text = xml_content
         # 分词 + 去除停用词 + 筛选出user_dict中的词
         words = jieba.lcut(full_text)
         stop_words = json.load(open(SIGN_WORDS_PATH, 'r', encoding='utf-8'))
@@ -292,6 +301,9 @@ def similar_search(request):
                 word_list.append(word)
                 if word in user_dict:
                     user_word_list.append(word)
+        if len(judge_list) > 0:
+            for judge in judge_list:
+                user_word_list.append(judge)
         print(f'user_word_list: {user_word_list}')
         # 关键词查询
         keywords_result = search_by_keywords(user_word_list)
