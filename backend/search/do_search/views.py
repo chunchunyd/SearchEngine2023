@@ -258,6 +258,9 @@ def similar_search(request):
     """
     上传一个xml文件，返回相似文档
     """
+    st_time = time.time()
+    stop_watch = st_time
+
     if request.method != 'POST':
         return JsonResponse({
             "status": "Error",
@@ -275,6 +278,11 @@ def similar_search(request):
         for chunk in xml_file.chunks():
             f.write(chunk)
 
+    
+    now = time.time()
+    print(f'读文件{now - stop_watch:.2f}s')
+    stop_watch = now
+
     try:
         # 解析xml文件, 获取全文
         with open(xml_file_path, 'r', encoding='utf-8') as f:
@@ -288,6 +296,11 @@ def similar_search(request):
             elif xml_file_path.endswith('.txt_tmp'):
                 full_text = xml_content
         # 分词 + 去除停用词 + 筛选出user_dict中的词
+
+        now = time.time()
+        print(f'解析xml{now - stop_watch:.2f}s')
+        stop_watch = now
+
         words = jieba.lcut(full_text)
         stop_words = json.load(open(SIGN_WORDS_PATH, 'r', encoding='utf-8'))
         with open(STOP_WORDS_PATH, 'r', encoding='utf-8') as f:
@@ -296,17 +309,30 @@ def similar_search(request):
             user_dict = json.load(f)
         word_list = []
         user_word_list = []
+
+        now = time.time()
+        print(f'分词{now - stop_watch:.2f}s')
+        stop_watch = now
+
         for word in words:
             if word not in stop_words:
                 word_list.append(word)
-                if word in user_dict:
-                    user_word_list.append(word)
+        user_word_list = word_list
         if len(judge_list) > 0:
             for judge in judge_list:
                 user_word_list.append(judge)
-        print(f'user_word_list: {user_word_list}')
+        # print(f'user_word_list: {user_word_list}')
         # 关键词查询
+
+        now = time.time()
+        print(f'去停用词{now - stop_watch:.2f}s')
+        stop_watch = now
+
         keywords_result = search_by_keywords(user_word_list)
+
+        now = time.time()
+        print(f'关键词查询{now - stop_watch:.2f}s')
+        stop_watch = now
 
         # 对全文进行文本相似搜索
         similar_docs = get_similar_docs(word_list, 20)
