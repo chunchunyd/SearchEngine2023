@@ -1,7 +1,7 @@
 import axios from 'axios'
 
 export function search(_this, par) {
-  axios.get('/api/text_search', {
+  axios.get('/api/text_search/', {
     params: {
       query: par
     }
@@ -11,18 +11,21 @@ export function search(_this, par) {
       _this.data = d.result.doc_list
       _this.totalnum = d.result.total_page * 10
       _this.matchkey = d.result.word_list
+      _this.court = d.keywords_result.courts
+      _this.judge = d.keywords_result.judges
       _this.computehighlight()
+      _this.status = 1
     } else {
-      _this.$alert('error!')
+      _this.$alert('search error!')
     }
   }).catch(function (error) {
     console.log(error)
-    _this.$alert('error!')
+    _this.$alert('search error!')
   })
 }
 
 export function searchpage(_this, par, page) {
-  axios.get('/api/text_search', {
+  axios.get('/api/text_search/', {
     params: {
       query: par,
       page: page
@@ -35,50 +38,53 @@ export function searchpage(_this, par, page) {
       _this.matchkey = d.result.word_list
       _this.computehighlight()
     } else {
-      _this.$alert('error!')
+      _this.$alert('searchpage error!')
     }
   }).catch(function (error) {
     console.log(error)
-    _this.$alert('error!')
+    _this.$alert('searchpage error!')
   })
 }
 
 function getcarddata(_this) {
-  axios.get('/api/court/' + _this.court, {
+  axios.get('/api/court/' + _this.court + '/', {
     params: {
     }
   }).then((response) => {
     const d = response.data
     if (response.status === 200) {
       _this.courtdata = d
+      _this.status += 1
     } else {
-      _this.$alert('error!')
+      _this.$alert('getcarddata error!')
     }
   }).catch(function (error) {
     console.log(error)
-    _this.$alert('error!')
+    _this.$alert('getcarddata error!')
   })
   _this.judgedata = []
   //  遍历_this.judge数组
   for (let i = 0; i < _this.judge.length; i++) {
-    axios.get('/api/judge/' + _this.judge[i], {
+    axios.get('/api/judge/' + _this.judge[i] + '/', {
       params: {
       }
     }).then((response) => {
       const d = response.data
       if (response.status === 200) {
         _this.judgedata.push(d)
+        _this.status += 1
       } else {
-        _this.$alert('error!')
+        _this.$alert('getcarddata error!')
       }
     }).catch(function (error) {
       console.log(error)
-      _this.$alert('error!')
+      _this.$alert('getcarddata error!')
     })
   }
 }
 
 export function getxml(_this, addr) {
+// 获得xml数据，并解析（展示时根据doctype展示）
   axios.get('/' + addr, {
     params: {
     }
@@ -88,34 +94,55 @@ export function getxml(_this, addr) {
       _this.xml_data = d
       _this.parsexml()
     } else {
-      _this.$alert('error!')
+      _this.$alert('getxml error1!')
     }
   }).catch(function (error) {
     console.log(error)
-    _this.$alert('error!')
+    _this.$alert('getxml error2!')
   })
 
-  axios.get('/api/judgment', {
+  // 串行获得doc_type，根据doc_type并行解析数据、获得卡片信息等
+  axios.get('/api/document/', {
     params: {
       address: addr
     }
   }).then((response) => {
     const d = response.data
     if (response.status === 200) {
-      _this.court = d.results[0].court
-      _this.judge = d.results[0].judge
-      getcarddata(_this)
+      _this.type = d.results[0].doc_type
+      if (_this.type === '判决书' || _this.type === '裁定书' || _this.type === '调解书' || _this.type === '决定书') {
+        axios.get('/api/judgment/', {
+          params: {
+            address: addr
+          }
+        }).then((response) => {
+          const d = response.data
+          if (response.status === 200) {
+            _this.court = d.results[0].court
+            _this.judge = d.results[0].judge
+            _this.status = -_this.judge.length
+            getcarddata(_this)
+          } else {
+            _this.$alert('getxml error3!')
+          }
+        }).catch(function (error) {
+          console.log(error)
+          _this.$alert('getxml error4!')
+        })
+      } else {
+        _this.status = 1
+      }
     } else {
-      _this.$alert('error!')
+      _this.$alert('getxml error5!')
     }
   }).catch(function (error) {
     console.log(error)
-    _this.$alert('error!')
+    _this.$alert('getxml error6!')
   })
 }
 
 export function searchcourt(_this) {
-  axios.get('/api/court', {
+  axios.get('/api/court/', {
     params: {
     }
   }).then((response) => {
@@ -124,16 +151,16 @@ export function searchcourt(_this) {
       _this.data = d.results
       _this.totalnum = d.count
     } else {
-      _this.$alert('error!')
+      _this.$alert('searchcourt error!')
     }
   }).catch(function (error) {
     console.log(error)
-    _this.$alert('error!')
+    _this.$alert('searchcourt error!')
   })
 }
 
 export function searchcourtpage(_this, page) {
-  axios.get('/api/court', {
+  axios.get('/api/court/', {
     params: {
       offset: (page - 1) * 10
     }
@@ -143,15 +170,15 @@ export function searchcourtpage(_this, page) {
       _this.data = d.results
       _this.totalnum = d.count
     } else {
-      _this.$alert('error!')
+      _this.$alert('searchcourtpage error!')
     }
   }).catch(function (error) {
     console.log(error)
-    _this.$alert('error!')
+    _this.$alert('searchcourtpage error!')
   })
 }
 export function searchjudge(_this) {
-  axios.get('/api/judge', {
+  axios.get('/api/judge/', {
     params: {
     }
   }).then((response) => {
@@ -160,16 +187,16 @@ export function searchjudge(_this) {
       _this.data = d.results
       _this.totalnum = d.count
     } else {
-      _this.$alert('error!')
+      _this.$alert('searchjudge error!')
     }
   }).catch(function (error) {
     console.log(error)
-    _this.$alert('error!')
+    _this.$alert('searchjudge error!')
   })
 }
 
 export function searchjudgepage(_this, page) {
-  axios.get('/api/judge', {
+  axios.get('/api/judge/', {
     params: {
       offset: (page - 1) * 10
     }
@@ -179,11 +206,11 @@ export function searchjudgepage(_this, page) {
       _this.data = d.results
       _this.totalnum = d.count
     } else {
-      _this.$alert('error!')
+      _this.$alert('searchjudgepage error!')
     }
   }).catch(function (error) {
     console.log(error)
-    _this.$alert('error!')
+    _this.$alert('searchjudgepage error!')
   })
 }
 
@@ -198,19 +225,20 @@ export function getrelatedata(_this, type, id) {
       judge: id
     }
   }
-  axios.get('/api/judgment', {
+  axios.get('/api/judgment/', {
     params: par
   }).then((response) => {
     const d = response.data
     if (response.status === 200) {
       _this.data = d.results
       _this.totalnum = d.count
+      _this.status = 1
     } else {
-      _this.$alert('error!')
+      _this.$alert('getrelatedata error!')
     }
   }).catch(function (error) {
     console.log(error)
-    _this.$alert('error!')
+    _this.$alert('getrelatedata error!')
   })
 }
 
@@ -227,7 +255,7 @@ export function getrelatedatapage(_this, type, id, page) {
       offset: (page - 1) * 10
     }
   }
-  axios.get('/api/judgment', {
+  axios.get('/api/judgment/', {
     params: par
   }).then((response) => {
     const d = response.data
@@ -235,10 +263,28 @@ export function getrelatedatapage(_this, type, id, page) {
       _this.data = d.results
       _this.totalnum = d.count
     } else {
-      _this.$alert('error!')
+      _this.$alert('getrelatedatapage error!')
     }
   }).catch(function (error) {
     console.log(error)
-    _this.$alert('error!')
+    _this.$alert('getrelatedatapage error!')
+  })
+}
+
+export function similarsearch(_this, form) {
+  axios.post('/api/similar_search/', form
+  ).then((response) => {
+    const d = response.data
+    if (response.status === 200) {
+      _this.similardata = d.result.similar_result.doc_list
+      _this.similarcourt = d.result.keywords_result.courts
+      _this.similarjudge = d.result.keywords_result.judges
+      _this.status = 2
+    } else {
+      _this.$alert('similarsearch error!')
+    }
+  }).catch(function (error) {
+    console.log(error)
+    _this.$alert('similarsearch error!')
   })
 }

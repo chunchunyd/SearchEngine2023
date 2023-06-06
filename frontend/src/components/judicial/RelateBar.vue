@@ -1,5 +1,5 @@
 <template>
-<div>
+<div v-if="this.status==1">
     <!-- Service Start -->
     <div class="container-xxl">
         <div class="container">
@@ -66,7 +66,8 @@ export default {
     return {
       data: [],
       pageid: 0,
-      totalnum: 0
+      totalnum: 0,
+      status: 0
     }
   },
   methods: {
@@ -92,6 +93,7 @@ export default {
   watch: {
     text: {
       handler(text) {
+        this.status = 0
         getrelatedata(this, this.type, this.id)
       }
     }
