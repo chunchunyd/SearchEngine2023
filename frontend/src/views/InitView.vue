@@ -5,11 +5,11 @@
         <div class="row gx-0">
             <div class="col-lg-8 text-center text-lg-start mb-2 mb-lg-0">
                 <div class="d-inline-flex align-items-center" style="height: 45px;">
-                    <small class="me-3 text-light"><i class="fa fa-map-marker-alt me-2" v-on:click="home">Home</i></small>
-                    <small class="me-3 text-light"><i class="fa fa-phone-alt me-2"><router-link to="/about">About</router-link></i></small>
-                    <small class="me-3 text-light"><i class="fa fa-phone-alt me-2" v-on:click="back">Back</i></small>
-                    <small class="me-3 text-light"><i class="fa fa-phone-alt me-2" v-on:click="court">Court</i></small>
-                    <small class="me-3 text-light"><i class="fa fa-phone-alt me-2" v-on:click="judge">Judge</i></small>
+                    <small class="me-3 text-light"><i class="fa fa-map-marker-alt me-2" v-on:click="home"><router-link to="">Home</router-link></i></small>
+                    <small class="me-3 text-light"><i class="fa fa-phone-alt me-2"><a href="http://localhost:8001">About</a></i></small>
+                    <small class="me-3 text-light"><i class="fa fa-phone-alt me-2" v-on:click="back"><router-link to="">Back</router-link></i></small>
+                    <small class="me-3 text-light"><i class="fa fa-phone-alt me-2" v-on:click="court"><router-link to="">Court</router-link></i></small>
+                    <small class="me-3 text-light"><i class="fa fa-phone-alt me-2" v-on:click="judge"><router-link to="">Judge</router-link></i></small>
                 </div>
             </div>
         </div>

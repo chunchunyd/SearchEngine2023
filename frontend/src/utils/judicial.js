@@ -16,11 +16,11 @@ export function search(_this, par) {
       _this.computehighlight()
       _this.status = 1
     } else {
-      _this.$alert('search error!')
+      _this.$alert('请检查输入格式!')
     }
   }).catch(function (error) {
     console.log(error)
-    _this.$alert('search error!')
+    _this.$alert('请检查输入格式!')
   })
 }
 
@@ -285,6 +285,6 @@ export function similarsearch(_this, form) {
     }
   }).catch(function (error) {
     console.log(error)
-    _this.$alert('similarsearch error!')
+    _this.$alert('仅支持xml/txt文件!')
   })
 }

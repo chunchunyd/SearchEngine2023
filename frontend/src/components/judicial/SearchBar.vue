@@ -131,7 +131,7 @@
                       <h6 class="section-title bg-white text-center text-primary px-3">相关法官</h6>
                   </div>
                   <div class="allresult row g-4">
-                      <div v-for="item in judge" :key="item" class="service-item rounded pt-3" v-on:click="display_relate(item.id, item.name)">
+                      <div v-for="item in judge_cut" :key="item" class="service-item rounded pt-3" v-on:click="display_relate(item.id, item.name)">
                           <div class="p-4">
                             <i class="fa fa-3x fa-globe text-primary mb-4"></i>
                             <h5>{{item.name}}</h5>
@@ -168,6 +168,7 @@
                   </div>
               </div>
           </div>
+          <br/><br/>
           <!-- Service End -->
         </el-col>
         <el-col :span="7">
@@ -197,7 +198,7 @@
                       <h6 class="section-title bg-white text-center text-primary px-3">相似法官</h6>
                   </div>
                   <div class="allresult row g-4">
-                      <div v-for="item in similarjudge" :key="item" class="service-item rounded pt-3" v-on:click="display_relate(item.id, item.name)">
+                      <div v-for="item in similarjudge_cut" :key="item" class="service-item rounded pt-3" v-on:click="display_relate(item.id, item.name)">
                           <div class="p-4">
                             <i class="fa fa-3x fa-globe text-primary mb-4"></i>
                             <h5>{{item.name}}</h5>
@@ -222,14 +223,27 @@
           </div>
       </div>
     </div>
+
+    <div v-if="this.status==4">
+      <div class="container-xxl">
+          <div class="container">
+              <div class="text-center wow fadeInUp" data-wow-delay="0.1s">
+                  <h6 class="section-title bg-white text-center text-primary px-3">加载中...</h6>
+              </div>
+          </div>
+      </div>
+      <WaveBottom/>
+    </div>
 </div>
 </template>
 
 <script>
 import { search, searchpage, similarsearch } from '@/utils/judicial.js'
+import WaveBottom from './WaveBottom.vue'
 export default {
   name: 'SearchBar',
   components: {
+    WaveBottom
   },
   props: {
     to_display: {
@@ -252,6 +266,12 @@ export default {
     },
     judge_avail: function () {
       return this.judge.length > 0
+    },
+    judge_cut: function () {
+      return this.judge.slice(0, 5)
+    },
+    similarjudge_cut: function () {
+      return this.similarjudge.slice(0, 5)
     }
   },
   data() {
@@ -323,7 +343,7 @@ export default {
     },
     upload(file) {
       // 读取文件内容,将内容赋值给input
-      this.status = 3
+      this.status = 4
       const formData = new FormData()
       formData.append('xml_file', file)
       similarsearch(this, formData)

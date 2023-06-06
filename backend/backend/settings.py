@@ -154,7 +154,11 @@ SIGN_WORDS_PATH = os.path.join(BASE_DIR, 'resources', 'sign.json')
 USER_DICT_PATH = os.path.join(BASE_DIR, 'resources', 'user_dict.json')
 DEFAULT_PAGE_SIZE = 10
 
+
 # jieba初始化(加载用户词典)
 import jieba
-
 jieba.load_userdict(os.path.join(BASE_DIR, 'resources', 'user_dict.txt'))
+
+# 加载模型
+from gensim.models.doc2vec import Doc2Vec, TaggedDocument
+D2V_MODEL = Doc2Vec.load(os.path.join(BASE_DIR, 'resources', 'doc2vec_models', 'doc2vec.model'))

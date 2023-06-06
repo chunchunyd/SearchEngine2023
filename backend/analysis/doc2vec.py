@@ -5,7 +5,7 @@ import os
 import time
 from gensim.models.doc2vec import Doc2Vec, TaggedDocument
 from common.models import LawDocument
-from backend.settings import BASE_DIR, SIGN_WORDS_PATH, STOP_WORDS_PATH, MONGO_DB
+from backend.settings import BASE_DIR, SIGN_WORDS_PATH, STOP_WORDS_PATH, MONGO_DB, D2V_MODEL
 
 
 # 用于从sql获取文本并分词的迭代器
@@ -162,10 +162,8 @@ def get_similar_docs_by_id(doc_id, topn=10):
     """
     获取相似文档
     """
-    # 加载模型
-    model = Doc2Vec.load(os.path.join(BASE_DIR, 'resources', 'doc2vec_models', 'doc2vec.model'))
     # 获取相似文档
-    similar_docs = model.docvecs.most_similar(doc_id, topn=topn)
+    similar_docs = D2V_MODEL.docvecs.most_similar(doc_id, topn=topn)
     # 获取相似文档的id
     similar_docs_ids = [doc_id for doc_id, _ in similar_docs]
     return similar_docs_ids
@@ -175,13 +173,33 @@ def get_similar_docs_by_word_list(word_list, topn=10):
     """
     获取相似文档
     """
-    # 加载模型
-    model = Doc2Vec.load(os.path.join(BASE_DIR, 'resources', 'doc2vec_models', 'doc2vec.model'))
+    import time
+    st_time = time.time()
+    stop_watch = st_time
+    now = time.time()
+    print(f'加载模型用时{now - stop_watch:.2f}s')
+    stop_watch = now
+
     # 获取向量
-    vector = model.infer_vector(word_list)
+    vector = D2V_MODEL.infer_vector(word_list)
+
+    now = time.time()
+    print(f'获取向量用时{now - stop_watch:.2f}s')
+    stop_watch = now
+
     # 获取相似文档
-    # similar_docs = model.docvecs.most_similar(positive=word_list, topn=topn)
-    similar_docs = model.docvecs.most_similar([vector], topn=topn)
+    # similar_docs = D2V_MODEL.docvecs.most_similar(positive=word_list, topn=topn)
+    similar_docs = D2V_MODEL.docvecs.most_similar([vector], topn=topn)
+
+    now = time.time()
+    print(f'获取相似文档用时{now - stop_watch:.2f}s')
+    stop_watch = now
+
     # 获取相似文档的id
     similar_docs_ids = [doc_id for doc_id, _ in similar_docs]
+
+    now = time.time()
+    print(f'获取相似文档的id用时{now - stop_watch:.2f}s')
+    stop_watch = now
+    
     return similar_docs_ids
