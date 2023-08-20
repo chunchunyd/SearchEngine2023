@@ -1,0 +1,1549 @@
+
+<!doctype html>
+<html lang="zh" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+        <meta name="description" content="搜索引擎文档">
+      
+      
+      
+      
+      
+      <link rel="icon" href="../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.5.2, mkdocs-material-9.1.21">
+    
+    
+      
+        <title>实验报告 - 搜索引擎</title>
+      
+    
+    
+      <link rel="stylesheet" href="../assets/stylesheets/main.eebd395e.min.css">
+      
+        
+        <link rel="stylesheet" href="../assets/stylesheets/palette.ecc896b0.min.css">
+      
+      
+
+    
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+      <link rel="stylesheet" href="../resources/css/extra.css">
+    
+    <script>__md_scope=new URL("..",location),__md_hash=e=>[...e].reduce((e,_)=>(e<<5)-e+_.charCodeAt(0),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+    
+  </head>
+  
+  
+    
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="purple" data-md-color-accent="indigo">
+  
+    
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#_1" class="md-skip">
+          跳转至
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+  
+
+<header class="md-header md-header--shadow" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="页眉">
+    <a href=".." title="搜索引擎" class="md-header__button md-logo" aria-label="搜索引擎" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54Z"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3V6m0 5h18v2H3v-2m0 5h18v2H3v-2Z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            搜索引擎
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              实验报告
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+    
+    
+    
+      <label class="md-header__button md-icon" for="__search">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.516 6.516 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5Z"/></svg>
+      </label>
+      <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="搜索" placeholder="搜索" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.516 6.516 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5Z"/></svg>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12Z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="查找">
+        
+        <button type="reset" class="md-search__icon md-icon" title="清空当前内容" aria-label="清空当前内容" tabindex="-1">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12 19 6.41Z"/></svg>
+        </button>
+      </nav>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            正在初始化搜索引擎
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+    
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+<nav class="md-nav md-nav--primary" aria-label="导航栏" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href=".." title="搜索引擎" class="md-nav__button md-logo" aria-label="搜索引擎" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54Z"/></svg>
+
+    </a>
+    搜索引擎
+  </label>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
+      <a href=".." class="md-nav__link">
+        2023年春季学期搜索引擎大作业
+      </a>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../1.%20%E6%A6%82%E8%BF%B0/%E6%A6%82%E8%BF%B0/" class="md-nav__link">
+        1. 概述
+      </a>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+      
+      
+      <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3" >
+      
+      
+      
+        <label class="md-nav__link" for="__nav_3" id="__nav_3_label" tabindex="0">
+          2. 结构设计
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="false">
+        <label class="md-nav__title" for="__nav_3">
+          <span class="md-nav__icon md-icon"></span>
+          2. 结构设计
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../2.%20%E7%BB%93%E6%9E%84%E8%AE%BE%E8%AE%A1/2.1%20%E9%A1%B9%E7%9B%AE%E6%9E%84%E5%9E%8B/" class="md-nav__link">
+        2.1 项目构型
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../2.%20%E7%BB%93%E6%9E%84%E8%AE%BE%E8%AE%A1/2.2%20%E4%BB%93%E5%BA%93%E7%BB%93%E6%9E%84/" class="md-nav__link">
+        2.2 仓库结构
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../2.%20%E7%BB%93%E6%9E%84%E8%AE%BE%E8%AE%A1/2.3%20%E5%8A%9F%E8%83%BD%E5%88%92%E5%88%86/" class="md-nav__link">
+        2.3 功能划分
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+      
+      
+      <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4" >
+      
+      
+      
+        <label class="md-nav__link" for="__nav_4" id="__nav_4_label" tabindex="0">
+          3. 前端模块介绍
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_4_label" aria-expanded="false">
+        <label class="md-nav__title" for="__nav_4">
+          <span class="md-nav__icon md-icon"></span>
+          3. 前端模块介绍
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../3.%20%E5%89%8D%E7%AB%AF%E6%A8%A1%E5%9D%97%E4%BB%8B%E7%BB%8D/3.1%20%E6%A1%86%E6%9E%B6%E5%9B%BE/" class="md-nav__link">
+        3.1 框架图
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../3.%20%E5%89%8D%E7%AB%AF%E6%A8%A1%E5%9D%97%E4%BB%8B%E7%BB%8D/3.2%20%E5%8A%9F%E8%83%BD%E5%B1%95%E7%A4%BA/" class="md-nav__link">
+        3.2 功能展示
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../3.%20%E5%89%8D%E7%AB%AF%E6%A8%A1%E5%9D%97%E4%BB%8B%E7%BB%8D/3.3%20%E4%B8%BB%E8%A6%81%E5%87%BD%E6%95%B0/" class="md-nav__link">
+        3.3 主要函数
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+      
+      
+      <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_5" >
+      
+      
+      
+        <label class="md-nav__link" for="__nav_5" id="__nav_5_label" tabindex="0">
+          4. 后端模块介绍
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_5_label" aria-expanded="false">
+        <label class="md-nav__title" for="__nav_5">
+          <span class="md-nav__icon md-icon"></span>
+          4. 后端模块介绍
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+      
+      
+      <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_5_1" >
+      
+      
+      
+        <label class="md-nav__link" for="__nav_5_1" id="__nav_5_1_label" tabindex="0">
+          4.1 数据库设计
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_5_1_label" aria-expanded="false">
+        <label class="md-nav__title" for="__nav_5_1">
+          <span class="md-nav__icon md-icon"></span>
+          4.1 数据库设计
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../4.%20%E5%90%8E%E7%AB%AF%E6%A8%A1%E5%9D%97%E4%BB%8B%E7%BB%8D/4.1%20common/4.1.1%20%E6%96%87%E4%B9%A6%E7%B1%BB%E5%9E%8B%E5%88%86%E6%9E%90/" class="md-nav__link">
+        4.1.1 文书类型分析
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../4.%20%E5%90%8E%E7%AB%AF%E6%A8%A1%E5%9D%97%E4%BB%8B%E7%BB%8D/4.1%20common/4.1.2%20%E6%95%B0%E6%8D%AE%E5%BA%93%E6%A8%A1%E5%9E%8B%E8%AE%BE%E8%AE%A1/" class="md-nav__link">
+        4.1.2 数据库模型设计
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../4.%20%E5%90%8E%E7%AB%AF%E6%A8%A1%E5%9D%97%E4%BB%8B%E7%BB%8D/4.2%20%E6%95%B0%E6%8D%AE%E6%8A%93%E5%8F%96%E5%AD%90%E7%B3%BB%E7%BB%9F/" class="md-nav__link">
+        4.2 数据抓取子系统
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../4.%20%E5%90%8E%E7%AB%AF%E6%A8%A1%E5%9D%97%E4%BB%8B%E7%BB%8D/4.3%20%E5%86%85%E5%AE%B9%E7%B4%A2%E5%BC%95%E5%AD%90%E7%B3%BB%E7%BB%9F/" class="md-nav__link">
+        4.3 内容索引子系统
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+      
+      
+      <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_5_4" >
+      
+      
+      
+        <label class="md-nav__link" for="__nav_5_4" id="__nav_5_4_label" tabindex="0">
+          4.4 内容检索子系统
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_5_4_label" aria-expanded="false">
+        <label class="md-nav__title" for="__nav_5_4">
+          <span class="md-nav__icon md-icon"></span>
+          4.4 内容检索子系统
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../4.%20%E5%90%8E%E7%AB%AF%E6%A8%A1%E5%9D%97%E4%BB%8B%E7%BB%8D/4.4%20%E5%86%85%E5%AE%B9%E6%A3%80%E7%B4%A2%E5%AD%90%E7%B3%BB%E7%BB%9F/4.4.1%20%E6%A3%80%E7%B4%A2%E5%AD%90%E7%B3%BB%E7%BB%9F/" class="md-nav__link">
+        4.4.1 检索子系统
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../4.%20%E5%90%8E%E7%AB%AF%E6%A8%A1%E5%9D%97%E4%BB%8B%E7%BB%8D/4.4%20%E5%86%85%E5%AE%B9%E6%A3%80%E7%B4%A2%E5%AD%90%E7%B3%BB%E7%BB%9F/4.4.2%20%E8%A7%A3%E6%9E%90%E5%AD%90%E7%B3%BB%E7%BB%9F/" class="md-nav__link">
+        4.4.2 解析子系统
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../4.%20%E5%90%8E%E7%AB%AF%E6%A8%A1%E5%9D%97%E4%BB%8B%E7%BB%8D/4.5%20%E9%93%BE%E6%8E%A5%E5%88%86%E6%9E%90%E5%AD%90%E7%B3%BB%E7%BB%9F/" class="md-nav__link">
+        4.5 链接分析子系统
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+      
+      
+      <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_6" >
+      
+      
+      
+        <label class="md-nav__link" for="__nav_6" id="__nav_6_label" tabindex="0">
+          5. 优化过程
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_6_label" aria-expanded="false">
+        <label class="md-nav__title" for="__nav_6">
+          <span class="md-nav__icon md-icon"></span>
+          5. 优化过程
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../5.%20%E4%BC%98%E5%8C%96%E8%BF%87%E7%A8%8B/5.1%20%E6%90%9C%E7%B4%A2%E9%80%9F%E5%BA%A6%E4%BC%98%E5%8C%96/" class="md-nav__link">
+        5.1 搜索速度优化
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../5.%20%E4%BC%98%E5%8C%96%E8%BF%87%E7%A8%8B/5.2%20%E6%95%B0%E6%8D%AE%E5%A4%84%E7%90%86%E9%80%9F%E5%BA%A6%E4%BC%98%E5%8C%96/" class="md-nav__link">
+        5.2 数据处理速度优化
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../5.%20%E4%BC%98%E5%8C%96%E8%BF%87%E7%A8%8B/5.3%20%E7%B4%A2%E5%BC%95%E5%BB%BA%E7%AB%8B%E9%80%9F%E5%BA%A6%E4%BC%98%E5%8C%96/" class="md-nav__link">
+        5.3 索引建立速度优化
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+      
+      
+      <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_7" >
+      
+      
+      
+        <label class="md-nav__link" for="__nav_7" id="__nav_7_label" tabindex="0">
+          附1. 所有文书类型分析
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_7_label" aria-expanded="false">
+        <label class="md-nav__title" for="__nav_7">
+          <span class="md-nav__icon md-icon"></span>
+          附1. 所有文书类型分析
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+      
+      
+      <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_7_1" >
+      
+      
+      
+        <label class="md-nav__link" for="__nav_7_1" id="__nav_7_1_label" tabindex="0">
+          1.1 法院文书
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_7_1_label" aria-expanded="false">
+        <label class="md-nav__title" for="__nav_7_1">
+          <span class="md-nav__icon md-icon"></span>
+          1.1 法院文书
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../old/1.%E4%B8%8D%E5%90%8C%E6%96%87%E4%B9%A6%E5%88%86%E6%9E%90/%E6%B3%95%E9%99%A2/1.%20%E5%88%A4%E5%86%B3%E4%B9%A6%20%E8%A3%81%E5%AE%9A%E4%B9%A6%20%E8%B0%83%E8%A7%A3%E4%B9%A6%20%28%E5%8D%B3%20%E8%A3%81%E5%88%A4%E6%96%87%E4%B9%A6%29/" class="md-nav__link">
+        1.1.1 裁判文书(判决书+裁定书+调解书)
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../old/1.%E4%B8%8D%E5%90%8C%E6%96%87%E4%B9%A6%E5%88%86%E6%9E%90/%E6%B3%95%E9%99%A2/2.%20%E5%86%B3%E5%AE%9A%E4%B9%A6/" class="md-nav__link">
+        1.1.2 决定书
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../old/1.%E4%B8%8D%E5%90%8C%E6%96%87%E4%B9%A6%E5%88%86%E6%9E%90/%E6%B3%95%E9%99%A2/3.%20%E8%B5%B7%E8%AF%89%E7%8A%B6/" class="md-nav__link">
+        1.1.3 起诉状
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../old/1.%E4%B8%8D%E5%90%8C%E6%96%87%E4%B9%A6%E5%88%86%E6%9E%90/%E6%B3%95%E9%99%A2/4.%20%E9%80%9A%E7%9F%A5%E4%B9%A6/" class="md-nav__link">
+        1.1.4 通知书
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+      
+      
+      <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_7_2" >
+      
+      
+      
+        <label class="md-nav__link" for="__nav_7_2" id="__nav_7_2_label" tabindex="0">
+          1.2 检察院文书
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_7_2_label" aria-expanded="false">
+        <label class="md-nav__title" for="__nav_7_2">
+          <span class="md-nav__icon md-icon"></span>
+          1.2 检察院文书
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../old/1.%E4%B8%8D%E5%90%8C%E6%96%87%E4%B9%A6%E5%88%86%E6%9E%90/%E6%A3%80%E5%AF%9F%E9%99%A2/1.%20%E8%B5%B7%E8%AF%89%E4%B9%A6/" class="md-nav__link">
+        1.2.1 起诉书
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../old/1.%E4%B8%8D%E5%90%8C%E6%96%87%E4%B9%A6%E5%88%86%E6%9E%90/%E6%A3%80%E5%AF%9F%E9%99%A2/2.%20%E4%B8%8D%E8%B5%B7%E8%AF%89%E4%B9%A6/" class="md-nav__link">
+        1.2.2 不起诉书
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+      
+      
+      <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_7_3" >
+      
+      
+      
+        <label class="md-nav__link" for="__nav_7_3" id="__nav_7_3_label" tabindex="0">
+          1.3 司法行政文书
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_7_3_label" aria-expanded="false">
+        <label class="md-nav__title" for="__nav_7_3">
+          <span class="md-nav__icon md-icon"></span>
+          1.3 司法行政文书
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../old/1.%E4%B8%8D%E5%90%8C%E6%96%87%E4%B9%A6%E5%88%86%E6%9E%90/%E5%8F%B8%E6%B3%95%E8%A1%8C%E6%94%BF/%E6%9A%82%E4%BA%88%E7%9B%91%E5%A4%96%E6%89%A7%E8%A1%8C%E6%A1%88%E4%BE%8B/" class="md-nav__link">
+        1.3.1 暂予监外执行案例
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../%E9%99%84/%E4%BC%98%E5%8C%96sqlite3/" class="md-nav__link">
+        附2. 优化sqlite3
+      </a>
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="目录">
+  
+  
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      目录
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#_1" class="md-nav__link">
+    前端部分
+  </a>
+  
+    <nav class="md-nav" aria-label="前端部分">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#_2" class="md-nav__link">
+    框架图
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_3" class="md-nav__link">
+    功能展示
+  </a>
+  
+    <nav class="md-nav" aria-label="功能展示">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#_4" class="md-nav__link">
+    关键词检索
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_5" class="md-nav__link">
+    高亮显示
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_6" class="md-nav__link">
+    分页
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_7" class="md-nav__link">
+    相关法院/法官
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_8" class="md-nav__link">
+    精细化检索
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_9" class="md-nav__link">
+    上传文件搜索相似案例
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_10" class="md-nav__link">
+    条目信息解析
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_11" class="md-nav__link">
+    条目下载
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_12" class="md-nav__link">
+    同法院/法官案例扩展
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_13" class="md-nav__link">
+    同法院/法官条目
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_14" class="md-nav__link">
+    所有法院/法官
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_15" class="md-nav__link">
+    页面回退
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_16" class="md-nav__link">
+    主要函数
+  </a>
+  
+    <nav class="md-nav" aria-label="主要函数">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#search_this-par" class="md-nav__link">
+    search(_this, par)
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#search_page_this-par-page" class="md-nav__link">
+    search_page(_this, par, page)
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#get_xml_this-addr" class="md-nav__link">
+    get_xml(_this, addr)
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#get_relate_data_this-type-id" class="md-nav__link">
+    get_relate_data(_this, type, id)
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#similar_search_this-form" class="md-nav__link">
+    similar_search(_this, form)
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_17" class="md-nav__link">
+    评测结果
+  </a>
+  
+    <nav class="md-nav" aria-label="评测结果">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#_18" class="md-nav__link">
+    关键词测试
+  </a>
+  
+    <nav class="md-nav" aria-label="关键词测试">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#_19" class="md-nav__link">
+    关键词
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_20" class="md-nav__link">
+    检索结果与相关性标注
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_21" class="md-nav__link">
+    评价指标计算
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_22" class="md-nav__link">
+    案例测试
+  </a>
+  
+    <nav class="md-nav" aria-label="案例测试">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#_23" class="md-nav__link">
+    案例
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_24" class="md-nav__link">
+    检索结果与相关性标注
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_25" class="md-nav__link">
+    评价指标计算
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+  <h1>实验报告</h1>
+
+<div class="toc">
+<ul>
+<li><a href="#_1">前端部分</a><ul>
+<li><a href="#_2">框架图</a></li>
+<li><a href="#_3">功能展示</a><ul>
+<li><a href="#_4">关键词检索</a></li>
+<li><a href="#_5">高亮显示</a></li>
+<li><a href="#_6">分页</a></li>
+<li><a href="#_7">相关法院/法官</a></li>
+<li><a href="#_8">精细化检索</a></li>
+<li><a href="#_9">上传文件搜索相似案例</a></li>
+<li><a href="#_10">条目信息解析</a></li>
+<li><a href="#_11">条目下载</a></li>
+<li><a href="#_12">同法院/法官案例扩展</a></li>
+<li><a href="#_13">同法院/法官条目</a></li>
+<li><a href="#_14">所有法院/法官</a></li>
+<li><a href="#_15">页面回退</a></li>
+</ul>
+</li>
+<li><a href="#_16">主要函数</a><ul>
+<li><a href="#search_this-par">search(_this, par)</a></li>
+<li><a href="#search_page_this-par-page">search_page(_this, par, page)</a></li>
+<li><a href="#get_xml_this-addr">get_xml(_this, addr)</a></li>
+<li><a href="#get_relate_data_this-type-id">get_relate_data(_this, type, id)</a></li>
+<li><a href="#similar_search_this-form">similar_search(_this, form)</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a href="#_17">评测结果</a><ul>
+<li><a href="#_18">关键词测试</a><ul>
+<li><a href="#_19">关键词</a></li>
+<li><a href="#_20">检索结果与相关性标注</a></li>
+<li><a href="#_21">评价指标计算</a></li>
+</ul>
+</li>
+<li><a href="#_22">案例测试</a><ul>
+<li><a href="#_23">案例</a></li>
+<li><a href="#_24">检索结果与相关性标注</a></li>
+<li><a href="#_25">评价指标计算</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</div>
+<h2 id="_1">前端部分<a class="headerlink" href="#_1" title="Permanent link">&para;</a></h2>
+<h3 id="_2">框架图<a class="headerlink" href="#_2" title="Permanent link">&para;</a></h3>
+<p><img alt="frame" src="F:\OneDrive - mails.tsinghua.edu.cn\Coding\SearchEngine\SearchEngine2023\doc\docs\screenshots\frame.png" /></p>
+<h3 id="_3">功能展示<a class="headerlink" href="#_3" title="Permanent link">&para;</a></h3>
+<h4 id="_4">关键词检索<a class="headerlink" href="#_4" title="Permanent link">&para;</a></h4>
+<p>根据输入的关键词，搜索并展示相关的条目。点击可以进入条目详细信息页面。</p>
+<p><img alt="1" src="F:\OneDrive - mails.tsinghua.edu.cn\Coding\SearchEngine\SearchEngine2023\doc\docs\screenshots\1.png" /></p>
+<h4 id="_5">高亮显示<a class="headerlink" href="#_5" title="Permanent link">&para;</a></h4>
+<p>展示检索到的条目时，条目内容中的搜索词高亮显示。</p>
+<h4 id="_6">分页<a class="headerlink" href="#_6" title="Permanent link">&para;</a></h4>
+<p>检索到的条目超过10条时，将分页展示条目。</p>
+<p><img alt="3" src="D:\司法搜索\SearchEngine2023\frontend\screenshots\3.png" /></p>
+<h4 id="_7">相关法院/法官<a class="headerlink" href="#_7" title="Permanent link">&para;</a></h4>
+<p>关键词中包含法院/法官名时，在右侧展示法院/法官的条目。点击可以进入同法院/法官条目页面。</p>
+<p><img alt="2" src="D:\司法搜索\SearchEngine2023\frontend\screenshots\2.png" /></p>
+<h4 id="_8">精细化检索<a class="headerlink" href="#_8" title="Permanent link">&para;</a></h4>
+<p>开启后，支持多个检索词以交(&amp;)、并(|)、补(-)等逻辑进行精确匹配。</p>
+<p><img alt="4" src="D:\司法搜索\SearchEngine2023\frontend\screenshots\4.png" /></p>
+<h4 id="_9">上传文件搜索相似案例<a class="headerlink" href="#_9" title="Permanent link">&para;</a></h4>
+<p>支持上传文件，搜索并展示内容相似的案例、法院和法官。点击可以进入相应页面。</p>
+<p><img alt="5" src="D:\司法搜索\SearchEngine2023\frontend\screenshots\5.png" /></p>
+<h4 id="_10">条目信息解析<a class="headerlink" href="#_10" title="Permanent link">&para;</a></h4>
+<p>在条目详细信息页面，对条目内容做解析，以表格形式展示。</p>
+<p><img alt="6" src="D:\司法搜索\SearchEngine2023\frontend\screenshots\6.png" /></p>
+<h4 id="_11">条目下载<a class="headerlink" href="#_11" title="Permanent link">&para;</a></h4>
+<p>在条目详细信息页面，支持下载条目文件。</p>
+<h4 id="_12">同法院/法官案例扩展<a class="headerlink" href="#_12" title="Permanent link">&para;</a></h4>
+<p>在条目详细信息页面，解析法院和审判员信息。点击检索可以搜索同法院/法官案例。</p>
+<h4 id="_13">同法院/法官条目<a class="headerlink" href="#_13" title="Permanent link">&para;</a></h4>
+<p>搜索并展示某法院/法院的所有条目。</p>
+<p><img alt="7" src="D:\司法搜索\SearchEngine2023\frontend\screenshots\7.png" /></p>
+<h4 id="_14">所有法院/法官<a class="headerlink" href="#_14" title="Permanent link">&para;</a></h4>
+<p>分页展示所有法院/法官。点击可以进入同法院/法官条目页面。</p>
+<p><img alt="8" src="D:\司法搜索\SearchEngine2023\frontend\screenshots\8.png" /></p>
+<p><img alt="9" src="D:\司法搜索\SearchEngine2023\frontend\screenshots\9.png" /></p>
+<h4 id="_15">页面回退<a class="headerlink" href="#_15" title="Permanent link">&para;</a></h4>
+<p>记录页面切换的信息，支持用户通过back按钮回到之前的页面。</p>
+<h3 id="_16">主要函数<a class="headerlink" href="#_16" title="Permanent link">&para;</a></h3>
+<h4 id="search_this-par">search(_this, par)<a class="headerlink" href="#search_this-par" title="Permanent link">&para;</a></h4>
+<table>
+<thead>
+<tr>
+<th>功能</th>
+<th>根据关键词par，检索相关条目</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>使用后端接口</td>
+<td>/api/text_search</td>
+</tr>
+</tbody>
+</table>
+<h4 id="search_page_this-par-page">search_page(_this, par, page)<a class="headerlink" href="#search_page_this-par-page" title="Permanent link">&para;</a></h4>
+<table>
+<thead>
+<tr>
+<th>功能</th>
+<th>根据关键词par和页数page，检索相关条目</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>使用后端接口</td>
+<td>/api/text_search</td>
+</tr>
+</tbody>
+</table>
+<h4 id="get_xml_this-addr">get_xml(_this, addr)<a class="headerlink" href="#get_xml_this-addr" title="Permanent link">&para;</a></h4>
+<table>
+<thead>
+<tr>
+<th>功能</th>
+<th>根据条目编号addr，获得条目内容并解析</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>使用后端接口</td>
+<td>/api/document、/api/judgment、/api/court、/api/judge</td>
+</tr>
+</tbody>
+</table>
+<h4 id="get_relate_data_this-type-id">get_relate_data(_this, type, id)<a class="headerlink" href="#get_relate_data_this-type-id" title="Permanent link">&para;</a></h4>
+<table>
+<thead>
+<tr>
+<th>功能</th>
+<th>根据类别type和序号id，检索同法院/法官条目</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>使用后端接口</td>
+<td>/api/judgment</td>
+</tr>
+</tbody>
+</table>
+<h4 id="similar_search_this-form">similar_search(_this, form)<a class="headerlink" href="#similar_search_this-form" title="Permanent link">&para;</a></h4>
+<table>
+<thead>
+<tr>
+<th>功能</th>
+<th>根据上传的文件，检索相似条目</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>使用后端接口</td>
+<td>/api/similar_search</td>
+</tr>
+</tbody>
+</table>
+<h2 id="_17">评测结果<a class="headerlink" href="#_17" title="Permanent link">&para;</a></h2>
+<h3 id="_18">关键词测试<a class="headerlink" href="#_18" title="Permanent link">&para;</a></h3>
+<h4 id="_19">关键词<a class="headerlink" href="#_19" title="Permanent link">&para;</a></h4>
+<p>盗窃 西安</p>
+<h4 id="_20">检索结果与相关性标注<a class="headerlink" href="#_20" title="Permanent link">&para;</a></h4>
+<table>
+<thead>
+<tr>
+<th>序号</th>
+<th>标题</th>
+<th>截取内容</th>
+<th>相关性</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td>河南省确山县人民法院 刑事判决书 （2015）确刑初字第000084号</td>
+<td>判刑）等人20次盗窃中国建筑材料工业建设西安工程有限公司确山分公司停放在蝎子山矿值班房门前的3台“凯斯”牌（挖掘机编号为K1号、K2号、K3号）挖掘机及1台“沃尔沃”牌破碎机油箱内柴油，共盗窃柴油1780升。张文理、张玉星将盗窃来的部分柴油用于两人货车运输使用，剩余柴油卖给给经营加油站的古红祥（已判刑），所得赃款分给被告人隗义良400元。经确山县价格认证中心评估，中国建筑材料工业建设西安工程有限公司确山分公司被盗0#柴油每升价值7.43元，被盗的—10#柴油每升价值7.87元。被告人隗义良参与盗窃柴油总价值13225.4元。就上述指控，公诉机关当庭出示并提交了被告人隗义良及同案人的供述，证人证......</td>
+<td>相关</td>
+</tr>
+<tr>
+<td>2</td>
+<td>陕西省西安市新城区人民法院 刑事判决书 （2018）陕0102刑初320号</td>
+<td>陕西省西安市新城区人民法院 刑事判决书 （2018）陕0102刑初320号 公诉机关西安市新城区人民检察院。 被告人王某亮，男，汉族，大专文化。2015年11月因犯盗窃罪被本院判处拘役四个月，并处罚金人民币三千元，2016年1月3日刑满释放。2018年5月17日因涉嫌犯盗窃罪被抓获，次日被刑事拘留，2018年6月8日依法逮捕。现羁押于西安市新城区看守所。 指定辩护人马岗岭，陕西志功律师事务所律师。 西安市新城区人民检察院以新检诉刑诉（2018）292号起诉书指控被告人王某亮犯盗窃罪，于2018年7月4日向本院提起公诉。本院受理后，依法适用简易程序，并实行独任审......</td>
+<td>相关</td>
+</tr>
+<tr>
+<td>3-40</td>
+<td>......</td>
+<td>......</td>
+<td>相关</td>
+</tr>
+<tr>
+<td>41</td>
+<td>云南省维西傈僳族自治县人民法院 刑事判决书 （2017）云3423刑初9号</td>
+<td>市公安局古城分局派出所民警在丽江市古城区西安街道裕康苑小区睿园6栋202室将网上追逃人员赵秀龙抓获。 上述事实，有以下证据证实： 1．接处警登记表、受案登记表、立案决定书、拘留证、逮捕证。证实案件的来源、发案时间以及对被告人赵秀龙采取强制措施的情况。 2．抓获经过。证实2016年12月28日丽江市公安局古城分局派出所民警在丽江市古城区西安街道裕康苑小区睿园6栋202室将网上追逃人员赵秀龙抓获并执行刑事拘留。 3．户口证明。证实被告人赵秀龙具备完全刑事责任能力。 4．辨认笔录、现场指认照片。证实被告人辨认盗窃曹某1存款单以及到农村信用社取款的地点，指认盗窃存款单、取款的地点。 5．储蓄存单、公民......</td>
+<td>不相关</td>
+</tr>
+<tr>
+<td>42-50</td>
+<td>......</td>
+<td>......</td>
+<td>7个相关，2个不相关</td>
+</tr>
+</tbody>
+</table>
+<h4 id="_21">评价指标计算<a class="headerlink" href="#_21" title="Permanent link">&para;</a></h4>
+<table>
+<thead>
+<tr>
+<th>AP</th>
+<th>P@50</th>
+<th>RR</th>
+<th>S@50</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>0.93</td>
+<td>0.94</td>
+<td>1</td>
+<td>1</td>
+</tr>
+</tbody>
+</table>
+<h3 id="_22">案例测试<a class="headerlink" href="#_22" title="Permanent link">&para;</a></h3>
+<h4 id="_23">案例<a class="headerlink" href="#_23" title="Permanent link">&para;</a></h4>
+<div class="highlight"><pre><span></span><code>浙江省东阳市人民法院 民事判决书 （2016）浙0783民初17571号 原告：韦斌姬，女，1972年9月22日出生，汉族，住东阳市。 被告：韦斌强，男，1969年6月17日出生，汉族，住东阳市。 被告：杜满萍，女，1968年11月25日出生，汉族，住东阳市。 委托代理人：陈菊华、贾凌珂。 原告韦斌姬为与被告韦斌强、杜满萍民间借贷纠纷一案，于2016年12月1日向本院提起诉讼，请求判令两被告归还借款10万元，并支付利息（自起诉之日起按中国人民银行同期同档次贷款基准利率计算至实际履行之日止）。本院受理后，依法由审判员甘震适用简易程序独任审判。被告杜满萍在提交答辩状期间对管辖权提出异议，本院裁定予以驳回。杜满萍不服该裁定，上诉至金华市中级人民法院。后金华市中级人民法院驳回上诉，维持原裁定。2017年4月20日，被告杜满萍申请对借条中“杜满萍”的签名是否系其本人书写进行鉴定，本院依法委托金华天鉴司法鉴定所进行鉴定。本院于2017年7月6日公开开庭审理了本案。原告韦斌姬、被告韦斌强及被告杜满萍的委托代理人贾凌珂到庭参加了诉讼。本案现已审理终结。 本院经审理查明：2011年4月25日，被告韦斌强、杜满萍向原告韦斌姬借款10万元，并共同出具了借条一份，内容为：“今向韦斌姬借人民币拾万元正。”庭审中，原告韦斌姬自认被告杜满萍已归还款项2.4万元，其余款项未归还。被告韦斌强陈述其分文未还。被告杜满萍陈述其对案涉借款不知情，故分文未还。在本案审理过程中，被告杜满萍申请对借条中“杜满萍”的签名是否系其本人书写进行鉴定，本院依法委托金华天鉴司法鉴定所进行鉴定，鉴定意见为借条落款处的“杜满萍”的签名字迹与杜满萍样本字迹系同一人书写形成。 本院依照《中华人民共和国合同法》第二百零六条、第二百零七条之规定，判决如下： 一、被告韦斌强、杜满萍于本判决生效之日起十日内归还原告韦斌姬借款7.6万元，并支付利息（自2016年12月1日起按中国人民银行公布的同期同档次贷款基准利率计算至实际归还之日止）。 二、驳回原告韦斌姬的其他诉讼请求。 如果被告未按本判决指定的期间履行给付金钱义务，应当依照《中华人民共和国民事诉讼法》第二百五十三条之规定，加倍支付迟延履行期间的债务利息。 案件受理费2300元，减半收取1150元，由原告韦斌姬负担276元，由被告韦斌强、杜满萍负担874元；鉴定费3200元（已由被告杜满萍预交），由被告杜满萍负担。 如不服本判决，可在本判决书送达之日起十五日内向本院递交上诉状，并按对方当事人的人数提出副本，上诉于浙江省金华市中级人民法院。 审判员甘震 二〇一七年七月七日 代书记员许天瑶 &quot; value=&quot;浙江省东阳市人民法院 民事判决书 （2016）浙0783民初17571号 原告：韦斌姬，女，1972年9月22日出生，汉族，住东阳市。 被告：韦斌强，男，1969年6月17日出生，汉族，住东阳市。 被告：杜满萍，女，1968年11月25日出生，汉族，住东阳市。 委托代理人：陈菊华、贾凌珂。 原告韦斌姬为与被告韦斌强、杜满萍民间借贷纠纷一案，于2016年12月1日向本院提起诉讼，请求判令两被告归还借款10万元，并支付利息（自起诉之日起按中国人民银行同期同档次贷款基准利率计算至实际履行之日止）。本院受理后，依法由审判员甘震适用简易程序独任审判。被告杜满萍在提交答辩状期间对管辖权提出异议，本院裁定予以驳回。杜满萍不服该裁定，上诉至金华市中级人民法院。后金华市中级人民法院驳回上诉，维持原裁定。2017年4月20日，被告杜满萍申请对借条中“杜满萍”的签名是否系其本人书写进行鉴定，本院依法委托金华天鉴司法鉴定所进行鉴定。本院于2017年7月6日公开开庭审理了本案。原告韦斌姬、被告韦斌强及被告杜满萍的委托代理人贾凌珂到庭参加了诉讼。本案现已审理终结。 本院经审理查明：2011年4月25日，被告韦斌强、杜满萍向原告韦斌姬借款10万元，并共同出具了借条一份，内容为：“今向韦斌姬借人民币拾万元正。”庭审中，原告韦斌姬自认被告杜满萍已归还款项2.4万元，其余款项未归还。被告韦斌强陈述其分文未还。被告杜满萍陈述其对案涉借款不知情，故分文未还。在本案审理过程中，被告杜满萍申请对借条中“杜满萍”的签名是否系其本人书写进行鉴定，本院依法委托金华天鉴司法鉴定所进行鉴定，鉴定意见为借条落款处的“杜满萍”的签名字迹与杜满萍样本字迹系同一人书写形成。 本院依照《中华人民共和国合同法》第二百零六条、第二百零七条之规定，判决如下： 一、被告韦斌强、杜满萍于本判决生效之日起十日内归还原告韦斌姬借款7.6万元，并支付利息（自2016年12月1日起按中国人民银行公布的同期同档次贷款基准利率计算至实际归还之日止）。 二、驳回原告韦斌姬的其他诉讼请求。 如果被告未按本判决指定的期间履行给付金钱义务，应当依照《中华人民共和国民事诉讼法》第二百五十三条之规定，加倍支付迟延履行期间的债务利息。 案件受理费2300元，减半收取1150元，由原告韦斌姬负担276元，由被告韦斌强、杜满萍负担874元；鉴定费3200元（已由被告杜满萍预交），由被告杜满萍负担。 如不服本判决，可在本判决书送达之日起十五日内向本院递交上诉状，并按对方当事人的人数提出副本，上诉于浙江省金华市中级人民法院。 审判员甘震 二〇一七年七月七日 代书记员许天瑶
+</code></pre></div>
+<h4 id="_24">检索结果与相关性标注<a class="headerlink" href="#_24" title="Permanent link">&para;</a></h4>
+<table>
+<thead>
+<tr>
+<th>序号</th>
+<th>标题</th>
+<th>截取内容</th>
+<th>相关性</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td>浙江省东阳市人民法院 民事判决书 （2016）浙0783民初17571号</td>
+<td>浙江省东阳市人民法院 民事判决书 （2016）浙0783民初17571号 原告：韦斌姬，女，1972年9月22日出生，汉族，住东阳市。 被告：韦斌强，男，1969年6月17日出生，汉族，住东阳市。 被告：杜满萍，女，1968年11月25日出生，汉族，住东阳市。 委托代理人：陈菊华、贾凌珂。 原告韦斌姬为与被告韦斌强、杜满萍民间借贷纠纷一案，于2016年12月1日向本院提起诉讼，请求判令两被告归还借款10万元，并支付利息（自起诉之日起按中国人民银行同期同档次贷款基准利率计算至实际履行之日止）。本院受理后，依法由审判员甘震适用简易程序独任审判。被告杜满萍在提交答辩状期间对管辖权提出异议，本院裁定予......</td>
+<td>相关（就是上传的案例）</td>
+</tr>
+<tr>
+<td>2</td>
+<td>浙江省东阳市人民法院 民事判决书 （2017）浙0783民初7682号</td>
+<td>浙江省东阳市人民法院 民事判决书 （2017）浙0783民初7682号 原告：倪建明，男，1971年9月10日出生，汉族，住浙江省杭州市上城区，公民身份号码：330724197-109106018。 委托代理人：李广钱，浙江德当律师事务所律师。 被告：胡金芳，女，1962年11月20日出生，汉族，住浙江省东阳市，公民身份号码：33-0724196211201623。 委托代理人：唐园，浙江良济律师事务所律师。 原告倪建明为与被告胡金芳民间借贷纠纷一案，于2017年6月1日向本院提起诉讼，请求判令被告归还借款50万元，并支付利息（自2014年9月24日起按月利率2％计算至实际履行完毕之日止）。本......</td>
+<td>相关</td>
+</tr>
+<tr>
+<td>3</td>
+<td>浙江省东阳市人民法院 民事判决书 （2015）东商初字第6273号</td>
+<td>浙江省东阳市人民法院 民事判决书 （2015）东商初字第6273号 原告：金明星。 委托代理人：陆建强。 被告：赵晓兰。 被告：葛治华。 被告：东阳市中正建设有限公司。 法定代表人：金尧翰。 被告：晨阳建设集团有限公司。 法定代表人：赵晓红。 原告金明星为与被告赵晓兰、葛治华、东阳市中正建设有限公司、晨阳建设集团有限公司民间借贷纠纷一案，于2015年10月16日向本院提起诉讼，请求：1、判令被告赵晓兰立即归还借款50万元，并支付利息（从2014年7月6日起按月利率2％计算至实际归还之日止）；2、判令被告葛治华、东阳市中正建设有限公司、晨阳建设集团有限公司对上述借款本息承担连带清偿责任。本院受理......</td>
+<td>相关</td>
+</tr>
+<tr>
+<td>4</td>
+<td>浙江省东阳市人民法院 民事判决书 （2016）浙0783民初18109号</td>
+<td>浙江省东阳市人民法院 民事判决书 （2016）浙0783民初18109号 原告：王锦军，男，1978年5月20日出生，汉族，住浙江省东阳市。 被告：翁新飞，男，1982年9月23日出生，汉族，住上海市长宁区。 原告王锦军为与被告翁新飞民间借贷纠纷一案，于2016年12月9日向本院提起诉讼，请求判令被告归还借款48000元，并支付利息（从起诉之日起按月利率5‰计算至实际付清之日止）。本院受理后，依法由审判员甘震适用简易程序，于2017年3月2日公开开庭进行了审理，并当庭宣告判决。原告王锦军到庭参加了诉讼，被告翁新飞经本院合法传唤无正当理由未到庭参加诉讼。 本院经审理查明：2015年11月17日，......</td>
+<td>相关</td>
+</tr>
+<tr>
+<td>5</td>
+<td>浙江省东阳市人民法院 民事判决书 （2018）浙0783民初7705号</td>
+<td>浙江省东阳市人民法院 民事判决书 （2018）浙0783民初7705号 原告：胡雪花，女，1964年1月21日出生，汉族，住东阳市。公民身份号码：。 被告：许芳，女，1968年9月17日出生，汉族，住东阳市南市。公民身份号码：。 原告胡雪花为与被告许芳民间借贷纠纷一案，于2018年6月22日向本院提起诉讼，请求判令被告归还借款20000元，并支付利息（自2014年11月22日起按年利率15％计算至实际还清之日止，算至2018年5月31日止的利息为12600元）。本院于同日受理后，依法适用简易程序，于2018年7月23日公开开庭进行了审理。原告胡雪花到庭参加了诉讼，被告许芳经本院合法传唤无正当理......</td>
+<td>相关</td>
+</tr>
+<tr>
+<td>6</td>
+<td>杭州市萧山区人民法院 民事裁定书 （2018）浙0109民初22173号</td>
+<td>杭州市萧山区人民法院 民事裁定书 （2018）浙0109民初22173号 原告：梅洪新。 委托诉讼代理人：樊秀伟，浙江宝国律师事务所律师。 被告：汪丽萍。 原告梅洪新诉被告汪丽萍民间借贷纠纷一案，本院于2018年11月21日立案受理。经本院委托杭州市萧山区人民调解委员会主持调解，原告于同日向本院提出撤诉申请。 本院认为：本案在审理过程中，原告申请撤诉，符合法律规定，应予准许。依照《中华人民共和国民事诉讼法》第一百四十五条第一款与第一百五十四条第一款第（五）项之规定，裁定如下： 准许梅洪新撤回起诉。 案件受理费6760元，减半收取3380元，由梅洪新负担。因本案经杭州市萧山区人民调解委员会调解，......</td>
+<td>不相关</td>
+</tr>
+<tr>
+<td>7</td>
+<td>浙江省东阳市人民法院 民事判决书 （2018）浙0783民初5762号</td>
+<td>浙江省东阳市人民法院 民事判决书 （2018）浙0783民初5762号 原告：黄梅仙，女，1955年6月9日出生，汉族，住东阳市。 被告：蒋竹芳，女，1964年5月22日出生，汉族，住东阳市，现羁押于东阳市看守所。 原告黄梅仙为与被告蒋竹芳民间借贷纠纷一案，于2018年5月11日向本院提起诉讼，请求判令被告归还借款300000元，并支付利息（自2014年9月12日起按月利率2％计算至实际履行之日止，暂算至2018年5月12日止的利息为264000元）。本院于同日受理后，依法由审判员甘震适用简易程序，于2018年6月21日公开开庭进行了审理。原告黄梅仙及被告蒋竹芳到庭参加了诉讼。本案现已审理终结......</td>
+<td>相关</td>
+</tr>
+<tr>
+<td>8</td>
+<td>浙江省杭州市余杭区人民法院 民事裁定书 （2017）浙0110民初20196号</td>
+<td>浙江省杭州市余杭区人民法院 民事裁定书 （2017）浙0110民初20196号 原告：杭州蓝果文化创意有限公司，住所地：浙江省杭州市西湖区三墩镇西园路10号C403室。 法定代表人：林永凑，执行董事。 委托诉讼代理人：汪维佳，浙江杭知桥律师事务所律师。 被告：上海北柒贸易有限公司，住所地：上海市嘉定区菊园新区永靖路1188号3幢3135室。 法定代表人：唐金平。 被告：浙江淘宝网络有限公司，住所地：浙江省杭州市余杭区五常街道文一西路969号1幢6楼601室。 法定代表人：张勇。 本院在审理原告杭州蓝果文化创意有限公司诉被告上海北柒贸易有限公司、浙江淘宝网络有限公司著作权侵权纠纷一案中，原告杭州......</td>
+<td>不相关</td>
+</tr>
+<tr>
+<td>9</td>
+<td>江苏省靖江市人民法院 民事裁定书 （2015）泰靖商初字第0770号</td>
+<td>江苏省靖江市人民法院 民事裁定书 （2015）泰靖商初字第0770号 原告中国农业银行股份有限公司靖江市支行，住所地靖江市中洲路5号。 负责人刘月江，行长。 委托代理人盛晓江，原告工作人员。 被告常俊。 本院在审理原告中国农业银行股份有限公司靖江市支行与被告常俊为信用卡纠纷一案中，原告于2015年12月4日，以被告已还清到期欠款为由，向本院提出撤诉申请。 本院认为，原告的申请符合法律规定。根据《中华人民共和国民事诉讼法》第一百四十五条第一款之规定，裁定如下： 准许原告中国农业银行股份有限公司靖江市支行撤回起诉。 本案受理费50元减半收取，由原告负担。 审判员徐彩霞 二〇一五年十二月四日 书记员......</td>
+<td>相关</td>
+</tr>
+<tr>
+<td>10</td>
+<td>江苏省泰州医药高新技术产业开发区人民法院 行政裁定书 （2017）苏1291行初335号</td>
+<td>江苏省泰州医药高新技术产业开发区人民法院 行政裁定书 （2017）苏1291行初335号 原告叶东甫，男，1960年7月28日生，汉族，住江苏省泰兴市。 被告泰兴市滨江镇人民政府，住所地泰兴市福泰路1号。 法定代表人冯翔，该镇镇长。 委托代理人（特别授权）俞鑫生，江苏有方律师事务所律师。 本院在审理原告叶东甫与被告泰兴市滨江镇人民政府其他行政纠纷一案中，原告叶东甫经本院合法传唤，无正当理由未到庭参加诉讼。依照《中华人民共和国行政诉讼法》第五十八条之规定，裁定如下： 本案按照撤诉处理。 案件受理费人民币50元，减半收取25元，由原告负担（已预交）。 审判长李剑峰 人民陪审员刘葆久 人民陪审员肖桂......</td>
+<td>不相关</td>
+</tr>
+</tbody>
+</table>
+<h4 id="_25">评价指标计算<a class="headerlink" href="#_25" title="Permanent link">&para;</a></h4>
+<table>
+<thead>
+<tr>
+<th>AP</th>
+<th>P@10</th>
+<th>RR</th>
+<th>S@50</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>0.66</td>
+<td>0.7</td>
+<td>1</td>
+<td>1</td>
+</tr>
+</tbody>
+</table>
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+        </div>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    <script id="__config" type="application/json">{"base": "..", "features": [], "search": "../assets/javascripts/workers/search.74e28a9f.min.js", "translations": {"clipboard.copied": "\u5df2\u590d\u5236", "clipboard.copy": "\u590d\u5236", "search.result.more.one": "\u5728\u8be5\u9875\u4e0a\u8fd8\u6709 1 \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.more.other": "\u5728\u8be5\u9875\u4e0a\u8fd8\u6709 # \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.none": "\u6ca1\u6709\u627e\u5230\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.one": "\u627e\u5230 1 \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.other": "# \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.placeholder": "\u952e\u5165\u4ee5\u5f00\u59cb\u641c\u7d22", "search.result.term.missing": "\u7f3a\u5c11", "select.version": "\u9009\u62e9\u5f53\u524d\u7248\u672c"}}</script>
+    
+    
+      <script src="../assets/javascripts/bundle.220ee61c.min.js"></script>
+      
+    
+  </body>
+</html>

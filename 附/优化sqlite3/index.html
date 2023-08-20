@@ -1,0 +1,1048 @@
+
+<!doctype html>
+<html lang="zh" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+        <meta name="description" content="搜索引擎文档">
+      
+      
+      
+      
+        <link rel="prev" href="../../old/1.%E4%B8%8D%E5%90%8C%E6%96%87%E4%B9%A6%E5%88%86%E6%9E%90/%E5%8F%B8%E6%B3%95%E8%A1%8C%E6%94%BF/%E6%9A%82%E4%BA%88%E7%9B%91%E5%A4%96%E6%89%A7%E8%A1%8C%E6%A1%88%E4%BE%8B/">
+      
+      
+      <link rel="icon" href="../../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.5.2, mkdocs-material-9.1.21">
+    
+    
+      
+        <title>附2. 优化sqlite3 - 搜索引擎</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../assets/stylesheets/main.eebd395e.min.css">
+      
+        
+        <link rel="stylesheet" href="../../assets/stylesheets/palette.ecc896b0.min.css">
+      
+      
+
+    
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+      <link rel="stylesheet" href="../../resources/css/extra.css">
+    
+    <script>__md_scope=new URL("../..",location),__md_hash=e=>[...e].reduce((e,_)=>(e<<5)-e+_.charCodeAt(0),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+    
+  </head>
+  
+  
+    
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="purple" data-md-color-accent="indigo">
+  
+    
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+  
+
+<header class="md-header md-header--shadow" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="页眉">
+    <a href="../.." title="搜索引擎" class="md-header__button md-logo" aria-label="搜索引擎" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54Z"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3V6m0 5h18v2H3v-2m0 5h18v2H3v-2Z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            搜索引擎
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              附2. 优化sqlite3
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+    
+    
+    
+      <label class="md-header__button md-icon" for="__search">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.516 6.516 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5Z"/></svg>
+      </label>
+      <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="搜索" placeholder="搜索" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.516 6.516 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5Z"/></svg>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12Z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="查找">
+        
+        <button type="reset" class="md-search__icon md-icon" title="清空当前内容" aria-label="清空当前内容" tabindex="-1">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12 19 6.41Z"/></svg>
+        </button>
+      </nav>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            正在初始化搜索引擎
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+    
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+<nav class="md-nav md-nav--primary" aria-label="导航栏" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../.." title="搜索引擎" class="md-nav__button md-logo" aria-label="搜索引擎" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54Z"/></svg>
+
+    </a>
+    搜索引擎
+  </label>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../.." class="md-nav__link">
+        2023年春季学期搜索引擎大作业
+      </a>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../1.%20%E6%A6%82%E8%BF%B0/%E6%A6%82%E8%BF%B0/" class="md-nav__link">
+        1. 概述
+      </a>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+      
+      
+      <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3" >
+      
+      
+      
+        <label class="md-nav__link" for="__nav_3" id="__nav_3_label" tabindex="0">
+          2. 结构设计
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="false">
+        <label class="md-nav__title" for="__nav_3">
+          <span class="md-nav__icon md-icon"></span>
+          2. 结构设计
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../2.%20%E7%BB%93%E6%9E%84%E8%AE%BE%E8%AE%A1/2.1%20%E9%A1%B9%E7%9B%AE%E6%9E%84%E5%9E%8B/" class="md-nav__link">
+        2.1 项目构型
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../2.%20%E7%BB%93%E6%9E%84%E8%AE%BE%E8%AE%A1/2.2%20%E4%BB%93%E5%BA%93%E7%BB%93%E6%9E%84/" class="md-nav__link">
+        2.2 仓库结构
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../2.%20%E7%BB%93%E6%9E%84%E8%AE%BE%E8%AE%A1/2.3%20%E5%8A%9F%E8%83%BD%E5%88%92%E5%88%86/" class="md-nav__link">
+        2.3 功能划分
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+      
+      
+      <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4" >
+      
+      
+      
+        <label class="md-nav__link" for="__nav_4" id="__nav_4_label" tabindex="0">
+          3. 前端模块介绍
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_4_label" aria-expanded="false">
+        <label class="md-nav__title" for="__nav_4">
+          <span class="md-nav__icon md-icon"></span>
+          3. 前端模块介绍
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../3.%20%E5%89%8D%E7%AB%AF%E6%A8%A1%E5%9D%97%E4%BB%8B%E7%BB%8D/3.1%20%E6%A1%86%E6%9E%B6%E5%9B%BE/" class="md-nav__link">
+        3.1 框架图
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../3.%20%E5%89%8D%E7%AB%AF%E6%A8%A1%E5%9D%97%E4%BB%8B%E7%BB%8D/3.2%20%E5%8A%9F%E8%83%BD%E5%B1%95%E7%A4%BA/" class="md-nav__link">
+        3.2 功能展示
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../3.%20%E5%89%8D%E7%AB%AF%E6%A8%A1%E5%9D%97%E4%BB%8B%E7%BB%8D/3.3%20%E4%B8%BB%E8%A6%81%E5%87%BD%E6%95%B0/" class="md-nav__link">
+        3.3 主要函数
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+      
+      
+      <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_5" >
+      
+      
+      
+        <label class="md-nav__link" for="__nav_5" id="__nav_5_label" tabindex="0">
+          4. 后端模块介绍
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_5_label" aria-expanded="false">
+        <label class="md-nav__title" for="__nav_5">
+          <span class="md-nav__icon md-icon"></span>
+          4. 后端模块介绍
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+      
+      
+      <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_5_1" >
+      
+      
+      
+        <label class="md-nav__link" for="__nav_5_1" id="__nav_5_1_label" tabindex="0">
+          4.1 数据库设计
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_5_1_label" aria-expanded="false">
+        <label class="md-nav__title" for="__nav_5_1">
+          <span class="md-nav__icon md-icon"></span>
+          4.1 数据库设计
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../4.%20%E5%90%8E%E7%AB%AF%E6%A8%A1%E5%9D%97%E4%BB%8B%E7%BB%8D/4.1%20common/4.1.1%20%E6%96%87%E4%B9%A6%E7%B1%BB%E5%9E%8B%E5%88%86%E6%9E%90/" class="md-nav__link">
+        4.1.1 文书类型分析
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../4.%20%E5%90%8E%E7%AB%AF%E6%A8%A1%E5%9D%97%E4%BB%8B%E7%BB%8D/4.1%20common/4.1.2%20%E6%95%B0%E6%8D%AE%E5%BA%93%E6%A8%A1%E5%9E%8B%E8%AE%BE%E8%AE%A1/" class="md-nav__link">
+        4.1.2 数据库模型设计
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../4.%20%E5%90%8E%E7%AB%AF%E6%A8%A1%E5%9D%97%E4%BB%8B%E7%BB%8D/4.2%20%E6%95%B0%E6%8D%AE%E6%8A%93%E5%8F%96%E5%AD%90%E7%B3%BB%E7%BB%9F/" class="md-nav__link">
+        4.2 数据抓取子系统
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../4.%20%E5%90%8E%E7%AB%AF%E6%A8%A1%E5%9D%97%E4%BB%8B%E7%BB%8D/4.3%20%E5%86%85%E5%AE%B9%E7%B4%A2%E5%BC%95%E5%AD%90%E7%B3%BB%E7%BB%9F/" class="md-nav__link">
+        4.3 内容索引子系统
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+      
+      
+      <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_5_4" >
+      
+      
+      
+        <label class="md-nav__link" for="__nav_5_4" id="__nav_5_4_label" tabindex="0">
+          4.4 内容检索子系统
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_5_4_label" aria-expanded="false">
+        <label class="md-nav__title" for="__nav_5_4">
+          <span class="md-nav__icon md-icon"></span>
+          4.4 内容检索子系统
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../4.%20%E5%90%8E%E7%AB%AF%E6%A8%A1%E5%9D%97%E4%BB%8B%E7%BB%8D/4.4%20%E5%86%85%E5%AE%B9%E6%A3%80%E7%B4%A2%E5%AD%90%E7%B3%BB%E7%BB%9F/4.4.1%20%E6%A3%80%E7%B4%A2%E5%AD%90%E7%B3%BB%E7%BB%9F/" class="md-nav__link">
+        4.4.1 检索子系统
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../4.%20%E5%90%8E%E7%AB%AF%E6%A8%A1%E5%9D%97%E4%BB%8B%E7%BB%8D/4.4%20%E5%86%85%E5%AE%B9%E6%A3%80%E7%B4%A2%E5%AD%90%E7%B3%BB%E7%BB%9F/4.4.2%20%E8%A7%A3%E6%9E%90%E5%AD%90%E7%B3%BB%E7%BB%9F/" class="md-nav__link">
+        4.4.2 解析子系统
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../4.%20%E5%90%8E%E7%AB%AF%E6%A8%A1%E5%9D%97%E4%BB%8B%E7%BB%8D/4.5%20%E9%93%BE%E6%8E%A5%E5%88%86%E6%9E%90%E5%AD%90%E7%B3%BB%E7%BB%9F/" class="md-nav__link">
+        4.5 链接分析子系统
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+      
+      
+      <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_6" >
+      
+      
+      
+        <label class="md-nav__link" for="__nav_6" id="__nav_6_label" tabindex="0">
+          5. 优化过程
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_6_label" aria-expanded="false">
+        <label class="md-nav__title" for="__nav_6">
+          <span class="md-nav__icon md-icon"></span>
+          5. 优化过程
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../5.%20%E4%BC%98%E5%8C%96%E8%BF%87%E7%A8%8B/5.1%20%E6%90%9C%E7%B4%A2%E9%80%9F%E5%BA%A6%E4%BC%98%E5%8C%96/" class="md-nav__link">
+        5.1 搜索速度优化
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../5.%20%E4%BC%98%E5%8C%96%E8%BF%87%E7%A8%8B/5.2%20%E6%95%B0%E6%8D%AE%E5%A4%84%E7%90%86%E9%80%9F%E5%BA%A6%E4%BC%98%E5%8C%96/" class="md-nav__link">
+        5.2 数据处理速度优化
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../5.%20%E4%BC%98%E5%8C%96%E8%BF%87%E7%A8%8B/5.3%20%E7%B4%A2%E5%BC%95%E5%BB%BA%E7%AB%8B%E9%80%9F%E5%BA%A6%E4%BC%98%E5%8C%96/" class="md-nav__link">
+        5.3 索引建立速度优化
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+      
+      
+      <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_7" >
+      
+      
+      
+        <label class="md-nav__link" for="__nav_7" id="__nav_7_label" tabindex="0">
+          附1. 所有文书类型分析
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_7_label" aria-expanded="false">
+        <label class="md-nav__title" for="__nav_7">
+          <span class="md-nav__icon md-icon"></span>
+          附1. 所有文书类型分析
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+      
+      
+      <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_7_1" >
+      
+      
+      
+        <label class="md-nav__link" for="__nav_7_1" id="__nav_7_1_label" tabindex="0">
+          1.1 法院文书
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_7_1_label" aria-expanded="false">
+        <label class="md-nav__title" for="__nav_7_1">
+          <span class="md-nav__icon md-icon"></span>
+          1.1 法院文书
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../old/1.%E4%B8%8D%E5%90%8C%E6%96%87%E4%B9%A6%E5%88%86%E6%9E%90/%E6%B3%95%E9%99%A2/1.%20%E5%88%A4%E5%86%B3%E4%B9%A6%20%E8%A3%81%E5%AE%9A%E4%B9%A6%20%E8%B0%83%E8%A7%A3%E4%B9%A6%20%28%E5%8D%B3%20%E8%A3%81%E5%88%A4%E6%96%87%E4%B9%A6%29/" class="md-nav__link">
+        1.1.1 裁判文书(判决书+裁定书+调解书)
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../old/1.%E4%B8%8D%E5%90%8C%E6%96%87%E4%B9%A6%E5%88%86%E6%9E%90/%E6%B3%95%E9%99%A2/2.%20%E5%86%B3%E5%AE%9A%E4%B9%A6/" class="md-nav__link">
+        1.1.2 决定书
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../old/1.%E4%B8%8D%E5%90%8C%E6%96%87%E4%B9%A6%E5%88%86%E6%9E%90/%E6%B3%95%E9%99%A2/3.%20%E8%B5%B7%E8%AF%89%E7%8A%B6/" class="md-nav__link">
+        1.1.3 起诉状
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../old/1.%E4%B8%8D%E5%90%8C%E6%96%87%E4%B9%A6%E5%88%86%E6%9E%90/%E6%B3%95%E9%99%A2/4.%20%E9%80%9A%E7%9F%A5%E4%B9%A6/" class="md-nav__link">
+        1.1.4 通知书
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+      
+      
+      <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_7_2" >
+      
+      
+      
+        <label class="md-nav__link" for="__nav_7_2" id="__nav_7_2_label" tabindex="0">
+          1.2 检察院文书
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_7_2_label" aria-expanded="false">
+        <label class="md-nav__title" for="__nav_7_2">
+          <span class="md-nav__icon md-icon"></span>
+          1.2 检察院文书
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../old/1.%E4%B8%8D%E5%90%8C%E6%96%87%E4%B9%A6%E5%88%86%E6%9E%90/%E6%A3%80%E5%AF%9F%E9%99%A2/1.%20%E8%B5%B7%E8%AF%89%E4%B9%A6/" class="md-nav__link">
+        1.2.1 起诉书
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../old/1.%E4%B8%8D%E5%90%8C%E6%96%87%E4%B9%A6%E5%88%86%E6%9E%90/%E6%A3%80%E5%AF%9F%E9%99%A2/2.%20%E4%B8%8D%E8%B5%B7%E8%AF%89%E4%B9%A6/" class="md-nav__link">
+        1.2.2 不起诉书
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+      
+      
+      <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_7_3" >
+      
+      
+      
+        <label class="md-nav__link" for="__nav_7_3" id="__nav_7_3_label" tabindex="0">
+          1.3 司法行政文书
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_7_3_label" aria-expanded="false">
+        <label class="md-nav__title" for="__nav_7_3">
+          <span class="md-nav__icon md-icon"></span>
+          1.3 司法行政文书
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../old/1.%E4%B8%8D%E5%90%8C%E6%96%87%E4%B9%A6%E5%88%86%E6%9E%90/%E5%8F%B8%E6%B3%95%E8%A1%8C%E6%94%BF/%E6%9A%82%E4%BA%88%E7%9B%91%E5%A4%96%E6%89%A7%E8%A1%8C%E6%A1%88%E4%BE%8B/" class="md-nav__link">
+        1.3.1 暂予监外执行案例
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+    
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        附2. 优化sqlite3
+      </a>
+      
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="目录">
+  
+  
+  
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+  <h1>附2. 优化sqlite3</h1>
+
+<p>0 前言
+SQLite数据库由于其简单、灵活、轻量、开源，已经被越来越多的被应用到中小型应用中。甚至有人说，SQLite完全可以用来取代c语言中的文件读写操作。因此我最近编写有关遥感数据处理的程序的时候，也将SQLite引入进来，以提高数据的结构化程度，并且提高大数据的处理能力（SQLite最高支持2PB大小的数据）。但是最开始，我发现，直接使用SQL语句的插入效率简直低的令人发指的。后来不断查文档、查资料，才发现了一条快速的“数据插入”之路。本文就以插入数据为例，整合网上和资料书中的各种提高SQLite效率的方法，给出提高SQLite数据插入效率的完整方法。（大神们勿喷）</p>
+<p>1 数据</p>
+<p>我使用的电脑是Win7 64位系统，使用VC2010编译，SQLIte版本为3.7.15.2 ，电脑CPU为二代i3处理器，内存6G。</p>
+<p>实验之前，先建立要插入数据的表:</p>
+<div class="highlight"><pre><span></span><code><span class="k">create</span><span class="w"> </span><span class="k">table</span><span class="w"> </span><span class="n">t1</span><span class="w"> </span><span class="p">(</span><span class="n">id</span><span class="w"> </span><span class="nb">integer</span><span class="w"> </span><span class="p">,</span><span class="w"> </span><span class="n">x</span><span class="w"> </span><span class="nb">integer</span><span class="w"> </span><span class="p">,</span><span class="w"> </span><span class="n">y</span><span class="w"> </span><span class="nb">integer</span><span class="err">，</span><span class="w"> </span><span class="n">weight</span><span class="w"> </span><span class="nb">real</span><span class="p">)</span>
+</code></pre></div>
+<p>2 慢速——最粗暴的方法</p>
+<p>SQLite的API中直接执行SQL的函数是：</p>
+<div class="highlight"><pre><span></span><code><span class="kt">int</span><span class="w"> </span><span class="n">sqlite3_exec</span><span class="p">(</span><span class="w">  </span><span class="n">sqlite3</span><span class="o">*</span><span class="p">,</span><span class="w">    </span><span class="k">const</span><span class="w"> </span><span class="kt">char</span><span class="w"> </span><span class="o">*</span><span class="n">sql</span><span class="p">,</span><span class="w">   </span><span class="kt">int</span><span class="w"> </span><span class="p">(</span><span class="o">*</span><span class="n">callback</span><span class="p">)(</span><span class="kt">void</span><span class="o">*</span><span class="p">,</span><span class="kt">int</span><span class="p">,</span><span class="kt">char</span><span class="o">**</span><span class="p">,</span><span class="kt">char</span><span class="o">**</span><span class="p">),</span><span class="w">   </span><span class="kt">void</span><span class="w"> </span><span class="o">*</span><span class="p">,</span><span class="w">   </span><span class="kt">char</span><span class="w"> </span><span class="o">**</span><span class="n">errmsg</span><span class="p">)</span>
+</code></pre></div>
+<p>直接使用INSERT语句的字符串进行插入，程序部分代码（完整代码见后文），如下：
+<div class="highlight"><pre><span></span><code><span class="k">for</span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">i</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span><span class="n">i</span><span class="o">&lt;</span><span class="n">nCount</span><span class="p">;</span><span class="o">++</span><span class="n">i</span><span class="p">)</span>
+<span class="p">{</span>
+<span class="w">    </span><span class="n">std</span><span class="o">::</span><span class="n">stringstream</span><span class="w"> </span><span class="n">ssm</span><span class="p">;</span>
+<span class="w">    </span><span class="n">ssm</span><span class="o">&lt;&lt;</span><span class="s">&quot;insert into t1 values(&quot;</span><span class="o">&lt;&lt;</span><span class="n">i</span><span class="o">&lt;&lt;</span><span class="s">&quot;,&quot;</span><span class="o">&lt;&lt;</span><span class="n">i</span><span class="o">*</span><span class="mi">2</span><span class="o">&lt;&lt;</span><span class="s">&quot;,&quot;</span><span class="o">&lt;&lt;</span><span class="n">i</span><span class="o">/</span><span class="mi">2</span><span class="o">&lt;&lt;</span><span class="s">&quot;,&quot;</span><span class="o">&lt;&lt;</span><span class="n">i</span><span class="o">*</span><span class="n">i</span><span class="o">&lt;&lt;</span><span class="s">&quot;)&quot;</span><span class="p">;</span>
+<span class="w">    </span><span class="n">sqlite3_exec</span><span class="p">(</span><span class="n">db</span><span class="p">,</span><span class="n">ssm</span><span class="p">.</span><span class="n">str</span><span class="p">().</span><span class="n">c_str</span><span class="p">(),</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">);</span>
+<span class="p">}</span>
+</code></pre></div></p>
+<p>这个程序运行的太慢了，我已经没时间等待了，估算了一下，基本上是  7.826 条/s</p>
+<p>3 中速——显式开启事务</p>
+<p>所谓”事务“就是指一组SQL命令，这些命令要么一起执行，要么都不被执行。在SQLite中，<strong>每调用一次sqlite3_exec()函数，就会隐式地开启了一个事务</strong>，如果插入一条数据，就调用该函数一次，事务就会被反复地开启、关闭，会增大IO量。如果在插入数据前显式开启事务，插入后再一起提交，则会大大提高IO效率，进而加数据快插入速度。</p>
+<p>开启事务只需在上述代码的前后各加一句开启与提交事务的命令即可：</p>
+<div class="highlight"><pre><span></span><code><span class="n">sqlite3_exec</span><span class="p">(</span><span class="n">db</span><span class="p">,</span><span class="s">&quot;begin;&quot;</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">);</span>
+<span class="k">for</span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">i</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span><span class="n">i</span><span class="o">&lt;</span><span class="n">nCount</span><span class="p">;</span><span class="o">++</span><span class="n">i</span><span class="p">)</span>
+<span class="p">{</span>
+<span class="w">    </span><span class="n">std</span><span class="o">::</span><span class="n">stringstream</span><span class="w"> </span><span class="n">ssm</span><span class="p">;</span>
+<span class="w">    </span><span class="n">ssm</span><span class="o">&lt;&lt;</span><span class="s">&quot;insert into t1 values(&quot;</span><span class="o">&lt;&lt;</span><span class="n">i</span><span class="o">&lt;&lt;</span><span class="s">&quot;,&quot;</span><span class="o">&lt;&lt;</span><span class="n">i</span><span class="o">*</span><span class="mi">2</span><span class="o">&lt;&lt;</span><span class="s">&quot;,&quot;</span><span class="o">&lt;&lt;</span><span class="n">i</span><span class="o">/</span><span class="mi">2</span><span class="o">&lt;&lt;</span><span class="s">&quot;,&quot;</span><span class="o">&lt;&lt;</span><span class="n">i</span><span class="o">*</span><span class="n">i</span><span class="o">&lt;&lt;</span><span class="s">&quot;)&quot;</span><span class="p">;</span>
+<span class="w">    </span><span class="n">sqlite3_exec</span><span class="p">(</span><span class="n">db</span><span class="p">,</span><span class="n">ssm</span><span class="p">.</span><span class="n">str</span><span class="p">().</span><span class="n">c_str</span><span class="p">(),</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">);</span>
+<span class="p">}</span>
+<span class="n">sqlite3_exec</span><span class="p">(</span><span class="n">db</span><span class="p">,</span><span class="s">&quot;commit;&quot;</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">);</span>
+</code></pre></div>
+<p>显式开启事务后，这个程序运行起来明显快很多，估算效率达到了34095条/s，较原始方法提升约5000倍。</p>
+<p>4 高速——写同步(synchronous)</p>
+<p>我要使用一个遥感处理算法处理10000*10000的影像，中间有一步需要插入100000000条数据到数据库中，如果按照开启事务后的速度34095条/s，则需要100000000÷34095 = 2932秒 = 48.9分，仍然不能够接受，所以我接着找提升速度的方法。终于，在有关讲解SQLite配置的资料中，看到了“写同步”选项。</p>
+<p>在SQLite中，数据库配置的参数都由编译指示（pragma）来实现的，而其中synchronous选项有三种可选状态，分别是full、normal、off。这篇博客以及官方文档里面有详细讲到这三种参数的设置。简要说来，full写入速度最慢，但保证数据是安全的，不受断电、系统崩溃等影响，而off可以加速数据库的一些操作，但如果系统崩溃或断电，则数据库可能会损毁。</p>
+<p>SQLite3中，该选项的默认值就是full，如果我们再插入数据前将其改为off，则会提高效率。如果仅仅将SQLite当做一种临时数据库的话，完全没必要设置为full。在代码中，设置方法就是在打开数据库之后，直接插入以下语句：</p>
+<div class="highlight"><pre><span></span><code><span class="n">sqlite3_exec</span><span class="p">(</span><span class="n">db</span><span class="p">,</span><span class="s">&quot;PRAGMA synchronous = OFF; &quot;</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">);</span>
+</code></pre></div>
+<p>此时，经过测试，插入速度已经变成了 41851条/s，也就是说，插入100000000条数据，需要2389秒 = 39.8分。</p>
+<p>5 极速——执行准备</p>
+<p>虽然写同步设为off后，速度又有小幅提升，但是仍然较慢。我又一次踏上了寻找提高SQLite插入效率方法的道路上。终于，我发现，SQLite执行SQL语句的时候，有两种方式：一种是使用前文提到的函数sqlite3_exec()，该函数直接调用包含SQL语句的字符串；另一种方法就是“执行准备”（类似于存储过程）操作，即先将SQL语句编译好，然后再一步一步（或一行一行）地执行。如果采用前者的话，就算开起了事务，SQLite仍然要对循环中每一句SQL语句进行“词法分析”和“语法分析”，这对于同时插入大量数据的操作来说，简直就是浪费时间。因此，要进一步提高插入效率的话，就应该使用后者。</p>
+<p>“执行准备”主要分为三大步骤：</p>
+<p>1.调用函数</p>
+<div class="highlight"><pre><span></span><code><span class="kt">int</span><span class="w"> </span><span class="nf">sqlite3_prepare_v2</span><span class="p">(</span><span class="w"> </span><span class="n">sqlite3</span><span class="w"> </span><span class="o">*</span><span class="n">db</span><span class="p">,</span><span class="w">  </span><span class="k">const</span><span class="w"> </span><span class="kt">char</span><span class="w"> </span><span class="o">*</span><span class="n">zSql</span><span class="p">,</span><span class="w">  </span><span class="kt">int</span><span class="w"> </span><span class="n">nByte</span><span class="p">,</span><span class="w">  </span><span class="n">sqlite3_stmt</span><span class="w"> </span><span class="o">**</span><span class="n">ppStmt</span><span class="p">,</span><span class="w">  </span><span class="k">const</span><span class="w"> </span><span class="kt">char</span><span class="w"> </span><span class="o">**</span><span class="n">pzTail</span><span class="p">);</span>
+</code></pre></div>
+<p>并且声明一个指向sqlite3_stmt对象的指针，该函数对参数化的SQL语句zSql进行编译，将编译后的状态存入ppStmt中。</p>
+<p>2.调用函数 sqlite3_step() ，这个函数就是执行一步（本例中就是插入一行），如果函数返回的是SQLite_ROW则说明仍在继续执行，否则则说明已经执行完所有操作；</p>
+<p>3.调用函数 sqlite3_finalize()，关闭语句。</p>
+<p>关于执行准备的API的具体语法，详见官方文档。本文中执行准备的c++代码如下：</p>
+<div class="highlight"><pre><span></span><code><span class="n">sqlite3_exec</span><span class="p">(</span><span class="n">db</span><span class="p">,</span><span class="s">&quot;begin;&quot;</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">);</span>
+<span class="w">    </span><span class="n">sqlite3_stmt</span><span class="w"> </span><span class="o">*</span><span class="n">stmt</span><span class="p">;</span>
+<span class="w">    </span><span class="k">const</span><span class="w"> </span><span class="kt">char</span><span class="o">*</span><span class="w"> </span><span class="n">sql</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;insert into t1 values(?,?,?,?)&quot;</span><span class="p">;</span>
+<span class="w">    </span><span class="n">sqlite3_prepare_v2</span><span class="p">(</span><span class="n">db</span><span class="p">,</span><span class="n">sql</span><span class="p">,</span><span class="n">strlen</span><span class="p">(</span><span class="n">sql</span><span class="p">),</span><span class="o">&amp;</span><span class="n">stmt</span><span class="p">,</span><span class="mi">0</span><span class="p">);</span>
+
+<span class="w">    </span><span class="k">for</span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">i</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span><span class="n">i</span><span class="o">&lt;</span><span class="n">nCount</span><span class="p">;</span><span class="o">++</span><span class="n">i</span><span class="p">)</span>
+<span class="w">    </span><span class="p">{</span><span class="w">       </span>
+<span class="w">        </span><span class="n">sqlite3_reset</span><span class="p">(</span><span class="n">stmt</span><span class="p">);</span>
+<span class="w">        </span><span class="n">sqlite3_bind_int</span><span class="p">(</span><span class="n">stmt</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="n">i</span><span class="p">);</span>
+<span class="w">        </span><span class="n">sqlite3_bind_int</span><span class="p">(</span><span class="n">stmt</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="n">i</span><span class="o">*</span><span class="mi">2</span><span class="p">);</span>
+<span class="w">        </span><span class="n">sqlite3_bind_int</span><span class="p">(</span><span class="n">stmt</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="n">i</span><span class="o">/</span><span class="mi">2</span><span class="p">);</span>
+<span class="w">        </span><span class="n">sqlite3_bind_double</span><span class="p">(</span><span class="n">stmt</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="n">i</span><span class="o">*</span><span class="n">i</span><span class="p">);</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="w">    </span><span class="n">sqlite3_finalize</span><span class="p">(</span><span class="n">stmt</span><span class="p">);</span>
+<span class="w">    </span><span class="n">sqlite3_exec</span><span class="p">(</span><span class="n">db</span><span class="p">,</span><span class="s">&quot;commit;&quot;</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">);</span>
+</code></pre></div>
+<p>此时测试数据插入效率为： 265816条/s，也就是说，插入100000000条数据，需要376秒 = 6.27分。这个速度已经很满意了。</p>
+<p>5 总结</p>
+<p>综上所述啊，SQLite插入数据效率最快的方式就是：事务+关闭写同步+执行准备（存储过程），如果对数据库安全性有要求的话，就开启写同步。</p>
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+        </div>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    <script id="__config" type="application/json">{"base": "../..", "features": [], "search": "../../assets/javascripts/workers/search.74e28a9f.min.js", "translations": {"clipboard.copied": "\u5df2\u590d\u5236", "clipboard.copy": "\u590d\u5236", "search.result.more.one": "\u5728\u8be5\u9875\u4e0a\u8fd8\u6709 1 \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.more.other": "\u5728\u8be5\u9875\u4e0a\u8fd8\u6709 # \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.none": "\u6ca1\u6709\u627e\u5230\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.one": "\u627e\u5230 1 \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.other": "# \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.placeholder": "\u952e\u5165\u4ee5\u5f00\u59cb\u641c\u7d22", "search.result.term.missing": "\u7f3a\u5c11", "select.version": "\u9009\u62e9\u5f53\u524d\u7248\u672c"}}</script>
+    
+    
+      <script src="../../assets/javascripts/bundle.220ee61c.min.js"></script>
+      
+    
+  </body>
+</html>

@@ -1,0 +1,2217 @@
+
+<!doctype html>
+<html lang="zh" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+        <meta name="description" content="搜索引擎文档">
+      
+      
+      
+      
+      
+      <link rel="icon" href="../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.5.2, mkdocs-material-9.1.21">
+    
+    
+      
+        <title>搜索引擎大作业报告 - 搜索引擎</title>
+      
+    
+    
+      <link rel="stylesheet" href="../assets/stylesheets/main.eebd395e.min.css">
+      
+        
+        <link rel="stylesheet" href="../assets/stylesheets/palette.ecc896b0.min.css">
+      
+      
+
+    
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+      <link rel="stylesheet" href="../resources/css/extra.css">
+    
+    <script>__md_scope=new URL("..",location),__md_hash=e=>[...e].reduce((e,_)=>(e<<5)-e+_.charCodeAt(0),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+    
+  </head>
+  
+  
+    
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="purple" data-md-color-accent="indigo">
+  
+    
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#_1" class="md-skip">
+          跳转至
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+  
+
+<header class="md-header md-header--shadow" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="页眉">
+    <a href=".." title="搜索引擎" class="md-header__button md-logo" aria-label="搜索引擎" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54Z"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3V6m0 5h18v2H3v-2m0 5h18v2H3v-2Z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            搜索引擎
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              搜索引擎大作业报告
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+    
+    
+    
+      <label class="md-header__button md-icon" for="__search">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.516 6.516 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5Z"/></svg>
+      </label>
+      <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="搜索" placeholder="搜索" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.516 6.516 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5Z"/></svg>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12Z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="查找">
+        
+        <button type="reset" class="md-search__icon md-icon" title="清空当前内容" aria-label="清空当前内容" tabindex="-1">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12 19 6.41Z"/></svg>
+        </button>
+      </nav>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            正在初始化搜索引擎
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+    
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+<nav class="md-nav md-nav--primary" aria-label="导航栏" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href=".." title="搜索引擎" class="md-nav__button md-logo" aria-label="搜索引擎" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54Z"/></svg>
+
+    </a>
+    搜索引擎
+  </label>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
+      <a href=".." class="md-nav__link">
+        2023年春季学期搜索引擎大作业
+      </a>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../1.%20%E6%A6%82%E8%BF%B0/%E6%A6%82%E8%BF%B0/" class="md-nav__link">
+        1. 概述
+      </a>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+      
+      
+      <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3" >
+      
+      
+      
+        <label class="md-nav__link" for="__nav_3" id="__nav_3_label" tabindex="0">
+          2. 结构设计
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="false">
+        <label class="md-nav__title" for="__nav_3">
+          <span class="md-nav__icon md-icon"></span>
+          2. 结构设计
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../2.%20%E7%BB%93%E6%9E%84%E8%AE%BE%E8%AE%A1/2.1%20%E9%A1%B9%E7%9B%AE%E6%9E%84%E5%9E%8B/" class="md-nav__link">
+        2.1 项目构型
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../2.%20%E7%BB%93%E6%9E%84%E8%AE%BE%E8%AE%A1/2.2%20%E4%BB%93%E5%BA%93%E7%BB%93%E6%9E%84/" class="md-nav__link">
+        2.2 仓库结构
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../2.%20%E7%BB%93%E6%9E%84%E8%AE%BE%E8%AE%A1/2.3%20%E5%8A%9F%E8%83%BD%E5%88%92%E5%88%86/" class="md-nav__link">
+        2.3 功能划分
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+      
+      
+      <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4" >
+      
+      
+      
+        <label class="md-nav__link" for="__nav_4" id="__nav_4_label" tabindex="0">
+          3. 前端模块介绍
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_4_label" aria-expanded="false">
+        <label class="md-nav__title" for="__nav_4">
+          <span class="md-nav__icon md-icon"></span>
+          3. 前端模块介绍
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../3.%20%E5%89%8D%E7%AB%AF%E6%A8%A1%E5%9D%97%E4%BB%8B%E7%BB%8D/3.1%20%E6%A1%86%E6%9E%B6%E5%9B%BE/" class="md-nav__link">
+        3.1 框架图
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../3.%20%E5%89%8D%E7%AB%AF%E6%A8%A1%E5%9D%97%E4%BB%8B%E7%BB%8D/3.2%20%E5%8A%9F%E8%83%BD%E5%B1%95%E7%A4%BA/" class="md-nav__link">
+        3.2 功能展示
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../3.%20%E5%89%8D%E7%AB%AF%E6%A8%A1%E5%9D%97%E4%BB%8B%E7%BB%8D/3.3%20%E4%B8%BB%E8%A6%81%E5%87%BD%E6%95%B0/" class="md-nav__link">
+        3.3 主要函数
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+      
+      
+      <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_5" >
+      
+      
+      
+        <label class="md-nav__link" for="__nav_5" id="__nav_5_label" tabindex="0">
+          4. 后端模块介绍
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_5_label" aria-expanded="false">
+        <label class="md-nav__title" for="__nav_5">
+          <span class="md-nav__icon md-icon"></span>
+          4. 后端模块介绍
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+      
+      
+      <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_5_1" >
+      
+      
+      
+        <label class="md-nav__link" for="__nav_5_1" id="__nav_5_1_label" tabindex="0">
+          4.1 数据库设计
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_5_1_label" aria-expanded="false">
+        <label class="md-nav__title" for="__nav_5_1">
+          <span class="md-nav__icon md-icon"></span>
+          4.1 数据库设计
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../4.%20%E5%90%8E%E7%AB%AF%E6%A8%A1%E5%9D%97%E4%BB%8B%E7%BB%8D/4.1%20common/4.1.1%20%E6%96%87%E4%B9%A6%E7%B1%BB%E5%9E%8B%E5%88%86%E6%9E%90/" class="md-nav__link">
+        4.1.1 文书类型分析
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../4.%20%E5%90%8E%E7%AB%AF%E6%A8%A1%E5%9D%97%E4%BB%8B%E7%BB%8D/4.1%20common/4.1.2%20%E6%95%B0%E6%8D%AE%E5%BA%93%E6%A8%A1%E5%9E%8B%E8%AE%BE%E8%AE%A1/" class="md-nav__link">
+        4.1.2 数据库模型设计
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../4.%20%E5%90%8E%E7%AB%AF%E6%A8%A1%E5%9D%97%E4%BB%8B%E7%BB%8D/4.2%20%E6%95%B0%E6%8D%AE%E6%8A%93%E5%8F%96%E5%AD%90%E7%B3%BB%E7%BB%9F/" class="md-nav__link">
+        4.2 数据抓取子系统
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../4.%20%E5%90%8E%E7%AB%AF%E6%A8%A1%E5%9D%97%E4%BB%8B%E7%BB%8D/4.3%20%E5%86%85%E5%AE%B9%E7%B4%A2%E5%BC%95%E5%AD%90%E7%B3%BB%E7%BB%9F/" class="md-nav__link">
+        4.3 内容索引子系统
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+      
+      
+      <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_5_4" >
+      
+      
+      
+        <label class="md-nav__link" for="__nav_5_4" id="__nav_5_4_label" tabindex="0">
+          4.4 内容检索子系统
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_5_4_label" aria-expanded="false">
+        <label class="md-nav__title" for="__nav_5_4">
+          <span class="md-nav__icon md-icon"></span>
+          4.4 内容检索子系统
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../4.%20%E5%90%8E%E7%AB%AF%E6%A8%A1%E5%9D%97%E4%BB%8B%E7%BB%8D/4.4%20%E5%86%85%E5%AE%B9%E6%A3%80%E7%B4%A2%E5%AD%90%E7%B3%BB%E7%BB%9F/4.4.1%20%E6%A3%80%E7%B4%A2%E5%AD%90%E7%B3%BB%E7%BB%9F/" class="md-nav__link">
+        4.4.1 检索子系统
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../4.%20%E5%90%8E%E7%AB%AF%E6%A8%A1%E5%9D%97%E4%BB%8B%E7%BB%8D/4.4%20%E5%86%85%E5%AE%B9%E6%A3%80%E7%B4%A2%E5%AD%90%E7%B3%BB%E7%BB%9F/4.4.2%20%E8%A7%A3%E6%9E%90%E5%AD%90%E7%B3%BB%E7%BB%9F/" class="md-nav__link">
+        4.4.2 解析子系统
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../4.%20%E5%90%8E%E7%AB%AF%E6%A8%A1%E5%9D%97%E4%BB%8B%E7%BB%8D/4.5%20%E9%93%BE%E6%8E%A5%E5%88%86%E6%9E%90%E5%AD%90%E7%B3%BB%E7%BB%9F/" class="md-nav__link">
+        4.5 链接分析子系统
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+      
+      
+      <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_6" >
+      
+      
+      
+        <label class="md-nav__link" for="__nav_6" id="__nav_6_label" tabindex="0">
+          5. 优化过程
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_6_label" aria-expanded="false">
+        <label class="md-nav__title" for="__nav_6">
+          <span class="md-nav__icon md-icon"></span>
+          5. 优化过程
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../5.%20%E4%BC%98%E5%8C%96%E8%BF%87%E7%A8%8B/5.1%20%E6%90%9C%E7%B4%A2%E9%80%9F%E5%BA%A6%E4%BC%98%E5%8C%96/" class="md-nav__link">
+        5.1 搜索速度优化
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../5.%20%E4%BC%98%E5%8C%96%E8%BF%87%E7%A8%8B/5.2%20%E6%95%B0%E6%8D%AE%E5%A4%84%E7%90%86%E9%80%9F%E5%BA%A6%E4%BC%98%E5%8C%96/" class="md-nav__link">
+        5.2 数据处理速度优化
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../5.%20%E4%BC%98%E5%8C%96%E8%BF%87%E7%A8%8B/5.3%20%E7%B4%A2%E5%BC%95%E5%BB%BA%E7%AB%8B%E9%80%9F%E5%BA%A6%E4%BC%98%E5%8C%96/" class="md-nav__link">
+        5.3 索引建立速度优化
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+      
+      
+      <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_7" >
+      
+      
+      
+        <label class="md-nav__link" for="__nav_7" id="__nav_7_label" tabindex="0">
+          附1. 所有文书类型分析
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_7_label" aria-expanded="false">
+        <label class="md-nav__title" for="__nav_7">
+          <span class="md-nav__icon md-icon"></span>
+          附1. 所有文书类型分析
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+      
+      
+      <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_7_1" >
+      
+      
+      
+        <label class="md-nav__link" for="__nav_7_1" id="__nav_7_1_label" tabindex="0">
+          1.1 法院文书
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_7_1_label" aria-expanded="false">
+        <label class="md-nav__title" for="__nav_7_1">
+          <span class="md-nav__icon md-icon"></span>
+          1.1 法院文书
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../old/1.%E4%B8%8D%E5%90%8C%E6%96%87%E4%B9%A6%E5%88%86%E6%9E%90/%E6%B3%95%E9%99%A2/1.%20%E5%88%A4%E5%86%B3%E4%B9%A6%20%E8%A3%81%E5%AE%9A%E4%B9%A6%20%E8%B0%83%E8%A7%A3%E4%B9%A6%20%28%E5%8D%B3%20%E8%A3%81%E5%88%A4%E6%96%87%E4%B9%A6%29/" class="md-nav__link">
+        1.1.1 裁判文书(判决书+裁定书+调解书)
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../old/1.%E4%B8%8D%E5%90%8C%E6%96%87%E4%B9%A6%E5%88%86%E6%9E%90/%E6%B3%95%E9%99%A2/2.%20%E5%86%B3%E5%AE%9A%E4%B9%A6/" class="md-nav__link">
+        1.1.2 决定书
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../old/1.%E4%B8%8D%E5%90%8C%E6%96%87%E4%B9%A6%E5%88%86%E6%9E%90/%E6%B3%95%E9%99%A2/3.%20%E8%B5%B7%E8%AF%89%E7%8A%B6/" class="md-nav__link">
+        1.1.3 起诉状
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../old/1.%E4%B8%8D%E5%90%8C%E6%96%87%E4%B9%A6%E5%88%86%E6%9E%90/%E6%B3%95%E9%99%A2/4.%20%E9%80%9A%E7%9F%A5%E4%B9%A6/" class="md-nav__link">
+        1.1.4 通知书
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+      
+      
+      <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_7_2" >
+      
+      
+      
+        <label class="md-nav__link" for="__nav_7_2" id="__nav_7_2_label" tabindex="0">
+          1.2 检察院文书
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_7_2_label" aria-expanded="false">
+        <label class="md-nav__title" for="__nav_7_2">
+          <span class="md-nav__icon md-icon"></span>
+          1.2 检察院文书
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../old/1.%E4%B8%8D%E5%90%8C%E6%96%87%E4%B9%A6%E5%88%86%E6%9E%90/%E6%A3%80%E5%AF%9F%E9%99%A2/1.%20%E8%B5%B7%E8%AF%89%E4%B9%A6/" class="md-nav__link">
+        1.2.1 起诉书
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../old/1.%E4%B8%8D%E5%90%8C%E6%96%87%E4%B9%A6%E5%88%86%E6%9E%90/%E6%A3%80%E5%AF%9F%E9%99%A2/2.%20%E4%B8%8D%E8%B5%B7%E8%AF%89%E4%B9%A6/" class="md-nav__link">
+        1.2.2 不起诉书
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+      
+      
+      <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_7_3" >
+      
+      
+      
+        <label class="md-nav__link" for="__nav_7_3" id="__nav_7_3_label" tabindex="0">
+          1.3 司法行政文书
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_7_3_label" aria-expanded="false">
+        <label class="md-nav__title" for="__nav_7_3">
+          <span class="md-nav__icon md-icon"></span>
+          1.3 司法行政文书
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../old/1.%E4%B8%8D%E5%90%8C%E6%96%87%E4%B9%A6%E5%88%86%E6%9E%90/%E5%8F%B8%E6%B3%95%E8%A1%8C%E6%94%BF/%E6%9A%82%E4%BA%88%E7%9B%91%E5%A4%96%E6%89%A7%E8%A1%8C%E6%A1%88%E4%BE%8B/" class="md-nav__link">
+        1.3.1 暂予监外执行案例
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../%E9%99%84/%E4%BC%98%E5%8C%96sqlite3/" class="md-nav__link">
+        附2. 优化sqlite3
+      </a>
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="目录">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      目录
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#1" class="md-nav__link">
+    1. 概述
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#2" class="md-nav__link">
+    2. 结构设计
+  </a>
+  
+    <nav class="md-nav" aria-label="2. 结构设计">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#21" class="md-nav__link">
+    2.1 项目构型
+  </a>
+  
+    <nav class="md-nav" aria-label="2.1 项目构型">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#_2" class="md-nav__link">
+    后端：
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_3" class="md-nav__link">
+    前端：
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#22" class="md-nav__link">
+    2.2 仓库结构：
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#23" class="md-nav__link">
+    2.3 功能划分
+  </a>
+  
+    <nav class="md-nav" aria-label="2.3 功能划分">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#231-ui" class="md-nav__link">
+    2.3.1 前端UI
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#232" class="md-nav__link">
+    2.3.2 数据抓取子系统
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#233" class="md-nav__link">
+    2.3.3 内容索引子系统
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#234" class="md-nav__link">
+    2.3.4 检索解析子系统
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#235" class="md-nav__link">
+    2.3.5 链接分析子系统
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#3" class="md-nav__link">
+    3. 前端模块介绍
+  </a>
+  
+    <nav class="md-nav" aria-label="3. 前端模块介绍">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#31" class="md-nav__link">
+    3.1 框架图
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#32" class="md-nav__link">
+    3.2 功能展示
+  </a>
+  
+    <nav class="md-nav" aria-label="3.2 功能展示">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#321" class="md-nav__link">
+    3.2.1 关键词检索
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#322" class="md-nav__link">
+    3.2.2 高亮显示
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#323" class="md-nav__link">
+    3.2.3 分页
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#324" class="md-nav__link">
+    3.2.4 相关法院/法官
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#325" class="md-nav__link">
+    3.2.5 精细化检索
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#326" class="md-nav__link">
+    3.2.6 上传文件搜索相似案例
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#327" class="md-nav__link">
+    3.2.7 条目信息解析
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#328" class="md-nav__link">
+    3.2.8 条目下载
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#329" class="md-nav__link">
+    3.2.9 同法院/法官案例扩展
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#3210" class="md-nav__link">
+    3.2.10 同法院/法官条目
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#3211" class="md-nav__link">
+    3.2.11 所有法院/法官
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#3212" class="md-nav__link">
+    3.2.12 页面回退
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#33" class="md-nav__link">
+    3.3 主要函数
+  </a>
+  
+    <nav class="md-nav" aria-label="3.3 主要函数">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#331-search_this-par" class="md-nav__link">
+    3.3.1 search(_this, par)
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#332-search_page_this-par-page" class="md-nav__link">
+    3.3.2 search_page(_this, par, page)
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#333-get_xml_this-addr" class="md-nav__link">
+    3.3.3 get_xml(_this, addr)
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#334-get_relate_data_this-type-id" class="md-nav__link">
+    3.3.4 get_relate_data(_this, type, id)
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#335-similar_search_this-form" class="md-nav__link">
+    3.3.5 similar_search(_this, form)
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#4" class="md-nav__link">
+    4. 后端模块介绍
+  </a>
+  
+    <nav class="md-nav" aria-label="4. 后端模块介绍">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#41-common" class="md-nav__link">
+    4.1 common: 结构化数据库设计
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#42-crawlers" class="md-nav__link">
+    4.2 crawlers: 数据抓取子系统
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#43-indexes" class="md-nav__link">
+    4.3 indexes: 内容索引子系统
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#441-do_search" class="md-nav__link">
+    4.4.1 do_search: 检索子系统
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#442-query_parse" class="md-nav__link">
+    4.4.2 query_parse: 解析子系统
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#45-analysis" class="md-nav__link">
+    4.5 analysis: 链接分析子系统
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#5" class="md-nav__link">
+    5. 优化过程
+  </a>
+  
+    <nav class="md-nav" aria-label="5. 优化过程">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#51" class="md-nav__link">
+    5.1 速度优化
+  </a>
+  
+    <nav class="md-nav" aria-label="5.1 速度优化">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#511" class="md-nav__link">
+    5.1.1 搜索速度
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#512" class="md-nav__link">
+    5.1.2 数据处理速度
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_4" class="md-nav__link">
+    初始用时：
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_5" class="md-nav__link">
+    第一次优化
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_6" class="md-nav__link">
+    第二次优化
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_7" class="md-nav__link">
+    第三次优化
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+<h1 id="_1">搜索引擎大作业报告<a class="headerlink" href="#_1" title="Permanent link">&para;</a></h1>
+<p>后端: 王昱栋 2020010922</p>
+<p>前端: 程锐杰 2020010918</p>
+<h2 id="1">1. 概述<a class="headerlink" href="#1" title="Permanent link">&para;</a></h2>
+<p>本文档由王昱栋、程锐杰编写，用于简要介绍2023年春季搜索引擎课程大作业项目。</p>
+<h2 id="2">2. 结构设计<a class="headerlink" href="#2" title="Permanent link">&para;</a></h2>
+<h3 id="21">2.1 项目构型<a class="headerlink" href="#21" title="Permanent link">&para;</a></h3>
+<h4 id="_2">后端：<a class="headerlink" href="#_2" title="Permanent link">&para;</a></h4>
+<ul>
+<li>基础框架：django + django-restframework</li>
+<li>数据库选择：</li>
+<li>结构化数据：sqlite3</li>
+<li>索引数据：mongodb</li>
+<li>搜索数据缓存：redis</li>
+</ul>
+<h4 id="_3">前端：<a class="headerlink" href="#_3" title="Permanent link">&para;</a></h4>
+<ul>
+<li>基础框架：vue</li>
+<li>其他使用的库/工具：element-ui</li>
+</ul>
+<h3 id="22">2.2 仓库结构：<a class="headerlink" href="#22" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code>-SearchEngine
+    -backend
+        -common(基本数据库结构)
+        -crawlers
+        -indexes
+        -search
+            -do_search
+            -query_parse
+        -analysis
+        -pymongo(用于储存索引信息的NoSQL数据库)
+        -scripts
+    -frontend
+    -doc
+</code></pre></div>
+<h3 id="23">2.3 功能划分<a class="headerlink" href="#23" title="Permanent link">&para;</a></h3>
+<h4 id="231-ui">2.3.1 前端UI<a class="headerlink" href="#231-ui" title="Permanent link">&para;</a></h4>
+<p><code>/frontend</code></p>
+<ul>
+<li>提供基础的搜索框、搜索结果展示</li>
+<li>提供法院、法官信息展示页面</li>
+<li>在搜索结果旁展示可能要搜索的法官、法院</li>
+<li>......</li>
+</ul>
+<h4 id="232">2.3.2 数据抓取子系统<a class="headerlink" href="#232" title="Permanent link">&para;</a></h4>
+<p><code>/backend/crawlers</code></p>
+<ul>
+<li>数据爬取（模拟了一个爬虫，实际上使用本地数据）</li>
+<li>结构化解析、导入数据库</li>
+</ul>
+<h4 id="233">2.3.3 内容索引子系统<a class="headerlink" href="#233" title="Permanent link">&para;</a></h4>
+<p><code>/backend/indexes</code></p>
+<ul>
+<li>倒排索引的建立、储存</li>
+</ul>
+<h4 id="234">2.3.4 检索解析子系统<a class="headerlink" href="#234" title="Permanent link">&para;</a></h4>
+<p><code>/backend/search</code></p>
+<p>​   <strong>do_search</strong></p>
+<ul>
+<li>直接搜索、相似搜索入口</li>
+<li>调用数据库直接进行结构化字段的查询</li>
+<li>调用query_parse模块进行搜索词条的解析</li>
+<li>调用analysis模块对返回文档列表进行bm25排序</li>
+<li>调用analysis模块查找相似文档</li>
+</ul>
+<p>**  query_parse**</p>
+<ul>
+<li>将传入的查询词条进行处理</li>
+<li>若为精确搜索，筛选相关文档，进行逻辑计算</li>
+<li>若不为精确搜索，分词并筛选相关文档</li>
+</ul>
+<h4 id="235">2.3.5 链接分析子系统<a class="headerlink" href="#235" title="Permanent link">&para;</a></h4>
+<p><code>/backend/analysis</code></p>
+<ul>
+<li>提供bm25排序</li>
+<li>提供文档相似搜索</li>
+</ul>
+<h2 id="3">3. 前端模块介绍<a class="headerlink" href="#3" title="Permanent link">&para;</a></h2>
+<h3 id="31">3.1 框架图<a class="headerlink" href="#31" title="Permanent link">&para;</a></h3>
+<p><img alt="frame" src="../screenshots/frame.png" /></p>
+<h3 id="32">3.2 功能展示<a class="headerlink" href="#32" title="Permanent link">&para;</a></h3>
+<h4 id="321">3.2.1 关键词检索<a class="headerlink" href="#321" title="Permanent link">&para;</a></h4>
+<p>根据输入的关键词，搜索并展示相关的条目。点击可以进入条目详细信息页面。</p>
+<p><img alt="1" src="../screenshots/1.png" /></p>
+<h4 id="322">3.2.2 高亮显示<a class="headerlink" href="#322" title="Permanent link">&para;</a></h4>
+<p>展示检索到的条目时，条目内容中的搜索词高亮显示。</p>
+<h4 id="323">3.2.3 分页<a class="headerlink" href="#323" title="Permanent link">&para;</a></h4>
+<p>检索到的条目超过10条时，将分页展示条目。</p>
+<p><img alt="3" src="../screenshots/3.png" /></p>
+<h4 id="324">3.2.4 相关法院/法官<a class="headerlink" href="#324" title="Permanent link">&para;</a></h4>
+<p>关键词中包含法院/法官名时，在右侧展示法院/法官的条目。点击可以进入同法院/法官条目页面。</p>
+<p><img alt="2" src="../screenshots/2.png" /></p>
+<h4 id="325">3.2.5 精细化检索<a class="headerlink" href="#325" title="Permanent link">&para;</a></h4>
+<p>开启后，支持多个检索词以交(&amp;)、并(|)、补(-)等逻辑进行精确匹配。</p>
+<p><img alt="4" src="../screenshots/4.png" /></p>
+<h4 id="326">3.2.6 上传文件搜索相似案例<a class="headerlink" href="#326" title="Permanent link">&para;</a></h4>
+<p>支持上传文件，搜索并展示内容相似的案例、法院和法官。点击可以进入相应页面。</p>
+<p><img alt="5" src="../screenshots/5.png" /></p>
+<h4 id="327">3.2.7 条目信息解析<a class="headerlink" href="#327" title="Permanent link">&para;</a></h4>
+<p>在条目详细信息页面，对条目内容做解析，以表格形式展示。</p>
+<p><img alt="6" src="../screenshots/6.png" /></p>
+<h4 id="328">3.2.8 条目下载<a class="headerlink" href="#328" title="Permanent link">&para;</a></h4>
+<p>在条目详细信息页面，支持下载条目文件。</p>
+<h4 id="329">3.2.9 同法院/法官案例扩展<a class="headerlink" href="#329" title="Permanent link">&para;</a></h4>
+<p>在条目详细信息页面，解析法院和审判员信息。点击检索可以搜索同法院/法官案例。</p>
+<h4 id="3210">3.2.10 同法院/法官条目<a class="headerlink" href="#3210" title="Permanent link">&para;</a></h4>
+<p>搜索并展示某法院/法院的所有条目。</p>
+<p><img alt="7" src="../screenshots/7.png" /></p>
+<h4 id="3211">3.2.11 所有法院/法官<a class="headerlink" href="#3211" title="Permanent link">&para;</a></h4>
+<p>分页展示所有法院/法官。点击可以进入同法院/法官条目页面。</p>
+<p><img alt="8" src="../screenshots/8.png" /></p>
+<p><img alt="9" src="../screenshots/9.png" /></p>
+<h4 id="3212">3.2.12 页面回退<a class="headerlink" href="#3212" title="Permanent link">&para;</a></h4>
+<p>记录页面切换的信息，支持用户通过back按钮回到之前的页面。</p>
+<h3 id="33">3.3 主要函数<a class="headerlink" href="#33" title="Permanent link">&para;</a></h3>
+<h4 id="331-search_this-par">3.3.1 search(_this, par)<a class="headerlink" href="#331-search_this-par" title="Permanent link">&para;</a></h4>
+<table>
+<thead>
+<tr>
+<th>功能</th>
+<th>根据关键词par，检索相关条目</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>使用后端接口</td>
+<td>/api/text_search</td>
+</tr>
+</tbody>
+</table>
+<h4 id="332-search_page_this-par-page">3.3.2 search_page(_this, par, page)<a class="headerlink" href="#332-search_page_this-par-page" title="Permanent link">&para;</a></h4>
+<table>
+<thead>
+<tr>
+<th>功能</th>
+<th>根据关键词par和页数page，检索相关条目</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>使用后端接口</td>
+<td>/api/text_search</td>
+</tr>
+</tbody>
+</table>
+<h4 id="333-get_xml_this-addr">3.3.3 get_xml(_this, addr)<a class="headerlink" href="#333-get_xml_this-addr" title="Permanent link">&para;</a></h4>
+<table>
+<thead>
+<tr>
+<th>功能</th>
+<th>根据条目编号addr，获得条目内容并解析</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>使用后端接口</td>
+<td>/api/document、/api/judgment、/api/court、/api/judge</td>
+</tr>
+</tbody>
+</table>
+<h4 id="334-get_relate_data_this-type-id">3.3.4 get_relate_data(_this, type, id)<a class="headerlink" href="#334-get_relate_data_this-type-id" title="Permanent link">&para;</a></h4>
+<table>
+<thead>
+<tr>
+<th>功能</th>
+<th>根据类别type和序号id，检索同法院/法官条目</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>使用后端接口</td>
+<td>/api/judgment</td>
+</tr>
+</tbody>
+</table>
+<h4 id="335-similar_search_this-form">3.3.5 similar_search(_this, form)<a class="headerlink" href="#335-similar_search_this-form" title="Permanent link">&para;</a></h4>
+<table>
+<thead>
+<tr>
+<th>功能</th>
+<th>根据上传的文件，检索相似条目</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>使用后端接口</td>
+<td>/api/similar_search</td>
+</tr>
+</tbody>
+</table>
+<h2 id="4">4. 后端模块介绍<a class="headerlink" href="#4" title="Permanent link">&para;</a></h2>
+<h3 id="41-common">4.1 common: 结构化数据库设计<a class="headerlink" href="#41-common" title="Permanent link">&para;</a></h3>
+<ol>
+<li>
+<p>文书类型分析</p>
+<p>我们对课程提供的数据进行了详实的前期分析。</p>
+<p>所提供的XML文件中，除了15个损坏的文件以外，主要可分为以下九种（括号中为文书数目）：</p>
+<ul>
+<li>法院文书</li>
+<li>判决书(44402) </li>
+<li>裁定书(21752)</li>
+<li>调解书(87)</li>
+<li>决定书(31)</li>
+<li>起诉状(2)</li>
+<li>通知书(1)</li>
+<li>检察院文书</li>
+<li>起诉书(1579)</li>
+<li>不起诉书(327)</li>
+<li>司法行政文书</li>
+<li>暂予监外执行案例(1)</li>
+</ul>
+<p>每种文书的文件结构都不相同，需要根据类型进行不同的处理，以判决书为例：</p>
+<div class="highlight"><pre><span></span><code>全文
+    文首
+        文书制作单位(法院)
+        法院文书种类(裁判文书)
+        经办法院
+            法院层级码
+            标准法院名称
+            法院级别
+            行政区划_省
+            行政区划_市
+        文书名称
+        案号
+            字号
+            案件类型_一级(NULL)
+                案件类型_二级
+                    案件类型_三级
+                        ......
+            立案年度
+            法院简介
+            案号顺序号
+        案件类别
+        文书种类
+        审判程序
+        案件类型
+    当事人
+        起诉方 x N
+            诉讼参与人(即 姓名)
+            当事人类型(法人 或 自然人)
+            诉讼身份(有 原告 和 起诉人 之分)
+            当事人类别(原告 被告 代理人)
+            本审诉讼地位(原告 被告 代理人)
+            国籍
+            性别
+            民族
+            出生日期
+            当事人地址
+            自然人身份
+        应诉方 x N
+            诉讼参与人(即 姓名)
+            当事人类型(法人 或 自然人)
+            诉讼身份(有 原告 和 起诉人 之分)
+            当事人类别(原告 被告 代理人)
+            本审诉讼地位(原告 被告 代理人)
+            国籍
+            性别
+            民族
+            出生日期
+            当事人地址
+            自然人身份
+        代理人 x N
+            诉讼参与人(即 姓名)
+            当事人类型(法人 或 自然人)
+            诉讼身份
+            当事人类别(原告 被告 代理人)
+            参与人诉讼地位(原告 被告 代理人)
+            国籍
+            自然人身份
+            代理对象集合
+                起诉方/应诉方 x N
+            ......
+        共同诉讼(是/否)
+    诉讼记录
+        案由
+            完整案由
+            案由代码
+            分级码
+        ......
+    案件基本情况
+        ......
+        法律法条引用 x N(NULL)
+            法律法条分组 x N
+    裁判分析过程
+        案由
+            完整案由
+            案由代码
+            分级码
+        法律法条引用 x N(NULL)
+            法律法条分组 x N
+    判决结果
+        ......
+    文尾
+        裁判时间
+            结案年度
+            结案年月日
+            结案年月
+            结案月份
+        审判组织成员 x N
+            姓名
+            角色
+        法官成员 x N
+            姓名
+            角色
+            完整信息
+    立案日期(NULL)
+    文书是否模糊
+    时间线
+        时间 x N
+            段落来源
+            原文
+            时间原文
+            具体时间
+附加段
+    案件类别
+    审判程序
+    民事案由
+        完整案由
+        案由代码
+        分级码
+        父案由代码
+        父案由
+自定义
+    .......
+法律法条引用 x N(NULL)
+    法律法条分组 x N
+</code></pre></div>
+</li>
+<li>
+<p>数据库设计</p>
+<p>在综合了多种文书的特点后，我们的决定将文书的数据表设计为三个部分：</p>
+<ul>
+<li>LawDocument: 基类，所有文档的基础内容，包括地址、文书类型、全文等；</li>
+<li>Judgment: 法院文书，包括判决书、裁定书、调解书、决定书；</li>
+<li>Prosecution: 检察院文书，包括起诉书、不起诉书；</li>
+<li>个别极少数的文书，如"监外执行案例"和"通知书"，仅解析储存基础内容。</li>
+</ul>
+<p>最后，完整的数据库设计如下：</p>
+<div class="highlight"><pre><span></span><code><span class="k">class</span> <span class="nc">Court</span><span class="p">(</span><span class="n">models</span><span class="o">.</span><span class="n">Model</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    法院模型</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">name</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">CharField</span><span class="p">(</span><span class="n">max_length</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span> <span class="n">verbose_name</span><span class="o">=</span><span class="s1">&#39;法院名称&#39;</span><span class="p">)</span>  <span class="c1"># 法院标准名称</span>
+    <span class="n">code</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">CharField</span><span class="p">(</span><span class="n">max_length</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">verbose_name</span><span class="o">=</span><span class="s1">&#39;法院层级码&#39;</span><span class="p">)</span>  <span class="c1"># 法院层级码</span>
+    <span class="n">level</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">CharField</span><span class="p">(</span><span class="n">max_length</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">verbose_name</span><span class="o">=</span><span class="s1">&#39;法院级别&#39;</span><span class="p">)</span>  <span class="c1"># 法院级别(eg. 基层、中级、高级)</span>
+    <span class="n">province</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">CharField</span><span class="p">(</span><span class="n">max_length</span><span class="o">=</span><span class="mi">30</span><span class="p">,</span> <span class="n">verbose_name</span><span class="o">=</span><span class="s1">&#39;省份&#39;</span><span class="p">)</span>  <span class="c1"># 行政区划——省份</span>
+    <span class="n">city</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">CharField</span><span class="p">(</span><span class="n">max_length</span><span class="o">=</span><span class="mi">50</span><span class="p">,</span> <span class="n">verbose_name</span><span class="o">=</span><span class="s1">&#39;城市&#39;</span><span class="p">)</span>  <span class="c1"># 行政区划——城市</span>
+
+<span class="k">class</span> <span class="nc">Procuratorate</span><span class="p">(</span><span class="n">models</span><span class="o">.</span><span class="n">Model</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    检察院模型</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">name</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">CharField</span><span class="p">(</span><span class="n">max_length</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span> <span class="n">verbose_name</span><span class="o">=</span><span class="s1">&#39;检察院名称&#39;</span><span class="p">)</span>  <span class="c1"># 检察院名称</span>
+    <span class="n">district_code</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">CharField</span><span class="p">(</span><span class="n">max_length</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">verbose_name</span><span class="o">=</span><span class="s1">&#39;行政区划代码&#39;</span><span class="p">)</span>  <span class="c1"># 行政区划代码</span>
+    <span class="n">province</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">CharField</span><span class="p">(</span><span class="n">max_length</span><span class="o">=</span><span class="mi">30</span><span class="p">,</span> <span class="n">verbose_name</span><span class="o">=</span><span class="s1">&#39;省份&#39;</span><span class="p">)</span>  <span class="c1"># 行政区划——省份</span>
+    <span class="n">city</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">CharField</span><span class="p">(</span><span class="n">max_length</span><span class="o">=</span><span class="mi">50</span><span class="p">,</span> <span class="n">verbose_name</span><span class="o">=</span><span class="s1">&#39;城市&#39;</span><span class="p">)</span>  <span class="c1"># 行政区划——城市</span>
+    <span class="n">county</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">CharField</span><span class="p">(</span><span class="n">max_length</span><span class="o">=</span><span class="mi">50</span><span class="p">,</span> <span class="n">verbose_name</span><span class="o">=</span><span class="s1">&#39;区县&#39;</span><span class="p">,</span> <span class="n">null</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">blank</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>  <span class="c1"># 行政区划——区县</span>
+    <span class="n">level</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">IntegerField</span><span class="p">(</span><span class="n">verbose_name</span><span class="o">=</span><span class="s1">&#39;检察院级别&#39;</span><span class="p">)</span>  <span class="c1"># 检察院级别(eg. 4)</span>
+
+<span class="k">class</span> <span class="nc">Party</span><span class="p">(</span><span class="n">models</span><span class="o">.</span><span class="n">Model</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    当事人模型</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">name</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">CharField</span><span class="p">(</span><span class="n">max_length</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span> <span class="n">verbose_name</span><span class="o">=</span><span class="s1">&#39;当事人名称&#39;</span><span class="p">)</span>  <span class="c1"># 当事人名称</span>
+    <span class="n">name_is_fuzzy</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">BooleanField</span><span class="p">(</span><span class="n">verbose_name</span><span class="o">=</span><span class="s1">&#39;当事人名称是否模糊&#39;</span><span class="p">)</span>  <span class="c1"># 当事人名称是否模糊(可能是化名)</span>
+    <span class="n">h_type</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">CharField</span><span class="p">(</span><span class="n">max_length</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">verbose_name</span><span class="o">=</span><span class="s1">&#39;当事人类型&#39;</span><span class="p">)</span>  <span class="c1"># 当事人类型(eg. 个人、法人、其他)</span>
+    <span class="n">nationality</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">CharField</span><span class="p">(</span><span class="n">max_length</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">verbose_name</span><span class="o">=</span><span class="s1">&#39;国籍&#39;</span><span class="p">,</span> <span class="n">blank</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>  <span class="c1"># 国籍</span>
+    <span class="n">nation</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">CharField</span><span class="p">(</span><span class="n">max_length</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">verbose_name</span><span class="o">=</span><span class="s1">&#39;民族&#39;</span><span class="p">,</span> <span class="n">blank</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>  <span class="c1"># 民族</span>
+    <span class="n">gender</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">CharField</span><span class="p">(</span><span class="n">max_length</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">verbose_name</span><span class="o">=</span><span class="s1">&#39;性别&#39;</span><span class="p">,</span> <span class="n">blank</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>  <span class="c1"># 性别</span>
+    <span class="n">birthday</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">DateField</span><span class="p">(</span><span class="n">verbose_name</span><span class="o">=</span><span class="s1">&#39;出生日期&#39;</span><span class="p">,</span> <span class="n">blank</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">null</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>  <span class="c1"># 出生日期</span>
+
+<span class="k">class</span> <span class="nc">Agent</span><span class="p">(</span><span class="n">models</span><span class="o">.</span><span class="n">Model</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    代理人模型</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">name</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">CharField</span><span class="p">(</span><span class="n">max_length</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span> <span class="n">verbose_name</span><span class="o">=</span><span class="s1">&#39;代理人名称&#39;</span><span class="p">)</span>  <span class="c1"># 代理人名称</span>
+    <span class="n">h_type</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">CharField</span><span class="p">(</span><span class="n">max_length</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">verbose_name</span><span class="o">=</span><span class="s1">&#39;代理人类型&#39;</span><span class="p">)</span>  <span class="c1"># 代理人类型(eg. 个人、法人、其他)</span>
+    <span class="n">profession</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">CharField</span><span class="p">(</span><span class="n">max_length</span><span class="o">=</span><span class="mi">30</span><span class="p">,</span> <span class="n">verbose_name</span><span class="o">=</span><span class="s1">&#39;代理人辩护人职业类型&#39;</span><span class="p">,</span> <span class="n">blank</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>  <span class="c1"># 职业(eg. 职业律师、非法务人员)</span>
+    <span class="n">a_type</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">CharField</span><span class="p">(</span><span class="n">max_length</span><span class="o">=</span><span class="mi">20</span><span class="p">,</span> <span class="n">verbose_name</span><span class="o">=</span><span class="s1">&#39;辩护人或诉讼代理人类型&#39;</span><span class="p">,</span> <span class="n">blank</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>  <span class="c1"># 代理类型(eg. 律师、亲友)</span>
+
+<span class="k">class</span> <span class="nc">LawReference</span><span class="p">(</span><span class="n">models</span><span class="o">.</span><span class="n">Model</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    法条引用模型</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">law_name</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">CharField</span><span class="p">(</span><span class="n">max_length</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span> <span class="n">verbose_name</span><span class="o">=</span><span class="s2">&quot;法律名称&quot;</span><span class="p">)</span>  <span class="c1"># 法律名称</span>
+    <span class="n">law_clause</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">CharField</span><span class="p">(</span><span class="n">max_length</span><span class="o">=</span><span class="mi">30</span><span class="p">,</span> <span class="n">verbose_name</span><span class="o">=</span><span class="s2">&quot;条&quot;</span><span class="p">,</span> <span class="n">null</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">blank</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>  <span class="c1"># 条</span>
+    <span class="n">law_clause_item</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">CharField</span><span class="p">(</span><span class="n">max_length</span><span class="o">=</span><span class="mi">30</span><span class="p">,</span> <span class="n">verbose_name</span><span class="o">=</span><span class="s2">&quot;款&quot;</span><span class="p">,</span> <span class="n">null</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">blank</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>  <span class="c1"># 款</span>
+    <span class="n">law_item</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">CharField</span><span class="p">(</span><span class="n">max_length</span><span class="o">=</span><span class="mi">30</span><span class="p">,</span> <span class="n">verbose_name</span><span class="o">=</span><span class="s2">&quot;项&quot;</span><span class="p">,</span> <span class="n">null</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">blank</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>  <span class="c1"># 项</span>
+
+<span class="k">class</span> <span class="nc">Judge</span><span class="p">(</span><span class="n">models</span><span class="o">.</span><span class="n">Model</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    法官模型</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">name</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">CharField</span><span class="p">(</span><span class="n">max_length</span><span class="o">=</span><span class="mi">50</span><span class="p">,</span> <span class="n">verbose_name</span><span class="o">=</span><span class="s1">&#39;法官名称&#39;</span><span class="p">)</span>  <span class="c1"># 法官名称</span>
+    <span class="n">full_name</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">CharField</span><span class="p">(</span><span class="n">max_length</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span> <span class="n">verbose_name</span><span class="o">=</span><span class="s1">&#39;法官全称&#39;</span><span class="p">)</span>  <span class="c1"># 法官全称</span>
+
+<span class="k">class</span> <span class="nc">LawDocument</span><span class="p">(</span><span class="n">models</span><span class="o">.</span><span class="n">Model</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    文书基类</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">WSZZDW</span> <span class="o">=</span> <span class="p">(</span>
+        <span class="p">(</span><span class="s1">&#39;1&#39;</span><span class="p">,</span> <span class="s1">&#39;法院&#39;</span><span class="p">),</span>
+        <span class="p">(</span><span class="s1">&#39;2&#39;</span><span class="p">,</span> <span class="s1">&#39;检察院&#39;</span><span class="p">),</span>
+        <span class="p">(</span><span class="s1">&#39;3&#39;</span><span class="p">,</span> <span class="s1">&#39;司法行政&#39;</span><span class="p">),</span>
+    <span class="p">)</span>
+    <span class="c1"># 文书基本信息</span>
+    <span class="n">address</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">CharField</span><span class="p">(</span><span class="n">max_length</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span> <span class="n">verbose_name</span><span class="o">=</span><span class="s1">&#39;地址&#39;</span><span class="p">)</span>  <span class="c1"># 地址</span>
+    <span class="n">agency</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">CharField</span><span class="p">(</span><span class="n">max_length</span><span class="o">=</span><span class="mi">20</span><span class="p">,</span> <span class="n">choices</span><span class="o">=</span><span class="n">WSZZDW</span><span class="p">,</span> <span class="n">verbose_name</span><span class="o">=</span><span class="s1">&#39;文书制作单位&#39;</span><span class="p">)</span>  <span class="c1"># 文书制作单位</span>
+    <span class="n">doc_name</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">CharField</span><span class="p">(</span><span class="n">max_length</span><span class="o">=</span><span class="mi">30</span><span class="p">,</span> <span class="n">verbose_name</span><span class="o">=</span><span class="s1">&#39;文书名称&#39;</span><span class="p">,</span> <span class="n">blank</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>  <span class="c1"># 文书名称</span>
+    <span class="n">doc_type</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">CharField</span><span class="p">(</span><span class="n">max_length</span><span class="o">=</span><span class="mi">30</span><span class="p">,</span> <span class="n">verbose_name</span><span class="o">=</span><span class="s1">&#39;文书种类&#39;</span><span class="p">,</span> <span class="n">blank</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>  <span class="c1"># 文书种类</span>
+    <span class="n">full_text</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">TextField</span><span class="p">(</span><span class="n">verbose_name</span><span class="o">=</span><span class="s1">&#39;全文&#39;</span><span class="p">)</span>  <span class="c1"># 全文</span>
+
+<span class="k">class</span> <span class="nc">Judgment</span><span class="p">(</span><span class="n">LawDocument</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    法院文书模型（裁判文书+决定书）</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="c1"># 文书基本信息</span>
+    <span class="n">case_number</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">CharField</span><span class="p">(</span><span class="n">max_length</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span> <span class="n">verbose_name</span><span class="o">=</span><span class="s1">&#39;案号&#39;</span><span class="p">)</span>  <span class="c1"># 案号</span>
+    <span class="n">case_type</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">CharField</span><span class="p">(</span><span class="n">max_length</span><span class="o">=</span><span class="mi">30</span><span class="p">,</span> <span class="n">verbose_name</span><span class="o">=</span><span class="s1">&#39;案件类别&#39;</span><span class="p">)</span>  <span class="c1"># 案件类别</span>
+    <span class="c1"># 裁判日期</span>
+    <span class="n">judgment_date</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">DateField</span><span class="p">(</span><span class="n">verbose_name</span><span class="o">=</span><span class="s1">&#39;裁判日期&#39;</span><span class="p">,</span> <span class="n">blank</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">null</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>  <span class="c1"># 裁判日期</span>
+    <span class="c1"># 法院信息</span>
+    <span class="n">court</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">ForeignKey</span><span class="p">(</span><span class="n">Court</span><span class="p">,</span> <span class="n">on_delete</span><span class="o">=</span><span class="n">models</span><span class="o">.</span><span class="n">CASCADE</span><span class="p">,</span> <span class="n">verbose_name</span><span class="o">=</span><span class="s1">&#39;法院&#39;</span><span class="p">)</span>  <span class="c1"># 法院</span>
+    <span class="c1"># 当事人信息</span>
+    <span class="n">plaintiff</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">ManyToManyField</span><span class="p">(</span><span class="n">Party</span><span class="p">,</span> <span class="n">related_name</span><span class="o">=</span><span class="s1">&#39;plaintiff&#39;</span><span class="p">,</span> <span class="n">verbose_name</span><span class="o">=</span><span class="s1">&#39;原告&#39;</span><span class="p">,</span> <span class="n">db_index</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>  <span class="c1"># 原告</span>
+    <span class="n">defendant</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">ManyToManyField</span><span class="p">(</span><span class="n">Party</span><span class="p">,</span> <span class="n">related_name</span><span class="o">=</span><span class="s1">&#39;defendant&#39;</span><span class="p">,</span> <span class="n">verbose_name</span><span class="o">=</span><span class="s1">&#39;被告&#39;</span><span class="p">,</span> <span class="n">db_index</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>  <span class="c1"># 被告</span>
+    <span class="c1"># 代理人信息</span>
+    <span class="n">agent</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">ManyToManyField</span><span class="p">(</span><span class="n">Agent</span><span class="p">,</span> <span class="n">related_name</span><span class="o">=</span><span class="s1">&#39;plaintiff_agent&#39;</span><span class="p">,</span> <span class="n">verbose_name</span><span class="o">=</span><span class="s1">&#39;代理人&#39;</span><span class="p">,</span>
+                                   <span class="n">blank</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">db_index</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">through</span><span class="o">=</span><span class="s1">&#39;DocAgentParty&#39;</span><span class="p">)</span>  <span class="c1"># 代理人</span>
+    <span class="c1"># 法条引用</span>
+    <span class="n">law_reference</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">ManyToManyField</span><span class="p">(</span><span class="n">LawReference</span><span class="p">,</span> <span class="n">verbose_name</span><span class="o">=</span><span class="s1">&#39;法条引用&#39;</span><span class="p">,</span> <span class="n">db_index</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>  <span class="c1"># 法条引用</span>
+    <span class="c1"># 审判组织信息</span>
+    <span class="n">judge</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">ManyToManyField</span><span class="p">(</span><span class="n">Judge</span><span class="p">,</span> <span class="n">verbose_name</span><span class="o">=</span><span class="s1">&#39;法官&#39;</span><span class="p">,</span> <span class="n">db_index</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>  <span class="c1"># 法官</span>
+
+<span class="k">class</span> <span class="nc">Prosecution</span><span class="p">(</span><span class="n">LawDocument</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    检察院文书模型</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="c1"># 文书基本信息</span>
+    <span class="n">case_number</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">CharField</span><span class="p">(</span><span class="n">max_length</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span> <span class="n">verbose_name</span><span class="o">=</span><span class="s1">&#39;案号&#39;</span><span class="p">)</span>  <span class="c1"># 案号</span>
+    <span class="n">case_type</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">CharField</span><span class="p">(</span><span class="n">max_length</span><span class="o">=</span><span class="mi">30</span><span class="p">,</span> <span class="n">verbose_name</span><span class="o">=</span><span class="s1">&#39;案件类别&#39;</span><span class="p">)</span>  <span class="c1"># 案件类别</span>
+    <span class="c1"># 诉至法院</span>
+    <span class="n">court</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">CharField</span><span class="p">(</span><span class="n">max_length</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span> <span class="n">verbose_name</span><span class="o">=</span><span class="s1">&#39;诉至法院&#39;</span><span class="p">)</span>  <span class="c1"># 诉至法院</span>
+    <span class="c1"># (不)起诉日期</span>
+    <span class="n">p_date</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">DateField</span><span class="p">(</span><span class="n">verbose_name</span><span class="o">=</span><span class="s1">&#39;(不)起诉日期&#39;</span><span class="p">,</span> <span class="n">blank</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">null</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>  <span class="c1"># (不)起诉日期</span>
+    <span class="c1"># 检察院信息</span>
+    <span class="n">procuratorate</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">ForeignKey</span><span class="p">(</span><span class="n">Procuratorate</span><span class="p">,</span> <span class="n">on_delete</span><span class="o">=</span><span class="n">models</span><span class="o">.</span><span class="n">CASCADE</span><span class="p">,</span> <span class="n">verbose_name</span><span class="o">=</span><span class="s1">&#39;检察院&#39;</span><span class="p">)</span>  <span class="c1"># 检察院</span>
+    <span class="c1"># 被告人信息</span>
+    <span class="n">defendant</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">ManyToManyField</span><span class="p">(</span><span class="n">Party</span><span class="p">,</span> <span class="n">related_name</span><span class="o">=</span><span class="s1">&#39;prosecution_defendant&#39;</span><span class="p">,</span> <span class="n">verbose_name</span><span class="o">=</span><span class="s1">&#39;被告&#39;</span><span class="p">,</span>
+                                       <span class="n">db_index</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>  <span class="c1"># 被告</span>
+
+<span class="k">class</span> <span class="nc">DocAgentParty</span><span class="p">(</span><span class="n">models</span><span class="o">.</span><span class="n">Model</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    文书代理人当事人关系模型</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">doc</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">ForeignKey</span><span class="p">(</span><span class="n">Judgment</span><span class="p">,</span> <span class="n">on_delete</span><span class="o">=</span><span class="n">models</span><span class="o">.</span><span class="n">CASCADE</span><span class="p">,</span> <span class="n">verbose_name</span><span class="o">=</span><span class="s1">&#39;文书&#39;</span><span class="p">)</span>  <span class="c1"># 文书</span>
+    <span class="n">agent</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">ForeignKey</span><span class="p">(</span><span class="n">Agent</span><span class="p">,</span> <span class="n">on_delete</span><span class="o">=</span><span class="n">models</span><span class="o">.</span><span class="n">CASCADE</span><span class="p">,</span> <span class="n">verbose_name</span><span class="o">=</span><span class="s1">&#39;代理人&#39;</span><span class="p">)</span>  <span class="c1"># 代理人</span>
+    <span class="n">party</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">ForeignKey</span><span class="p">(</span><span class="n">Party</span><span class="p">,</span> <span class="n">on_delete</span><span class="o">=</span><span class="n">models</span><span class="o">.</span><span class="n">CASCADE</span><span class="p">,</span> <span class="n">verbose_name</span><span class="o">=</span><span class="s1">&#39;当事人&#39;</span><span class="p">)</span>  <span class="c1"># 当事人</span>
+</code></pre></div>
+</li>
+</ol>
+<h3 id="42-crawlers">4.2 crawlers: 数据抓取子系统<a class="headerlink" href="#42-crawlers" title="Permanent link">&para;</a></h3>
+<p>建立了一个<code>XmlSpider</code>类，用于获取数据并调用<code>./handlers.py</code>中的方法对获取到的数据进行解析，解析后的结构化数据存储在在<code>common</code>中建立的数据表中。</p>
+<ol>
+<li>文件结构</li>
+</ol>
+<div class="highlight"><pre><span></span><code>-文件 views.py
+ -类 XmlSpider
+ -接口 launch_spider
+-文件 handlers.py
+ -辅助函数 
+        -find_node(一个简单的封装，用于查找节点，如果没有找到，返回一个value为空的default节点;主要是为了解决.get(&quot;value&quot;)报错)
+        -str_to_date(将字符串转换为日期)
+        -str_to_int(将字符串转换为整数)
+    -功能函数
+     -handle_court
+     -handle_procuratorate
+     ......
+     -handle_document
+     -handle_judgment
+     -handle_prosecution
+</code></pre></div>
+<ol>
+<li>简单介绍</li>
+</ol>
+<p>接口<code>launch_spider</code>被调用后，建立一个<code>XmlSpider</code>实例并开启它，<code>XmlSpider</code>会从本地指定目录获取法律文书，并判断文书所属类别；然后，它会根据文书类别调用<code>handlers.py</code>中的<code>handle_document</code>、<code>handle_judgment</code>或<code>handle_prosecution</code>，后者会调用其他<code>handle</code>函数将文书逐步解析。</p>
+<h3 id="43-indexes">4.3 indexes: 内容索引子系统<a class="headerlink" href="#43-indexes" title="Permanent link">&para;</a></h3>
+<ol>
+<li>索引数据库结构</li>
+</ol>
+<div class="highlight"><pre><span></span><code>-数据库名:index
+ -表名: Posting(倒排索引)
+     -字段：
+         -词项: term
+         -文档编号: doc_id
+         -词频: freq
+         -位置: position
+    -表名: Term(词条)
+     -字段
+         -词项: term
+         -文档数量: document_count
+         -idf得分: idf
+</code></pre></div>
+<ol>
+<li>文件结构</li>
+</ol>
+<div class="highlight"><pre><span></span><code>-文件 views.py
+ -功能函数 
+     -handle_document
+     -build_inverted_index
+     -build_terms
+     -build_inverted_index_and_term_for_one
+    -接口
+     (一些调用上述函数的测试接口)
+</code></pre></div>
+<ol>
+<li>
+<p>简要介绍</p>
+</li>
+<li>
+<p>接口收到建立索引的请求后，调用<code>build_inverted_index()</code>；</p>
+</li>
+<li>
+<p><code>build_inverted_index()</code>会进行一些预处理工作，如mongoDB数据表的建立、停用词的构建；然后遍历文书，对于遍历到的每一个文档，调用<code>handle_document()</code>；在遍历完所有文书后，调用<code>build_terms()</code>建立关键词表；</p>
+</li>
+<li>
+<p><code>handle_document()</code>会对传入的文档进行分词处理，处理后存入mongoDB的倒排索引<code>Posting</code>表中；</p>
+</li>
+<li><code>build_inverted_index_and_term_for_one()</code>用于额外功能"上传新文书"，用于上传单个新文书时为其单独添索引。</li>
+</ol>
+<h3 id="441-do_search">4.4.1 do_search: 检索子系统<a class="headerlink" href="#441-do_search" title="Permanent link">&para;</a></h3>
+<ol>
+<li>文件结构</li>
+</ol>
+<div class="highlight"><pre><span></span><code>-文件 do_search
+ -功能函数
+     -search_by_keywords
+     -construct_page
+     -filter_result
+ -接口
+     -text_search
+     -similar_search
+</code></pre></div>
+<ol>
+<li>
+<p>简要介绍</p>
+</li>
+<li>
+<p>词条搜索：调用text_search接口，它会进行</p>
+<ol>
+<li>从GET方法获取搜索词条query；</li>
+<li>检查redis缓存，如果有相同的query，直接获取其搜索结果；</li>
+<li>如果redis未命中：<ol>
+<li>调用query_parse(解析子系统)的<code>parse_query()</code>解析query，并返回一个文档id列表和分词结果；</li>
+<li>调用analysis(链接分析子系统)的<code>bm25_sort()</code>对文档id列表进行排序；</li>
+<li>筛选分词结果中的人名、法院名等，调用<code>search_by_keywords()</code>进行结构化查询，得到一个保存有相关法官、法院列表的dict；</li>
+<li>将结果组织为一个dict，存入redis缓存；</li>
+</ol>
+</li>
+<li>调用<code>construct_page()</code>，根据传入的文档id列表和页码信息生成一个返回页面；</li>
+<li>返回结果。</li>
+</ol>
+</li>
+<li>相似文件搜索：<ol>
+<li>从POST方法获取文件数据流，存储到本地；</li>
+<li>解析文件，获取全文内容和一些结构化信息；</li>
+<li>对法院名称、法官名称等结构化信息，调用<code>search_by_keywords()</code>进行结构化查询；</li>
+<li>对全文，调用analysis(链接分析子系统)的<code>get_similar_docs()</code>进行相似查询；</li>
+<li>将两种查询结结果组织并返回。</li>
+</ol>
+</li>
+</ol>
+<h3 id="442-query_parse">4.4.2 query_parse: 解析子系统<a class="headerlink" href="#442-query_parse" title="Permanent link">&para;</a></h3>
+<ol>
+<li>文件结构</li>
+</ol>
+<div class="highlight"><pre><span></span><code>-文件 query_parse
+ -辅助函数
+     -split_into_tokens
+     -infix_to_postfix
+ -功能函数
+     -term_to_doc_ids
+     -cal_doc_ids
+     -parse_query
+</code></pre></div>
+<ol>
+<li>
+<p>简要介绍</p>
+</li>
+<li>
+<p>parse_query获取从do_search模块传来的词条，并判断其类型</p>
+<ol>
+<li>如果开头为"EXACTLY: "，则为精确、逻辑查询：<ol>
+<li>调用两个辅助函数将查询语句解析并转化为后缀逻辑表达式；</li>
+<li>调用<code>cal_doc_ids()</code>，创建一个解析栈，并遍历上一步创立的后缀逻辑表达式<ol>
+<li>如果是查询词，调用<code>term_to_doc_ids()</code>获取相关文档列表，转换为集合压入栈中；</li>
+<li>如果是逻辑运算符，栈顶的两项出栈，对集合进行对应的操作后入栈；</li>
+</ol>
+</li>
+<li>最终栈中只有一项，将其出栈并作为结果返回；</li>
+</ol>
+</li>
+<li>否则为普通查询：<ol>
+<li>对query进行分词；</li>
+<li>根据分词结果，调用<code>term_to_doc_ids()</code>获取相关文档，作为结果返回；</li>
+<li>检查分词结果的idf值并排序，筛选出超过一定阈值的词，作为排序依据额外返回。</li>
+</ol>
+</li>
+</ol>
+</li>
+</ol>
+<h3 id="45-analysis">4.5 analysis: 链接分析子系统<a class="headerlink" href="#45-analysis" title="Permanent link">&para;</a></h3>
+<ol>
+<li>文件结构</li>
+</ol>
+<div class="highlight"><pre><span></span><code>-文件 views.py
+ -功能函数 
+     - bm25_sort
+     - get_similar_docs
+ -接口
+     -train_model(开启模型训练)
+-文件 doc2vec.py
+ -类 MyDocs
+ -功能函数
+     -train_doc2vec
+     -get_similar_docs_by_id
+     -get_similar_docs_by_word_list
+</code></pre></div>
+<ol>
+<li>
+<p>简要介绍</p>
+</li>
+<li>
+<p>views.py中的两个函数已经在前面模块的介绍中提到，它们分别用于bm25排序和相似文档获取，这里不再赘述。</p>
+</li>
+<li>doc2vec.py中调用了<code>gensim</code>库中的<code>Doc2Vec</code>模型，导入所有文书进行训练，获取每个文书的特征向量：<ol>
+<li><code>MyDocs</code>类是一个迭代器，用于从数据库中获取所有文书的全文信息并进行分词，将分词结果依次返回；</li>
+<li><code>train_doc2vec()</code>开启训练；</li>
+<li><code>get_similar_docs_by_id()</code>根据文书id筛选topk条和它相似的文书；</li>
+<li><code>get_similar_docs_by_word_list()</code>根据传入的文书分词结果，建立特征向量，然后筛选topk条和它相似的文书。</li>
+</ol>
+</li>
+</ol>
+<h2 id="5">5. 优化过程<a class="headerlink" href="#5" title="Permanent link">&para;</a></h2>
+<h3 id="51">5.1 速度优化<a class="headerlink" href="#51" title="Permanent link">&para;</a></h3>
+<p>我们主要进行了如下优化：</p>
+<h4 id="511">5.1.1 搜索速度<a class="headerlink" href="#511" title="Permanent link">&para;</a></h4>
+<p>考虑到搜索引擎的功能特点，搜索速度的快慢是非常影响体验的因素；对此，我们做了如下优化：</p>
+<ol>
+<li>
+<p>建立一个清晰的<strong>函数调用逻辑</strong>：</p>
+</li>
+<li>
+<p>最初，我们的函数调用比较混乱，一些操作在很多不同函数中存在，例如连接数据库等；在搜索过程中会调用不同的函数，有些操作会重复多次。</p>
+</li>
+<li>
+<p>优化后，我们尽量保证构建停用词表、分词、查询数据库等耗时操作在整个搜索过程中只进行一次。</p>
+</li>
+<li>
+<p>分离<strong>处理逻辑</strong>，每一步处理尽可能少的数据：</p>
+</li>
+<li>
+<p>最初，我们的检索、分析、排序功能耦合度较高，执行过程中有很多冗余信息。例如，如果我们的搜索词中包括"人民法院"等普遍存在的词条，检索返回的结果将会是数据库中几乎全部的文档信息，这些文档信息会包含在一个巨大的list列表中，参与后续的分析、排序，带来了极大的时间、空间成本。</p>
+<blockquote>
+<p>搜索“人民法院”，用时在我们的不同的设备上耗时约在20s~60s之间。</p>
+</blockquote>
+</li>
+<li>
+<p>在优化后，我们尽可能保证每个阶段之间只传递后续必要的信息。例如，在检索时只返回一个文书id列表和分词后的查询词列表，分析时返回一个查询词列表中idf超过某个阈值的部分，排序时只根据这些idf符合要求的查询词对文书id列表进行排序；同时，将构建返回页面的功能解耦出来，单独建立一个函数<code>construct_page()</code>，根据文书id列表和页码构建返回结果。</p>
+<blockquote>
+<p>经过上述两项优化后，搜索“人民法院”，用时缩减到了2s以内，其他大部分搜索用时更短。</p>
+</blockquote>
+</li>
+<li>
+<p>使用<strong>数据库原生查询语句</strong>代替django的查询语句</p>
+</li>
+<li>
+<p>django的查询语句相比原生的SQL和mongoDB查询语句多了一层ORM包装，对于简单查询效率影响较小，对于复杂、批量查询效率影响较大。</p>
+</li>
+<li>
+<p>我们在项目中涉及到查询的部分，全部用SQL的聚合搜索语句和mongoDB的管道进行了替代。</p>
+<blockquote>
+<p>优化后，所有搜索词的用时都缩减到了1s左右。</p>
+</blockquote>
+</li>
+<li>
+<p>使用<strong>redis</strong>缓存，将最近的查询结果存入redis中，当再次查询/翻页时直接跳到<code>construct_page()</code>构建返回页面。</p>
+</li>
+</ol>
+<h4 id="512">5.1.2 数据处理速度<a class="headerlink" href="#512" title="Permanent link">&para;</a></h4>
+<p>虽然我们使用的是静态的本地数据，但考虑到"搜索引擎"的普遍特征，对数据的更新应该是一项基本的要求。因此，我们对于数据的创建和更新也进行了一些优化。</p>
+<ol>
+<li>
+<p><strong>数据抓取和更新</strong>：</p>
+</li>
+<li>
+<p>在一开始，我们的数据抓取子系统中对数据库的Queryset使用的操作基本都是<code>create()</code>，但考虑到可能进行的更新，我们将其大量更改为<code>update_or_create()</code>，这极大的降低了我们数据读取的速度(本来读完所有数据用时约1.5小时，更改后要用接近5个小时)：</p>
+<blockquote>
+<p><img alt="154539f60afffe37484adfed07f1d9c4_MD5" src="../5.%20%E4%BC%98%E5%8C%96%E8%BF%87%E7%A8%8B/pic/154539f60afffe37484adfed07f1d9c4_MD5.png" /></p>
+</blockquote>
+</li>
+<li>
+<p>统计了各种操作用时，我发现分词等其他操作的用时相较于数据库的IO操作几乎可以忽略不计，因此把重心放在了数据库操作的优化上。</p>
+</li>
+<li>
+<p>参考了[[<strong>优化sqlite3速度</strong>]]之后，我总结了两个优化方向</p>
+<ol>
+<li>通过<strong>对事务的显示操作</strong>，批量传入SQL操作语句，而不是默认的对于每次数据库操作都进行一次"开启事务-SQL操作-关闭事务"的流程；</li>
+<li>尽可能多地使用<strong>批量操作</strong>，利用好SQL数据库本身对于批量操作的优化；</li>
+</ol>
+<p>反映到项目中的具体做法主要是</p>
+<ol>
+<li>在部分SQL操作量较多的函数上添加<code>@transaction.atomic</code>，使得其中的SQL语句在函数执行完后统一开启事务传入数据库；</li>
+<li>在一些循环中，将循环结果暂存入一个列表，循环一定轮次后手动开启事务并批量插入数据；</li>
+<li>手动实现了一些filter操作，用HAVING替代WHERE，加速筛选速度。</li>
+</ol>
+<blockquote>
+<p>改前5000条用时：
+<div class="highlight"><pre><span></span><code>当前进度：999/68417，总用时：123.65395903587341秒
+当前进度：1999/68417，总用时：246.55316972732544秒
+当前进度：2999/68417，总用时：371.1040680408478秒
+当前进度：3999/68417，总用时：506.7788779735565秒
+当前进度：4999/68417，总用时：641.8681755065918秒
+</code></pre></div></p>
+<p>改后10000条用时：
+<div class="highlight"><pre><span></span><code>当前进度：999/68417用时：34.04985427856445秒
+当前进度：1999/68417用时：72.40004515647888秒
+当前进度：2999/68417用时：118.16527771949768秒
+当前进度：3999/68417用时：170.25840783119202秒
+当前进度：4999/68417用时：221.5308060646057秒
+当前进度：5999/68417用时：277.9871973991394秒
+当前进度：6999/68417用时：339.6625759601593秒
+当前进度：7999/68417用时：404.6741075515747秒
+当前进度：8999/68417用时：472.87201833724976秒
+当前进度：9999/68417用时：543.7172710895538秒
+</code></pre></div></p>
+<p>加速了三倍左右。</p>
+</blockquote>
+</li>
+<li>
+<p>在数据库中为一些常用的筛选字段建立<strong>索引</strong>。</p>
+<blockquote>
+<p><img alt="76d98faade2f6beb28b5a55cdddee671_MD5" src="../5.%20%E4%BC%98%E5%8C%96%E8%BF%87%E7%A8%8B/pic/76d98faade2f6beb28b5a55cdddee671_MD5.png" /></p>
+</blockquote>
+</li>
+</ol>
+<p>最终用时仅有优化前的$\frac{1}{8}$左右。</p>
+<ol>
+<li><strong>倒排索引建立</strong>：</li>
+</ol>
+<blockquote>
+<h3 id="_4">初始用时：<a class="headerlink" href="#_4" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code>正在处理第268/19879个文档 获取词条用时5.50s, 保存词条用时4.23s, 获取倒排索引用时7.68s, 保存倒排索引用时5.08s  
+文档268用时24.18s, 总用时24.18s, 平均用时24.18s  
+正在处理第269/19879个文档 获取词条用时1.08s, 保存词条用时0.85s, 获取倒排索引用时1.73s, 保存倒排索引用时0.93s  
+文档269用时4.65s, 总用时28.83s, 平均用时14.41s  
+正在处理第270/19879个文档 获取词条用时1.15s, 保存词条用时0.90s, 获取倒排索引用时1.87s, 保存倒排索引用时1.03s  
+文档270用时5.01s, 总用时33.84s, 平均用时11.28s  
+正在处理第271/19879个文档 获取词条用时3.64s, 保存词条用时2.84s, 获取倒排索引用时5.24s, 保存倒排索引用时3.23s  
+文档271用时15.10s, 总用时48.94s, 平均用时12.23s  
+正在处理第272/19879个文档 获取词条用时2.69s, 保存词条用时2.13s, 获取倒排索引用时4.12s, 保存倒排索引用时2.58s  
+文档272用时11.64s, 总用时60.58s, 平均用时12.12s  
+正在处理第273/19879个文档 获取词条用时5.01s, 保存词条用时3.86s, 获取倒排索引用时7.25s, 保存倒排索引用时4.54s  
+文档273用时20.90s, 总用时81.47s, 平均用时13.58s  
+正在处理第274/19879个文档 获取词条用时6.77s, 保存词条用时5.27s, 获取倒排索引用时9.60s, 保存倒排索引用时6.33s  
+文档274用时28.28s, 总用时109.75s, 平均用时15.68s  
+正在处理第275/19879个文档 获取词条用时3.91s, 保存词条用时3.05s, 获取倒排索引用时5.82s, 保存倒排索引用时3.73s  
+文档275用时16.67s, 总用时126.42s, 平均用时15.80s  
+正在处理第276/19879个文档 获取词条用时0.42s, 保存词条用时0.34s, 获取倒排索引用时0.78s, 保存倒排索引用时0.37s  
+文档276用时1.93s, 总用时128.35s, 平均用时14.26s  
+正在处理第277/19879个文档 获取词条用时1.65s, 保存词条用时1.26s, 获取倒排索引用时2.63s, 保存倒排索引用时1.48s  
+文档277用时7.09s, 总用时135.44s, 平均用时13.54s
+</code></pre></div>
+<h3 id="_5">第一次优化<a class="headerlink" href="#_5" title="Permanent link">&para;</a></h3>
+<p>分析：现在会直接用jieba的分词结果，从前往后逐个词进行处理。这样的话，每个词需要在Term表中全表查询一次、插入一次，在Posting表中全表查询一次、插入一次。</p>
+<p>改进：先将分词结果词条words整理成一个词典，key是词条，value是词条的位置信息，然后遍历这个词典。</p>
+<p>改进后分析：现在遍历词典，而不是分词结果本身。对于Term表而言，所有出现的相同词条只会查询、插入一次，例如“法院”、“人民”这样的高频词汇可能在一篇文档中能省下几十次的数据库访问；对于Posting表而言，不再需要查询，只需要插入(因为term+doc_id双主键，不可能有重复)，省下了费时的全表查询。</p>
+<div class="highlight"><pre><span></span><code>正在处理第334/19879个文档 获取词条用时0.55s, 保存词条用时0.43s, 获取倒排索引用时0.00s, 保存倒排索引用时0.39s  
+文档334用时1.50s, 总用时38.76s, 平均用时1.17s  
+正在处理第335/19879个文档 获取词条用时0.72s, 保存词条用时0.58s, 获取倒排索引用时0.00s, 保存倒排索引用时0.55s  
+文档335用时2.03s, 总用时40.79s, 平均用时1.20s  
+正在处理第336/19879个文档 获取词条用时0.42s, 保存词条用时0.33s, 获取倒排索引用时0.00s, 保存倒排索引用时0.26s  
+文档336用时1.10s, 总用时41.88s, 平均用时1.20s  
+正在处理第337/19879个文档 获取词条用时0.23s, 保存词条用时0.16s, 获取倒排索引用时0.00s, 保存倒排索引用时0.18s  
+文档337用时0.60s, 总用时42.48s, 平均用时1.18s  
+正在处理第338/19879个文档 获取词条用时0.83s, 保存词条用时0.65s, 获取倒排索引用时0.00s, 保存倒排索引用时0.62s  
+文档338用时2.40s, 总用时44.89s, 平均用时1.21s  
+正在处理第339/19879个文档 获取词条用时0.23s, 保存词条用时0.17s, 获取倒排索引用时0.00s, 保存倒排索引用时0.16s  
+文档339用时0.58s, 总用时45.47s, 平均用时1.20s  
+正在处理第340/19879个文档 获取词条用时0.56s, 保存词条用时0.45s, 获取倒排索引用时0.00s, 保存倒排索引用时0.38s  
+文档340用时1.51s, 总用时46.98s, 平均用时1.20s  
+正在处理第341/19879个文档 获取词条用时0.65s, 保存词条用时0.55s, 获取倒排索引用时0.00s, 保存倒排索引用时0.52s  
+文档341用时1.87s, 总用时48.85s, 平均用时1.22s  
+正在处理第342/19879个文档 获取词条用时0.52s, 保存词条用时0.41s, 获取倒排索引用时0.00s, 保存倒排索引用时0.36s  
+文档342用时1.39s, 总用时50.25s, 平均用时1.23s  
+正在处理第343/19879个文档 获取词条用时0.26s, 保存词条用时0.20s, 获取倒排索引用时0.00s, 保存倒排索引用时0.17s  
+文档343用时0.65s, 总用时50.90s, 平均用时1.21s  
+正在处理第344/19879个文档 获取词条用时0.55s, 保存词条用时0.40s, 获取倒排索引用时0.00s, 保存倒排索引用时0.40s  
+文档344用时1.44s, 总用时52.34s, 平均用时1.22s  
+正在处理第345/19879个文档 获取词条用时0.38s, 保存词条用时0.28s, 获取倒排索引用时0.00s, 保存倒排索引用时0.25s  
+文档345用时0.96s, 总用时53.30s, 平均用时1.21s
+</code></pre></div>
+<h3 id="_6">第二次优化<a class="headerlink" href="#_6" title="Permanent link">&para;</a></h3>
+<p>分析：每个词条都会对Term表单独进行一次查询+插入操作，对Posting表单独进行一次插入操作。</p>
+<p>改进：结合之前保存原始数据时的优化经验，把单独插入改成批量插入。遍历生成的字典时，将posting单独保存一个list，Term表中搜索不到的新词条new_terms也单独保存一个list，遍历结束后统一批量插入。</p>
+<div class="highlight"><pre><span></span><code>正在处理第22/68382个文档 获取词条用时0.61s, 保存词条用时0.35s, 获取倒排索引用时0.00s, 保存倒排索引用时0.08s 文档22用时1.19s, 总用时22.65s, 平均用时1.03s  
+正在处理第23/68382个文档 获取词条用时0.84s, 保存词条用时0.46s, 获取倒排索引用时0.00s, 保存倒排索引用时0.11s 文档23用时1.58s, 总用时24.23s, 平均用时1.05s  
+正在处理第24/68382个文档 获取词条用时0.46s, 保存词条用时0.29s, 获取倒排索引用时0.00s, 保存倒排索引用时0.05s 文档24用时0.87s, 总用时25.10s, 平均用时1.05s  
+正在处理第25/68382个文档 获取词条用时0.66s, 保存词条用时0.41s, 获取倒排索引用时0.00s, 保存倒排索引用时0.08s 文档25用时1.28s, 总用时26.38s, 平均用时1.06s  
+正在处理第26/68382个文档 获取词条用时0.23s, 保存词条用时0.14s, 获取倒排索引用时0.00s, 保存倒排索引用时0.03s 文档26用时0.43s, 总用时26.81s, 平均用时1.03s  
+正在处理第27/68382个文档 获取词条用时0.37s, 保存词条用时0.26s, 获取倒排索引用时0.00s, 保存倒排索引用时0.04s 文档27用时0.72s, 总用时27.53s, 平均用时1.02s  
+正在处理第28/68382个文档 获取词条用时0.70s, 保存词条用时0.37s, 获取倒排索引用时0.00s, 保存倒排索引用时0.09s 文档28用时1.29s, 总用时28.82s, 平均用时1.03s  
+正在处理第29/68382个文档 获取词条用时0.21s, 保存词条用时0.14s, 获取倒排索引用时0.00s, 保存倒排索引用时0.02s 文档29用时0.40s, 总用时29.22s, 平均用时1.01s  
+正在处理第30/68382个文档 获取词条用时1.40s, 保存词条用时0.62s, 获取倒排索引用时0.00s, 保存倒排索引用时0.16s 文档30用时2.48s, 总用时31.69s, 平均用时1.06s  
+正在处理第31/68382个文档 获取词条用时0.39s, 保存词条用时0.25s, 获取倒排索引用时0.00s, 保存倒排索引用时0.05s 文档31用时0.74s, 总用时32.43s, 平均用时1.05s  
+正在处理第32/68382个文档 获取词条用时0.86s, 保存词条用时0.51s, 获取倒排索引用时0.00s, 保存倒排索引用时0.10s 文档32用时1.68s, 总用时34.11s, 平均用时1.07s  
+正在处理第33/68382个文档 获取词条用时0.26s, 保存词条用时0.18s, 获取倒排索引用时0.00s, 保存倒排索引用时0.03s 文档33用时0.49s, 总用时34.60s, 平均用时1.05s  
+正在处理第34/68382个文档 获取词条用时0.30s, 保存词条用时0.19s, 获取倒排索引用时0.00s, 保存倒排索引用时0.04s 文档34用时0.58s, 总用时35.18s, 平均用时1.03s  
+正在处理第35/68382个文档 获取词条用时0.22s, 保存词条用时0.12s, 获取倒排索引用时0.00s, 保存倒排索引用时0.02s 文档35用时0.39s, 总用时35.57s, 平均用时1.02s  
+正在处理第36/68382个文档 获取词条用时0.27s, 保存词条用时0.18s, 获取倒排索引用时0.00s, 保存倒排索引用时0.03s 文档36用时0.52s, 总用时36.09s, 平均用时1.00s  
+正在处理第37/68382个文档 获取词条用时0.75s, 保存词条用时0.44s, 获取倒排索引用时0.00s, 保存倒排索引用时0.10s 文档37用时1.41s, 总用时37.50s, 平均用时1.01s  
+正在处理第38/68382个文档 获取词条用时0.43s, 保存词条用时0.27s, 获取倒排索引用时0.00s, 保存倒排索引用时0.05s 文档38用时0.80s, 总用时38.31s, 平均用时1.01s
+</code></pre></div>
+<h3 id="_7">第三次优化<a class="headerlink" href="#_7" title="Permanent link">&para;</a></h3>
+<p>分析：看上面的结果可以发现，获取倒排索引用时为0，保存倒排索引用时也普遍低于0.1秒，主要花费时间的步骤是Term表的查询和插入；实际上，Term记录的是词条出现文档数，其实就是在Posting中的出现次数，所以没有必要每个词读入时都更新一次。</p>
+<p>改进：在第一次处理的过程中，遍历词条字典时只进行倒排索引Posting表的插入，结束后使用mongoDB的管道功能直接统计不同Term的出现次数，记录到Term表中。</p>
+<div class="highlight"><pre><span></span><code>正在处理第514/68382个文档 文档514用时0.01s, 总用时41.28s, 平均用时0.08s  
+正在处理第515/68382个文档 文档515用时0.03s, 总用时41.31s, 平均用时0.08s  
+正在处理第516/68382个文档 文档516用时0.01s, 总用时41.32s, 平均用时0.08s  
+正在处理第517/68382个文档 文档517用时0.09s, 总用时41.41s, 平均用时0.08s  
+正在处理第518/68382个文档 文档518用时0.19s, 总用时41.60s, 平均用时0.08s  
+正在处理第519/68382个文档 文档519用时0.03s, 总用时41.64s, 平均用时0.08s  
+正在处理第520/68382个文档 文档520用时0.08s, 总用时41.72s, 平均用时0.08s  
+正在处理第521/68382个文档 文档521用时0.07s, 总用时41.79s, 平均用时0.08s  
+正在处理第522/68382个文档 文档522用时0.02s, 总用时41.81s, 平均用时0.08s  
+正在处理第523/68382个文档 文档523用时0.01s, 总用时41.82s, 平均用时0.08s  
+正在处理第524/68382个文档 文档524用时0.03s, 总用时41.84s, 平均用时0.08s  
+正在处理第525/68382个文档 文档525用时0.02s, 总用时41.86s, 平均用时0.08s  
+正在处理第526/68382个文档 文档526用时0.07s, 总用时41.94s, 平均用时0.08s  
+正在处理第527/68382个文档 文档527用时0.06s, 总用时42.00s, 平均用时0.08s  
+
+
+用管道统计并添加全部1025356个词条到Term表用时几分钟
+</code></pre></div>
+</blockquote>
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+        </div>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    <script id="__config" type="application/json">{"base": "..", "features": [], "search": "../assets/javascripts/workers/search.74e28a9f.min.js", "translations": {"clipboard.copied": "\u5df2\u590d\u5236", "clipboard.copy": "\u590d\u5236", "search.result.more.one": "\u5728\u8be5\u9875\u4e0a\u8fd8\u6709 1 \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.more.other": "\u5728\u8be5\u9875\u4e0a\u8fd8\u6709 # \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.none": "\u6ca1\u6709\u627e\u5230\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.one": "\u627e\u5230 1 \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.other": "# \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.placeholder": "\u952e\u5165\u4ee5\u5f00\u59cb\u641c\u7d22", "search.result.term.missing": "\u7f3a\u5c11", "select.version": "\u9009\u62e9\u5f53\u524d\u7248\u672c"}}</script>
+    
+    
+      <script src="../assets/javascripts/bundle.220ee61c.min.js"></script>
+      
+    
+  </body>
+</html>

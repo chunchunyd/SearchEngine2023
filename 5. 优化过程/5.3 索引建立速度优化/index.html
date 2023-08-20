@@ -1,0 +1,1170 @@
+
+<!doctype html>
+<html lang="zh" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+        <meta name="description" content="搜索引擎文档">
+      
+      
+      
+      
+        <link rel="prev" href="../5.2%20%E6%95%B0%E6%8D%AE%E5%A4%84%E7%90%86%E9%80%9F%E5%BA%A6%E4%BC%98%E5%8C%96/">
+      
+      
+        <link rel="next" href="../../old/1.%E4%B8%8D%E5%90%8C%E6%96%87%E4%B9%A6%E5%88%86%E6%9E%90/%E6%B3%95%E9%99%A2/1.%20%E5%88%A4%E5%86%B3%E4%B9%A6%20%E8%A3%81%E5%AE%9A%E4%B9%A6%20%E8%B0%83%E8%A7%A3%E4%B9%A6%20%28%E5%8D%B3%20%E8%A3%81%E5%88%A4%E6%96%87%E4%B9%A6%29/">
+      
+      <link rel="icon" href="../../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.5.2, mkdocs-material-9.1.21">
+    
+    
+      
+        <title>5.3 索引建立速度优化 - 搜索引擎</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../assets/stylesheets/main.eebd395e.min.css">
+      
+        
+        <link rel="stylesheet" href="../../assets/stylesheets/palette.ecc896b0.min.css">
+      
+      
+
+    
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+      <link rel="stylesheet" href="../../resources/css/extra.css">
+    
+    <script>__md_scope=new URL("../..",location),__md_hash=e=>[...e].reduce((e,_)=>(e<<5)-e+_.charCodeAt(0),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+    
+  </head>
+  
+  
+    
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="purple" data-md-color-accent="indigo">
+  
+    
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#_1" class="md-skip">
+          跳转至
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+  
+
+<header class="md-header md-header--shadow" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="页眉">
+    <a href="../.." title="搜索引擎" class="md-header__button md-logo" aria-label="搜索引擎" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54Z"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3V6m0 5h18v2H3v-2m0 5h18v2H3v-2Z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            搜索引擎
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              5.3 索引建立速度优化
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+    
+    
+    
+      <label class="md-header__button md-icon" for="__search">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.516 6.516 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5Z"/></svg>
+      </label>
+      <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="搜索" placeholder="搜索" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.516 6.516 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5Z"/></svg>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12Z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="查找">
+        
+        <button type="reset" class="md-search__icon md-icon" title="清空当前内容" aria-label="清空当前内容" tabindex="-1">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12 19 6.41Z"/></svg>
+        </button>
+      </nav>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            正在初始化搜索引擎
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+    
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+<nav class="md-nav md-nav--primary" aria-label="导航栏" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../.." title="搜索引擎" class="md-nav__button md-logo" aria-label="搜索引擎" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54Z"/></svg>
+
+    </a>
+    搜索引擎
+  </label>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../.." class="md-nav__link">
+        2023年春季学期搜索引擎大作业
+      </a>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../1.%20%E6%A6%82%E8%BF%B0/%E6%A6%82%E8%BF%B0/" class="md-nav__link">
+        1. 概述
+      </a>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+      
+      
+      <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3" >
+      
+      
+      
+        <label class="md-nav__link" for="__nav_3" id="__nav_3_label" tabindex="0">
+          2. 结构设计
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="false">
+        <label class="md-nav__title" for="__nav_3">
+          <span class="md-nav__icon md-icon"></span>
+          2. 结构设计
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../2.%20%E7%BB%93%E6%9E%84%E8%AE%BE%E8%AE%A1/2.1%20%E9%A1%B9%E7%9B%AE%E6%9E%84%E5%9E%8B/" class="md-nav__link">
+        2.1 项目构型
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../2.%20%E7%BB%93%E6%9E%84%E8%AE%BE%E8%AE%A1/2.2%20%E4%BB%93%E5%BA%93%E7%BB%93%E6%9E%84/" class="md-nav__link">
+        2.2 仓库结构
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../2.%20%E7%BB%93%E6%9E%84%E8%AE%BE%E8%AE%A1/2.3%20%E5%8A%9F%E8%83%BD%E5%88%92%E5%88%86/" class="md-nav__link">
+        2.3 功能划分
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+      
+      
+      <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4" >
+      
+      
+      
+        <label class="md-nav__link" for="__nav_4" id="__nav_4_label" tabindex="0">
+          3. 前端模块介绍
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_4_label" aria-expanded="false">
+        <label class="md-nav__title" for="__nav_4">
+          <span class="md-nav__icon md-icon"></span>
+          3. 前端模块介绍
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../3.%20%E5%89%8D%E7%AB%AF%E6%A8%A1%E5%9D%97%E4%BB%8B%E7%BB%8D/3.1%20%E6%A1%86%E6%9E%B6%E5%9B%BE/" class="md-nav__link">
+        3.1 框架图
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../3.%20%E5%89%8D%E7%AB%AF%E6%A8%A1%E5%9D%97%E4%BB%8B%E7%BB%8D/3.2%20%E5%8A%9F%E8%83%BD%E5%B1%95%E7%A4%BA/" class="md-nav__link">
+        3.2 功能展示
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../3.%20%E5%89%8D%E7%AB%AF%E6%A8%A1%E5%9D%97%E4%BB%8B%E7%BB%8D/3.3%20%E4%B8%BB%E8%A6%81%E5%87%BD%E6%95%B0/" class="md-nav__link">
+        3.3 主要函数
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+      
+      
+      <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_5" >
+      
+      
+      
+        <label class="md-nav__link" for="__nav_5" id="__nav_5_label" tabindex="0">
+          4. 后端模块介绍
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_5_label" aria-expanded="false">
+        <label class="md-nav__title" for="__nav_5">
+          <span class="md-nav__icon md-icon"></span>
+          4. 后端模块介绍
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+      
+      
+      <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_5_1" >
+      
+      
+      
+        <label class="md-nav__link" for="__nav_5_1" id="__nav_5_1_label" tabindex="0">
+          4.1 数据库设计
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_5_1_label" aria-expanded="false">
+        <label class="md-nav__title" for="__nav_5_1">
+          <span class="md-nav__icon md-icon"></span>
+          4.1 数据库设计
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../4.%20%E5%90%8E%E7%AB%AF%E6%A8%A1%E5%9D%97%E4%BB%8B%E7%BB%8D/4.1%20common/4.1.1%20%E6%96%87%E4%B9%A6%E7%B1%BB%E5%9E%8B%E5%88%86%E6%9E%90/" class="md-nav__link">
+        4.1.1 文书类型分析
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../4.%20%E5%90%8E%E7%AB%AF%E6%A8%A1%E5%9D%97%E4%BB%8B%E7%BB%8D/4.1%20common/4.1.2%20%E6%95%B0%E6%8D%AE%E5%BA%93%E6%A8%A1%E5%9E%8B%E8%AE%BE%E8%AE%A1/" class="md-nav__link">
+        4.1.2 数据库模型设计
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../4.%20%E5%90%8E%E7%AB%AF%E6%A8%A1%E5%9D%97%E4%BB%8B%E7%BB%8D/4.2%20%E6%95%B0%E6%8D%AE%E6%8A%93%E5%8F%96%E5%AD%90%E7%B3%BB%E7%BB%9F/" class="md-nav__link">
+        4.2 数据抓取子系统
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../4.%20%E5%90%8E%E7%AB%AF%E6%A8%A1%E5%9D%97%E4%BB%8B%E7%BB%8D/4.3%20%E5%86%85%E5%AE%B9%E7%B4%A2%E5%BC%95%E5%AD%90%E7%B3%BB%E7%BB%9F/" class="md-nav__link">
+        4.3 内容索引子系统
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+      
+      
+      <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_5_4" >
+      
+      
+      
+        <label class="md-nav__link" for="__nav_5_4" id="__nav_5_4_label" tabindex="0">
+          4.4 内容检索子系统
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_5_4_label" aria-expanded="false">
+        <label class="md-nav__title" for="__nav_5_4">
+          <span class="md-nav__icon md-icon"></span>
+          4.4 内容检索子系统
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../4.%20%E5%90%8E%E7%AB%AF%E6%A8%A1%E5%9D%97%E4%BB%8B%E7%BB%8D/4.4%20%E5%86%85%E5%AE%B9%E6%A3%80%E7%B4%A2%E5%AD%90%E7%B3%BB%E7%BB%9F/4.4.1%20%E6%A3%80%E7%B4%A2%E5%AD%90%E7%B3%BB%E7%BB%9F/" class="md-nav__link">
+        4.4.1 检索子系统
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../4.%20%E5%90%8E%E7%AB%AF%E6%A8%A1%E5%9D%97%E4%BB%8B%E7%BB%8D/4.4%20%E5%86%85%E5%AE%B9%E6%A3%80%E7%B4%A2%E5%AD%90%E7%B3%BB%E7%BB%9F/4.4.2%20%E8%A7%A3%E6%9E%90%E5%AD%90%E7%B3%BB%E7%BB%9F/" class="md-nav__link">
+        4.4.2 解析子系统
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../4.%20%E5%90%8E%E7%AB%AF%E6%A8%A1%E5%9D%97%E4%BB%8B%E7%BB%8D/4.5%20%E9%93%BE%E6%8E%A5%E5%88%86%E6%9E%90%E5%AD%90%E7%B3%BB%E7%BB%9F/" class="md-nav__link">
+        4.5 链接分析子系统
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+    
+  
+  
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--nested">
+      
+      
+      
+      
+      <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_6" checked>
+      
+      
+      
+        <label class="md-nav__link" for="__nav_6" id="__nav_6_label" tabindex="0">
+          5. 优化过程
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_6_label" aria-expanded="true">
+        <label class="md-nav__title" for="__nav_6">
+          <span class="md-nav__icon md-icon"></span>
+          5. 优化过程
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../5.1%20%E6%90%9C%E7%B4%A2%E9%80%9F%E5%BA%A6%E4%BC%98%E5%8C%96/" class="md-nav__link">
+        5.1 搜索速度优化
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../5.2%20%E6%95%B0%E6%8D%AE%E5%A4%84%E7%90%86%E9%80%9F%E5%BA%A6%E4%BC%98%E5%8C%96/" class="md-nav__link">
+        5.2 数据处理速度优化
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+    
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          5.3 索引建立速度优化
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        5.3 索引建立速度优化
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="目录">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      目录
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#_2" class="md-nav__link">
+    初始用时：
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_3" class="md-nav__link">
+    第一次优化
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_4" class="md-nav__link">
+    第二次优化
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_5" class="md-nav__link">
+    第三次优化
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+      
+      
+      <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_7" >
+      
+      
+      
+        <label class="md-nav__link" for="__nav_7" id="__nav_7_label" tabindex="0">
+          附1. 所有文书类型分析
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_7_label" aria-expanded="false">
+        <label class="md-nav__title" for="__nav_7">
+          <span class="md-nav__icon md-icon"></span>
+          附1. 所有文书类型分析
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+      
+      
+      <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_7_1" >
+      
+      
+      
+        <label class="md-nav__link" for="__nav_7_1" id="__nav_7_1_label" tabindex="0">
+          1.1 法院文书
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_7_1_label" aria-expanded="false">
+        <label class="md-nav__title" for="__nav_7_1">
+          <span class="md-nav__icon md-icon"></span>
+          1.1 法院文书
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../old/1.%E4%B8%8D%E5%90%8C%E6%96%87%E4%B9%A6%E5%88%86%E6%9E%90/%E6%B3%95%E9%99%A2/1.%20%E5%88%A4%E5%86%B3%E4%B9%A6%20%E8%A3%81%E5%AE%9A%E4%B9%A6%20%E8%B0%83%E8%A7%A3%E4%B9%A6%20%28%E5%8D%B3%20%E8%A3%81%E5%88%A4%E6%96%87%E4%B9%A6%29/" class="md-nav__link">
+        1.1.1 裁判文书(判决书+裁定书+调解书)
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../old/1.%E4%B8%8D%E5%90%8C%E6%96%87%E4%B9%A6%E5%88%86%E6%9E%90/%E6%B3%95%E9%99%A2/2.%20%E5%86%B3%E5%AE%9A%E4%B9%A6/" class="md-nav__link">
+        1.1.2 决定书
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../old/1.%E4%B8%8D%E5%90%8C%E6%96%87%E4%B9%A6%E5%88%86%E6%9E%90/%E6%B3%95%E9%99%A2/3.%20%E8%B5%B7%E8%AF%89%E7%8A%B6/" class="md-nav__link">
+        1.1.3 起诉状
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../old/1.%E4%B8%8D%E5%90%8C%E6%96%87%E4%B9%A6%E5%88%86%E6%9E%90/%E6%B3%95%E9%99%A2/4.%20%E9%80%9A%E7%9F%A5%E4%B9%A6/" class="md-nav__link">
+        1.1.4 通知书
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+      
+      
+      <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_7_2" >
+      
+      
+      
+        <label class="md-nav__link" for="__nav_7_2" id="__nav_7_2_label" tabindex="0">
+          1.2 检察院文书
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_7_2_label" aria-expanded="false">
+        <label class="md-nav__title" for="__nav_7_2">
+          <span class="md-nav__icon md-icon"></span>
+          1.2 检察院文书
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../old/1.%E4%B8%8D%E5%90%8C%E6%96%87%E4%B9%A6%E5%88%86%E6%9E%90/%E6%A3%80%E5%AF%9F%E9%99%A2/1.%20%E8%B5%B7%E8%AF%89%E4%B9%A6/" class="md-nav__link">
+        1.2.1 起诉书
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../old/1.%E4%B8%8D%E5%90%8C%E6%96%87%E4%B9%A6%E5%88%86%E6%9E%90/%E6%A3%80%E5%AF%9F%E9%99%A2/2.%20%E4%B8%8D%E8%B5%B7%E8%AF%89%E4%B9%A6/" class="md-nav__link">
+        1.2.2 不起诉书
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+      
+      
+      <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_7_3" >
+      
+      
+      
+        <label class="md-nav__link" for="__nav_7_3" id="__nav_7_3_label" tabindex="0">
+          1.3 司法行政文书
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_7_3_label" aria-expanded="false">
+        <label class="md-nav__title" for="__nav_7_3">
+          <span class="md-nav__icon md-icon"></span>
+          1.3 司法行政文书
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../old/1.%E4%B8%8D%E5%90%8C%E6%96%87%E4%B9%A6%E5%88%86%E6%9E%90/%E5%8F%B8%E6%B3%95%E8%A1%8C%E6%94%BF/%E6%9A%82%E4%BA%88%E7%9B%91%E5%A4%96%E6%89%A7%E8%A1%8C%E6%A1%88%E4%BE%8B/" class="md-nav__link">
+        1.3.1 暂予监外执行案例
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../%E9%99%84/%E4%BC%98%E5%8C%96sqlite3/" class="md-nav__link">
+        附2. 优化sqlite3
+      </a>
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="目录">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      目录
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#_2" class="md-nav__link">
+    初始用时：
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_3" class="md-nav__link">
+    第一次优化
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_4" class="md-nav__link">
+    第二次优化
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_5" class="md-nav__link">
+    第三次优化
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+<h1 id="_1">索引建立速度优化<a class="headerlink" href="#_1" title="Permanent link">&para;</a></h1>
+<h2 id="_2">初始用时：<a class="headerlink" href="#_2" title="Permanent link">&para;</a></h2>
+<div class="highlight"><pre><span></span><code>正在处理第268/19879个文档 获取词条用时5.50s, 保存词条用时4.23s, 获取倒排索引用时7.68s, 保存倒排索引用时5.08s  
+文档268用时24.18s, 总用时24.18s, 平均用时24.18s  
+正在处理第269/19879个文档 获取词条用时1.08s, 保存词条用时0.85s, 获取倒排索引用时1.73s, 保存倒排索引用时0.93s  
+文档269用时4.65s, 总用时28.83s, 平均用时14.41s  
+正在处理第270/19879个文档 获取词条用时1.15s, 保存词条用时0.90s, 获取倒排索引用时1.87s, 保存倒排索引用时1.03s  
+文档270用时5.01s, 总用时33.84s, 平均用时11.28s  
+正在处理第271/19879个文档 获取词条用时3.64s, 保存词条用时2.84s, 获取倒排索引用时5.24s, 保存倒排索引用时3.23s  
+文档271用时15.10s, 总用时48.94s, 平均用时12.23s  
+正在处理第272/19879个文档 获取词条用时2.69s, 保存词条用时2.13s, 获取倒排索引用时4.12s, 保存倒排索引用时2.58s  
+文档272用时11.64s, 总用时60.58s, 平均用时12.12s  
+正在处理第273/19879个文档 获取词条用时5.01s, 保存词条用时3.86s, 获取倒排索引用时7.25s, 保存倒排索引用时4.54s  
+文档273用时20.90s, 总用时81.47s, 平均用时13.58s  
+正在处理第274/19879个文档 获取词条用时6.77s, 保存词条用时5.27s, 获取倒排索引用时9.60s, 保存倒排索引用时6.33s  
+文档274用时28.28s, 总用时109.75s, 平均用时15.68s  
+正在处理第275/19879个文档 获取词条用时3.91s, 保存词条用时3.05s, 获取倒排索引用时5.82s, 保存倒排索引用时3.73s  
+文档275用时16.67s, 总用时126.42s, 平均用时15.80s  
+正在处理第276/19879个文档 获取词条用时0.42s, 保存词条用时0.34s, 获取倒排索引用时0.78s, 保存倒排索引用时0.37s  
+文档276用时1.93s, 总用时128.35s, 平均用时14.26s  
+正在处理第277/19879个文档 获取词条用时1.65s, 保存词条用时1.26s, 获取倒排索引用时2.63s, 保存倒排索引用时1.48s  
+文档277用时7.09s, 总用时135.44s, 平均用时13.54s
+</code></pre></div>
+<h2 id="_3">第一次优化<a class="headerlink" href="#_3" title="Permanent link">&para;</a></h2>
+<p>分析：现在会直接用jieba的分词结果，从前往后逐个词进行处理。这样的话，每个词需要在Term表中全表查询一次、插入一次，在Posting表中全表查询一次、插入一次。</p>
+<p>改进：先将分词结果词条words整理成一个词典，key是词条，value是词条的位置信息，然后遍历这个词典。</p>
+<p>改进后分析：现在遍历词典，而不是分词结果本身。对于Term表而言，所有出现的相同词条只会查询、插入一次，例如“法院”、“人民”这样的高频词汇可能在一篇文档中能省下几十次的数据库访问；对于Posting表而言，不再需要查询，只需要插入(因为term+doc_id双主键，不可能有重复)，省下了费时的全表查询。</p>
+<div class="highlight"><pre><span></span><code>正在处理第334/19879个文档 获取词条用时0.55s, 保存词条用时0.43s, 获取倒排索引用时0.00s, 保存倒排索引用时0.39s  
+文档334用时1.50s, 总用时38.76s, 平均用时1.17s  
+正在处理第335/19879个文档 获取词条用时0.72s, 保存词条用时0.58s, 获取倒排索引用时0.00s, 保存倒排索引用时0.55s  
+文档335用时2.03s, 总用时40.79s, 平均用时1.20s  
+正在处理第336/19879个文档 获取词条用时0.42s, 保存词条用时0.33s, 获取倒排索引用时0.00s, 保存倒排索引用时0.26s  
+文档336用时1.10s, 总用时41.88s, 平均用时1.20s  
+正在处理第337/19879个文档 获取词条用时0.23s, 保存词条用时0.16s, 获取倒排索引用时0.00s, 保存倒排索引用时0.18s  
+文档337用时0.60s, 总用时42.48s, 平均用时1.18s  
+正在处理第338/19879个文档 获取词条用时0.83s, 保存词条用时0.65s, 获取倒排索引用时0.00s, 保存倒排索引用时0.62s  
+文档338用时2.40s, 总用时44.89s, 平均用时1.21s  
+正在处理第339/19879个文档 获取词条用时0.23s, 保存词条用时0.17s, 获取倒排索引用时0.00s, 保存倒排索引用时0.16s  
+文档339用时0.58s, 总用时45.47s, 平均用时1.20s  
+正在处理第340/19879个文档 获取词条用时0.56s, 保存词条用时0.45s, 获取倒排索引用时0.00s, 保存倒排索引用时0.38s  
+文档340用时1.51s, 总用时46.98s, 平均用时1.20s  
+正在处理第341/19879个文档 获取词条用时0.65s, 保存词条用时0.55s, 获取倒排索引用时0.00s, 保存倒排索引用时0.52s  
+文档341用时1.87s, 总用时48.85s, 平均用时1.22s  
+正在处理第342/19879个文档 获取词条用时0.52s, 保存词条用时0.41s, 获取倒排索引用时0.00s, 保存倒排索引用时0.36s  
+文档342用时1.39s, 总用时50.25s, 平均用时1.23s  
+正在处理第343/19879个文档 获取词条用时0.26s, 保存词条用时0.20s, 获取倒排索引用时0.00s, 保存倒排索引用时0.17s  
+文档343用时0.65s, 总用时50.90s, 平均用时1.21s  
+正在处理第344/19879个文档 获取词条用时0.55s, 保存词条用时0.40s, 获取倒排索引用时0.00s, 保存倒排索引用时0.40s  
+文档344用时1.44s, 总用时52.34s, 平均用时1.22s  
+正在处理第345/19879个文档 获取词条用时0.38s, 保存词条用时0.28s, 获取倒排索引用时0.00s, 保存倒排索引用时0.25s  
+文档345用时0.96s, 总用时53.30s, 平均用时1.21s
+</code></pre></div>
+<h2 id="_4">第二次优化<a class="headerlink" href="#_4" title="Permanent link">&para;</a></h2>
+<p>分析：每个词条都会对Term表单独进行一次查询+插入操作，对Posting表单独进行一次插入操作。</p>
+<p>改进：结合之前保存原始数据时的优化经验，把单独插入改成批量插入。遍历生成的字典时，将posting单独保存一个list，Term表中搜索不到的新词条new_terms也单独保存一个list，遍历结束后统一批量插入。</p>
+<div class="highlight"><pre><span></span><code>正在处理第22/68382个文档 获取词条用时0.61s, 保存词条用时0.35s, 获取倒排索引用时0.00s, 保存倒排索引用时0.08s 文档22用时1.19s, 总用时22.65s, 平均用时1.03s  
+正在处理第23/68382个文档 获取词条用时0.84s, 保存词条用时0.46s, 获取倒排索引用时0.00s, 保存倒排索引用时0.11s 文档23用时1.58s, 总用时24.23s, 平均用时1.05s  
+正在处理第24/68382个文档 获取词条用时0.46s, 保存词条用时0.29s, 获取倒排索引用时0.00s, 保存倒排索引用时0.05s 文档24用时0.87s, 总用时25.10s, 平均用时1.05s  
+正在处理第25/68382个文档 获取词条用时0.66s, 保存词条用时0.41s, 获取倒排索引用时0.00s, 保存倒排索引用时0.08s 文档25用时1.28s, 总用时26.38s, 平均用时1.06s  
+正在处理第26/68382个文档 获取词条用时0.23s, 保存词条用时0.14s, 获取倒排索引用时0.00s, 保存倒排索引用时0.03s 文档26用时0.43s, 总用时26.81s, 平均用时1.03s  
+正在处理第27/68382个文档 获取词条用时0.37s, 保存词条用时0.26s, 获取倒排索引用时0.00s, 保存倒排索引用时0.04s 文档27用时0.72s, 总用时27.53s, 平均用时1.02s  
+正在处理第28/68382个文档 获取词条用时0.70s, 保存词条用时0.37s, 获取倒排索引用时0.00s, 保存倒排索引用时0.09s 文档28用时1.29s, 总用时28.82s, 平均用时1.03s  
+正在处理第29/68382个文档 获取词条用时0.21s, 保存词条用时0.14s, 获取倒排索引用时0.00s, 保存倒排索引用时0.02s 文档29用时0.40s, 总用时29.22s, 平均用时1.01s  
+正在处理第30/68382个文档 获取词条用时1.40s, 保存词条用时0.62s, 获取倒排索引用时0.00s, 保存倒排索引用时0.16s 文档30用时2.48s, 总用时31.69s, 平均用时1.06s  
+正在处理第31/68382个文档 获取词条用时0.39s, 保存词条用时0.25s, 获取倒排索引用时0.00s, 保存倒排索引用时0.05s 文档31用时0.74s, 总用时32.43s, 平均用时1.05s  
+正在处理第32/68382个文档 获取词条用时0.86s, 保存词条用时0.51s, 获取倒排索引用时0.00s, 保存倒排索引用时0.10s 文档32用时1.68s, 总用时34.11s, 平均用时1.07s  
+正在处理第33/68382个文档 获取词条用时0.26s, 保存词条用时0.18s, 获取倒排索引用时0.00s, 保存倒排索引用时0.03s 文档33用时0.49s, 总用时34.60s, 平均用时1.05s  
+正在处理第34/68382个文档 获取词条用时0.30s, 保存词条用时0.19s, 获取倒排索引用时0.00s, 保存倒排索引用时0.04s 文档34用时0.58s, 总用时35.18s, 平均用时1.03s  
+正在处理第35/68382个文档 获取词条用时0.22s, 保存词条用时0.12s, 获取倒排索引用时0.00s, 保存倒排索引用时0.02s 文档35用时0.39s, 总用时35.57s, 平均用时1.02s  
+正在处理第36/68382个文档 获取词条用时0.27s, 保存词条用时0.18s, 获取倒排索引用时0.00s, 保存倒排索引用时0.03s 文档36用时0.52s, 总用时36.09s, 平均用时1.00s  
+正在处理第37/68382个文档 获取词条用时0.75s, 保存词条用时0.44s, 获取倒排索引用时0.00s, 保存倒排索引用时0.10s 文档37用时1.41s, 总用时37.50s, 平均用时1.01s  
+正在处理第38/68382个文档 获取词条用时0.43s, 保存词条用时0.27s, 获取倒排索引用时0.00s, 保存倒排索引用时0.05s 文档38用时0.80s, 总用时38.31s, 平均用时1.01s
+</code></pre></div>
+<h2 id="_5">第三次优化<a class="headerlink" href="#_5" title="Permanent link">&para;</a></h2>
+<p>分析：看上面的结果可以发现，获取倒排索引用时为0，保存倒排索引用时也普遍低于0.1秒，主要花费时间的步骤是Term表的查询和插入。</p>
+<p>改进：在第一次处理的过程中，遍历词条字典时只进行倒排索引Posting表的插入，结束后使用管道直接统计不同Term的出现次数，记录到Term表中。</p>
+<div class="highlight"><pre><span></span><code>正在处理第514/68382个文档 文档514用时0.01s, 总用时41.28s, 平均用时0.08s  
+正在处理第515/68382个文档 文档515用时0.03s, 总用时41.31s, 平均用时0.08s  
+正在处理第516/68382个文档 文档516用时0.01s, 总用时41.32s, 平均用时0.08s  
+正在处理第517/68382个文档 文档517用时0.09s, 总用时41.41s, 平均用时0.08s  
+正在处理第518/68382个文档 文档518用时0.19s, 总用时41.60s, 平均用时0.08s  
+正在处理第519/68382个文档 文档519用时0.03s, 总用时41.64s, 平均用时0.08s  
+正在处理第520/68382个文档 文档520用时0.08s, 总用时41.72s, 平均用时0.08s  
+正在处理第521/68382个文档 文档521用时0.07s, 总用时41.79s, 平均用时0.08s  
+正在处理第522/68382个文档 文档522用时0.02s, 总用时41.81s, 平均用时0.08s  
+正在处理第523/68382个文档 文档523用时0.01s, 总用时41.82s, 平均用时0.08s  
+正在处理第524/68382个文档 文档524用时0.03s, 总用时41.84s, 平均用时0.08s  
+正在处理第525/68382个文档 文档525用时0.02s, 总用时41.86s, 平均用时0.08s  
+正在处理第526/68382个文档 文档526用时0.07s, 总用时41.94s, 平均用时0.08s  
+正在处理第527/68382个文档 文档527用时0.06s, 总用时42.00s, 平均用时0.08s  
+</code></pre></div>
+<p>用管道统计并添加全部1025356个词条到Term表仅用时几分钟</p>
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+        </div>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    <script id="__config" type="application/json">{"base": "../..", "features": [], "search": "../../assets/javascripts/workers/search.74e28a9f.min.js", "translations": {"clipboard.copied": "\u5df2\u590d\u5236", "clipboard.copy": "\u590d\u5236", "search.result.more.one": "\u5728\u8be5\u9875\u4e0a\u8fd8\u6709 1 \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.more.other": "\u5728\u8be5\u9875\u4e0a\u8fd8\u6709 # \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.none": "\u6ca1\u6709\u627e\u5230\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.one": "\u627e\u5230 1 \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.other": "# \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.placeholder": "\u952e\u5165\u4ee5\u5f00\u59cb\u641c\u7d22", "search.result.term.missing": "\u7f3a\u5c11", "select.version": "\u9009\u62e9\u5f53\u524d\u7248\u672c"}}</script>
+    
+    
+      <script src="../../assets/javascripts/bundle.220ee61c.min.js"></script>
+      
+    
+  </body>
+</html>
